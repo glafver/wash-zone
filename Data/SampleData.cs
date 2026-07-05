@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using WashOverflowV2.Models;
+using WashZone.Models;
 
-namespace WashOverflowV2.Data
+namespace WashZone.Data
 {
     public class SampleData
     {
@@ -149,15 +149,15 @@ namespace WashOverflowV2.Data
             //Seed admin user data to database
 
             //When log in as admin, use:
-            //email: admin@washoverflow.se
+            //email: admin@washzone.se
             //password: Admin123!
 
-            if (await userManager.FindByEmailAsync("admin@washoverflow.se") == null)
+            if (await userManager.FindByEmailAsync("admin@washzone.se") == null)
             {
                 var adminUser = new User
                 {
-                    UserName = "admin@washoverflow.se",
-                    Email = "admin@washoverflow.se",
+                    UserName = "admin@washzone.se",
+                    Email = "admin@washzone.se",
                     EmailConfirmed = true
                 };
                 await userManager.CreateAsync(adminUser, "Admin123!");
@@ -241,3 +241,4 @@ namespace WashOverflowV2.Data
         }
     }
 }
+

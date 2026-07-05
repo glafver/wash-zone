@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
@@ -7,10 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
-using WashOverflowV2.Data;
-using WashOverflowV2.Models;
+using WashZone.Data;
+using WashZone.Models;
 
-namespace WashOverflowV2.Pages
+namespace WashZone.Pages
 {
     [Authorize]
     public class MyBookingsPageModel : PageModel
@@ -24,11 +24,11 @@ namespace WashOverflowV2.Pages
             _userManager = userManager;
         }
 
-        public List<Booking> Bookings { get; set; }
-        public List<Station> Stations { get; set; }
-        public List<Package> Packages { get; set; }
+        public List<Booking> Bookings { get; set; } = new List<Booking>();
+        public List<Station> Stations { get; set; } = new List<Station>();
+        public List<Package> Packages { get; set; } = new List<Package>();
 
-        public string SortOrder { get; set; }
+        public string SortOrder { get; set; } = string.Empty;
         public int? SelectedStationId { get; set; }
         public int? SelectedPackageId { get; set; }
         public string? RegNumberFilter { get; set; }
@@ -93,3 +93,4 @@ namespace WashOverflowV2.Pages
         }
     }
 }
+

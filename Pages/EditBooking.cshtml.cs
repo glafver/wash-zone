@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -6,10 +6,10 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using WashOverflowV2.Data;
-using WashOverflowV2.Models;
+using WashZone.Data;
+using WashZone.Models;
 
-namespace WashOverflowV2.Pages
+namespace WashZone.Pages
 {
     public class EditBookingModel : PageModel
     {
@@ -23,7 +23,7 @@ namespace WashOverflowV2.Pages
         }
 
         [BindProperty]
-        public Booking Booking { get; set; }
+        public Booking Booking { get; set; } = new Booking();
 
         public List<Station> Stations { get; set; } = new List<Station>();
         public List<Package> Packages { get; set; } = new List<Package>();
@@ -34,14 +34,14 @@ namespace WashOverflowV2.Pages
         [BindProperty]
         public int SelectedPackageId { get; set; }
         [BindProperty]
-        public string SelectedMonth { get; set; }
+        public string SelectedMonth { get; set; } = string.Empty;
         [BindProperty]
         public int SelectedDay { get; set; }
         [BindProperty]
-        public string SelectedTime { get; set; }
+        public string SelectedTime { get; set; } = string.Empty;
 
         [BindProperty]
-        public string RegistrationNumber { get; set; }
+        public string RegistrationNumber { get; set; } = string.Empty;
         public async Task<IActionResult> OnGetAsync(int id)
         {
             // Load stations and packages when the page loads
@@ -49,12 +49,14 @@ namespace WashOverflowV2.Pages
             Packages = await _context.Packages.ToListAsync();
 
             // Fetch the booking from the database
-            Booking = await _context.Bookings.FindAsync(id);
+            var booking = await _context.Bookings.FindAsync(id);
 
-            if (Booking == null)
+            if (booking == null)
             {
                 return NotFound();
             }
+
+            Booking = booking;
 
             // Pre-fill the form with the current booking data
             SelectedStationId = Booking.StationId;

@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
-namespace WashOverflowV2.Areas.Identity.Pages.Account
+namespace WashZone.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
@@ -184,3 +184,4 @@ namespace WashOverflowV2.Areas.Identity.Pages.Account
         }
     }
 }
+

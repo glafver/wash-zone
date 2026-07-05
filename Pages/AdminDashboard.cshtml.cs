@@ -1,15 +1,15 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using WashOverflowV2.Data;
-using WashOverflowV2.Models;
+using WashZone.Data;
+using WashZone.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace WashOverflowV2.Pages
+namespace WashZone.Pages
 {
     [Authorize(Roles = "Admin")]
     public class AdminDashboardModel : PageModel
@@ -21,16 +21,16 @@ namespace WashOverflowV2.Pages
             _context = context;
         }
 
-        public List<Booking> Bookings { get; set; }
-        public List<Station> Stations { get; set; }
-        public List<Package> Packages { get; set; }
-        public string SortOrder { get; set; }
+        public List<Booking> Bookings { get; set; } = new List<Booking>();
+        public List<Station> Stations { get; set; } = new List<Station>();
+        public List<Package> Packages { get; set; } = new List<Package>();
+        public string SortOrder { get; set; } = string.Empty;
         public int? SelectedStationId { get; set; }
         public int? SelectedPackageId { get; set; }
         public string? RegNumberFilter { get; set; }
         public string? PhoneNumberFilter { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string sortOrder = "desc", int? stationId = null, int? packageId = null, string? regNumber = null, string? phoneNumber=null)
+        public async Task<IActionResult> OnGetAsync(string sortOrder = "desc", int? stationId = null, int? packageId = null, string? regNumber = null, string? phoneNumber = null)
         {
             if (!User.IsInRole("Admin"))
             {
@@ -66,7 +66,7 @@ namespace WashOverflowV2.Pages
             }
 
             if (!string.IsNullOrWhiteSpace(phoneNumber))
-                bookingsQuery = bookingsQuery.Where(b => b.User.PhoneNumber.Contains(phoneNumber));
+                bookingsQuery = bookingsQuery.Where(b => b.User != null && b.User.PhoneNumber != null && b.User.PhoneNumber.Contains(phoneNumber));
 
             bookingsQuery = sortOrder == "asc"
                 ? bookingsQuery.OrderBy(b => b.Date)
@@ -98,3 +98,4 @@ namespace WashOverflowV2.Pages
         }
     }
 }
+

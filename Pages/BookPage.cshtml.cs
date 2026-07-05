@@ -1,13 +1,13 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Security.Claims;
-using WashOverflowV2.Data;
-using WashOverflowV2.Models;
+using WashZone.Data;
+using WashZone.Models;
 
-namespace WashOverflowV2.Pages
+namespace WashZone.Pages
 {
     public class BookPageModel : PageModel
     {
@@ -29,19 +29,19 @@ namespace WashOverflowV2.Pages
         [BindProperty]
         public int SelectedPackageId { get; set; }
         [BindProperty]
-        public string SelectedMonth { get; set; }
+        public string SelectedMonth { get; set; } = string.Empty;
         [BindProperty]
         public int SelectedDay { get; set; }
         [BindProperty]
-        public string SelectedTime { get; set; }
+        public string SelectedTime { get; set; } = string.Empty;
 
         [BindProperty]
-        public string RegistrationNumber { get; set; }
-        
+        public string RegistrationNumber { get; set; } = string.Empty;
+
         public List<Station> Stations { get; set; } = new List<Station>();
         public List<Package> Packages { get; set; } = new List<Package>();
 
-        public Booking Booking { get; set; }
+        public Booking Booking { get; set; } = new Booking();
 
 
         public async Task<IActionResult> OnGetPackagesAsync(int stationId)
@@ -90,9 +90,9 @@ namespace WashOverflowV2.Pages
         {
             _logger.LogInformation("OnPostAsync() started...");
 
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
-              
+
                 return Page();
             }
             try
@@ -106,7 +106,7 @@ namespace WashOverflowV2.Pages
 
                 Booking = new Booking // creates the booking based on user input
                 {
-                    UserId = userId,
+                    UserId = userId ?? string.Empty,
                     StationId = SelectedStationId,
                     PackageId = SelectedPackageId,
                     RegistrationNumber = RegistrationNumber,
@@ -128,7 +128,8 @@ namespace WashOverflowV2.Pages
             }
 
         }
-        
+
 
     }
 }
+

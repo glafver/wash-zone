@@ -3,7 +3,7 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-@model WashOverflowV2.Pages.IndexModel
+@model WashZone.Pages.IndexModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -12,8 +12,7 @@
     var backgroundImage = "hero.jpg";
 }
 
-<section class="hero text-white text-center shadow d-flex align-items-center justify-content-center mb-5 rounded"
-         style="
+<section class="hero text-white text-center shadow d-flex align-items-center justify-content-center mb-5 rounded" style="
     background: url('/images/@backgroundImage') center/cover no-repeat;
     min-height: 30vh;
     position: relative;">
@@ -22,7 +21,7 @@
         @if (SignInManager.IsSignedIn(User))
         {
             <div class="text-center my-5">
-                <h1 class="text-center">Welcome, @(User.Identity.Name.Split('@')[0])!</h1>
+                <h1 class="text-center">Welcome, @(User.Identity?.Name?.Split('@')[0] ?? "User")!</h1>
                 <p class="mt-3 lead mx-auto w-75">
                     Whether you're looking for a quick exterior wash, a full interior refresh, or advanced detailing,
                     our professional team is here to make your vehicle look and feel brand new.
@@ -36,7 +35,7 @@
         else
         {
             <div class="text-center my-5 w-75 mx-auto">
-                <h1 class="display-4 fw-bold">Welcome to WashOverflow</h1>
+                <h1 class="display-4 fw-bold">Welcome to WashZone</h1>
                 <p class="mt-3 lead mx-auto w-75">
                     Whether you're looking for a quick exterior wash, a full interior refresh, or advanced detailing,
                     our professional team is here to make your vehicle look and feel brand new.
@@ -60,7 +59,8 @@
         <input type="hidden" name="SelectedPackageId" id="selectedPackageInput">
 
         <div class="dropdown">
-            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" id="dropdownMenuButton">
+            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    id="dropdownMenuButton">
                 Alla paket
             </button>
             <ul class="dropdown-menu">
@@ -81,56 +81,164 @@
         {
             <div class="col-md-4">
                 <div class="card shadow mb-4">
-                    <img src="@Url.Content($"~/images/{station.Id}.jpg")"
-                         class="card-img-top w-100"
-                         alt="@station.Name"
+                    <img src="@Url.Content($"~/images/{station.Id}.jpg")" class="card-img-top w-100" alt="@station.Name"
                          style="height: 120px; object-fit: cover;">
                     <div class="card-body text-center">
                         <h5 class="card-title logo">@station.Name</h5>
                         <p class="card-text">@station.Address</p>
-                        <a href="@Url.Page("/DetailsCarwash", new { id = station.Id })" class="btn btn-dark mb-3">More info</a>
+                        <a href="@Url.Page("/DetailsCarwash", new { id = station.Id })" class="btn btn-dark mb-3">More
+                            info</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <section class="mx-3 mt-5">
+        <h2 class="text-center mb-4 fs-1 fw-bold">Find Our Locations</h2>
+        <div id="map"
+             style="width: 100%; height: 500px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        </div>
+    </section>
+
+    <section class="bg-dark text-light py-5 mx-3 mb-5 rounded-bottom">
+        <div class="container px-5 py-5">
+            <div class="row align-items-center">
+                <div class="col-md-7 ps-5">
+                    <h2 class="fw-bold">Give Your Car a Sparkling Clean Wash</h2>
+                    <p class="lead mb-0">Book a professional car wash today and let us take care of your car with care and
+                        precision.</p>
+                    </div>
+                    <div class="col-md-5 text-center">
+
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <a asp-page="/BookPage" class="btn btn-light btn-lg mt-5 mt-lg-0">Book a wash</a>
+                        }
+                        else
+                        {
+                            <a href="/Identity/Account/Login" class="btn btn-light btn-lg mt-5 mt-lg-0">Log in to book</a>
+                        }
                     </div>
                 </div>
             </div>
-        }
-    </div>
-</div>
-
-<section class="mx-3 mt-5">
-    <div style="width: 100%; overflow: hidden; height: 300px;">
-        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1K2q_1ZSX-VoTUTVsMtt_tL27wVqBE9s&ehbc=2E312F&noprof=1"
-                class="w-100"
-                height="600"
-                frameborder="0"
-                style="border:0; margin-top: -50px;">
-        </iframe>
-    </div>
-</section>
-
-<section class="bg-dark text-light py-5 mx-3 mb-5 rounded-bottom">
-    <div class="container px-5 py-5">
-        <div class="row align-items-center">
-            <div class="col-md-7 ps-5">
-                <h2 class="fw-bold">Give Your Car a Sparkling Clean Wash</h2> 
-                <p class="lead mb-0">Book a professional car wash today and let us take care of your car with care and precision.</p>
-            </div>
-            <div class="col-md-5 text-center">
-                <a asp-page="/BookPage" class="btn btn-light btn-lg mt-5 mt-lg-0">Book a wash</a>
-            </div>
-        </div>
-    </div>
-</section>
+        </section>
 
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
-        document.querySelectorAll('.package-option').forEach(item => {
-            item.addEventListener('click', function() {
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial" />
+            <script src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleMapsApiKey&libraries=marker"></script>
+            <script>
+                document.querySelectorAll('.package-option').forEach(item => {
+                item.addEventListener('click', function () {
                 document.getElementById('selectedPackageInput').value = this.getAttribute('data-value');
                 document.getElementById('dropdownMenuButton').textContent = this.textContent;
                 document.getElementById('packageForm').submit();
-            });
-        });
-    </script>
-}
+                });
+                });
+
+                // Initialize Google Map
+                function initMap() {
+                const stations = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Stations.Select(s => new { name = s.Name, address = s.Address, id = s.Id })));
+
+                if (stations.length === 0) {
+                return;
+                }
+
+                // Hardcoded coordinates for Malmö stations (more reliable than geocoding)
+                const stationCoordinates = {
+                "Centrum": { lat: 55.6075, lng: 13.0015 },
+                "Västra Hamnen": { lat: 55.6176, lng: 12.9338 },
+                "Rosengård": { lat: 55.5888, lng: 13.0235 },
+                "Limhamn": { lat: 55.5708, lng: 12.9443 },
+                "Hyllie": { lat: 55.5432, lng: 12.9912 },
+                "Möllevången": { lat: 55.6130, lng: 12.9670 },
+                "Sorgenfri": { lat: 55.6305, lng: 13.0075 },
+                "Kirseberg": { lat: 55.5820, lng: 12.9895 }
+                };
+
+                // Default center - Malmö, Sweden
+                const malmoCenterLat = 55.6050;
+                const malmoCenterLng = 12.9850;
+                const defaultCenter = { lat: malmoCenterLat, lng: malmoCenterLng };
+
+                const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 11,
+                center: defaultCenter,
+                mapTypeControl: true,
+                fullscreenControl: true,
+                });
+
+                const bounds = new google.maps.LatLngBounds();
+                let markersPlaced = 0;
+
+                stations.forEach((station, index) => {
+                const coords = stationCoordinates[station.name];
+
+                if (coords) {
+                const location = coords;
+                markersPlaced++;
+
+                // Create marker with custom car wash icon
+                const marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                title: station.name,
+                icon: {
+                url: '/images/car-wash.png',
+                scaledSize: new google.maps.Size(40, 40),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(20, 20)
+                }
+                });
+
+                // Add info window with station details
+                const infoWindow = new google.maps.InfoWindow({
+                content: `<div style="padding: 0; max-width: 300px; font-family: Arial, sans-serif; border-radius: 8px; overflow: hidden;">
+                <img src="/images/${station.id}.jpg" style="width: 100%; height: 150px; object-fit: cover; display: block;">
+                <div style="padding: 12px;">
+                <h5 style="margin: 0 0 8px 0; font-weight: bold; font-size: 15px; color: #1f2937;">${station.name}</h5>
+                <p style="margin: 0 0 10px 0; font-size: 13px; color: #6b7280;">
+                <strong>Address:</strong> ${station.address}
+                </p>
+                <a href="/DetailsCarwash/${station.id}" style="display: inline-block; padding: 8px 16px; background-color: #212529; color: white; text-decoration: none; font-weight: 500; border-radius: 4px; font-size: 13px; border: none; cursor: pointer;">
+                View Details →
+                </a>
+                </div>
+                </div>`
+                });
+
+                marker.addListener("click", () => {
+                infoWindow.open(map, marker);
+                });
+
+                bounds.extend(location);
+                } else {
+                console.warn(`✗ No coordinates found for station: ${station.name}`);
+                }
+                });
+
+                // Fit map to all markers
+                if (markersPlaced > 0) {
+                setTimeout(() => {
+                map.fitBounds(bounds);
+                // Adjust zoom if too zoomed in
+                const currentZoom = map.getZoom();
+                if (currentZoom > 12) {
+                map.setZoom(12);
+                }
+                }, 100);
+                }
+                }
+
+                // Initialize map when DOM is loaded
+                if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initMap);
+                } else {
+                initMap();
+                }
+            </script>
+        }
+
+

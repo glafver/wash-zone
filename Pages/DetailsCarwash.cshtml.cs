@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
+ï»¿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using WashOverflowV2.Data;
-using WashOverflowV2.Models;
+using WashZone.Data;
+using WashZone.Models;
 
-namespace WashOverflowV2.Pages
+namespace WashZone.Pages
 {
     public class DetailsCarwashModel : PageModel
     {
@@ -17,15 +17,15 @@ namespace WashOverflowV2.Pages
 
         public IReadOnlyDictionary<string, string> FeatureImages { get; } = new Dictionary<string, string>
         {
-            { "Utvändig tvätt", "exterior-wash.png" },
-            { "Invändig rengöring", "interior-cleaning.png" },
+            { "UtvÃ¤ndig tvÃ¤tt", "exterior-wash.png" },
+            { "InvÃ¤ndig rengÃ¶ring", "interior-cleaning.png" },
             { "Vaxning", "waxing.png" },
-            { "Däckglans", "tire-shine.png" },
-            { "Fönsterputs", "window-cleaning.png" },
-            { "Motortvätt", "engine-wash.png" },
-            { "Interiör desinficering", "interior-disinfection.png" },
+            { "DÃ¤ckglans", "tire-shine.png" },
+            { "FÃ¶nsterputs", "window-cleaning.png" },
+            { "MotortvÃ¤tt", "engine-wash.png" },
+            { "InteriÃ¶r desinficering", "interior-disinfection.png" },
             { "Luktsanering", "odor-removal.png" },
-            { "Keramisk beläggning", "ceramic-coating.png" }
+            { "Keramisk belÃ¤ggning", "ceramic-coating.png" }
         };
 
         public Station? Station { get; set; }
@@ -37,7 +37,7 @@ namespace WashOverflowV2.Pages
                 .Include(s => s.StationPackages)
                 .ThenInclude(sp => sp.Package)
                 .ThenInclude(p => p.PackageFeatures) // Inkludera kopplingen till features
-                .ThenInclude(pf => pf.Feature) // Inkludera själva feature-data
+                .ThenInclude(pf => pf.Feature) // Inkludera sjÃ¤lva feature-data
                 .FirstOrDefault(s => s.Id == id);
 
             if (Station == null)

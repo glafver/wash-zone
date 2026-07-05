@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using WashOverflowV2.Models;
+using WashZone.Models;
 
-namespace WashOverflowV2.Data
+namespace WashZone.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
@@ -54,3 +54,4 @@ namespace WashOverflowV2.Data
         }
     }
 }
+

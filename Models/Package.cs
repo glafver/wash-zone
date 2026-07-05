@@ -1,4 +1,4 @@
-﻿namespace WashOverflowV2.Models
+﻿namespace WashZone.Models
 {
     public class Package
     {
@@ -12,3 +12,4 @@
         public ICollection<StationPackage> StationPackages { get; set; } = new List<StationPackage>();
     }
 }
+

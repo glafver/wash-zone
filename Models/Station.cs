@@ -1,4 +1,4 @@
-﻿namespace WashOverflowV2.Models
+﻿namespace WashZone.Models
 {
     public class Station
     {
@@ -10,3 +10,4 @@
 
     }
 }
+

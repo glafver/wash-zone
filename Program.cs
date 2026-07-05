@@ -1,9 +1,15 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WashOverflowV2.Data;
-using WashOverflowV2.Models;
+using WashZone.Data;
+using WashZone.Models;
+
+// Fixed port for WashZone
+const int fixedPort = 5000;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure to use fixed port
+builder.WebHost.UseUrls($"http://localhost:{fixedPort}");
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -14,8 +20,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+	.AddRoles<IdentityRole>()
+	.AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddRazorPages();
 
@@ -25,9 +31,9 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
 	var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    SampleData.SeedData(context, userManager, roleManager);
+	var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+	var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+	SampleData.SeedData(context, userManager, roleManager);
 }
 
 // Configure the HTTP request pipeline.
@@ -51,4 +57,15 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+// Log clickable localhost links with fixed port
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+var appUrl = $"http://localhost:{fixedPort}";
+
+logger.LogInformation("╔════════════════════════════════════════════════════════╗");
+logger.LogInformation("║           🚀 WashZone is Running!                     ║");
+logger.LogInformation("╠════════════════════════════════════════════════════════╣");
+logger.LogInformation("║  📍 Open in browser: {url}            ║", appUrl);
+logger.LogInformation("╚════════════════════════════════════════════════════════╝");
+
 app.Run();
+

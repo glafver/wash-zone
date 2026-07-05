@@ -1,4 +1,4 @@
-﻿namespace WashOverflowV2.Models
+﻿namespace WashZone.Models
 {
     public class PackageFeature
     {
@@ -9,3 +9,4 @@
         public Feature Feature { get; set; } = null!;
     }
 }
+

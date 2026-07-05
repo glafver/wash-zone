@@ -1,41 +1,47 @@
-using Microsoft.AspNetCore.Identity;
+ï»¿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using WashOverflowV2.Data;
-using WashOverflowV2.Models;
+using WashZone.Data;
+using WashZone.Models;
 
-namespace WashOverflowV2.Pages
+namespace WashZone.Pages
 {
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IConfiguration _configuration;
 
         public IndexModel(
             ApplicationDbContext context,
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            IConfiguration configuration)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _configuration = configuration;
         }
 
-        public IList<Station> Stations { get; set; }
+        public IList<Station> Stations { get; set; } = new List<Station>();
         public IList<Package> Packages { get; set; } = new List<Package>();
+        public string GoogleMapsApiKey { get; set; } = string.Empty;
 
         [BindProperty(SupportsGet = true)]
-        public int? SelectedPackageId { get; set; } // Paket som användaren valt
+        public int? SelectedPackageId { get; set; }
 
 
         public async Task<IActionResult> OnGetAsync()
         {
-            // Hämta alla paket för dropdown-listan
+            GoogleMapsApiKey = _configuration["GoogleMaps:ApiKey"]
+                ?? _configuration["GoogleMapsApiKey"]
+                ?? "";
+
             Packages = _context.Packages.ToList();
 
-            // Om användaren har valt ett paket, filtrera stationerna
             if (SelectedPackageId.HasValue && SelectedPackageId > 0)
             {
                 Stations = _context.Stations
@@ -44,9 +50,9 @@ namespace WashOverflowV2.Pages
             }
             else
             {
-                Stations = _context.Stations.ToList(); // Visa alla stationer om inget paket är valt
+                Stations = _context.Stations.ToList();
             }
-            // Redirect admin users to the admin dashboard
+
             if (_signInManager.IsSignedIn(User))
             {
                 var user = await _userManager.GetUserAsync(User);
@@ -61,7 +67,8 @@ namespace WashOverflowV2.Pages
 
         public IActionResult OnPostBookPage()
         {
-            return RedirectToPage("BookPage"); // Redirects to BookPage.cshtml
+            return RedirectToPage("BookPage");
         }
     }
 }
+
