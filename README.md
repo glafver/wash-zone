@@ -1,225 +1,369 @@
 # WashZone - Car Wash Booking Application
 
-A comprehensive car wash booking system built with ASP.NET Core and Razor Pages.
+A comprehensive car wash booking system built with **ASP.NET Core 8 Razor Pages**, **Entity Framework Core**, **SQL Server**, and **Docker Compose**.
 
-## 📋 Prerequisites
+The application is a monolithic ASP.NET Core application where the frontend (Razor Pages) and backend run together in one container, connected to a SQL Server database container.
 
-Before starting the application, ensure you have the following installed:
+---
 
-- **.NET 8.0 SDK** - [Download](https://dotnet.microsoft.com/download/dotnet/8.0)
-- **SQL Server** - Local or Azure SQL Database
-- **Git** (optional, for cloning)
+# 📋 Prerequisites
 
-## 🔧 Database Setup
+Before starting the application, install:
 
-### Using Azure SQL Server (Current Configuration)
-The application is configured to use Azure SQL Server. Ensure you have:
-- Active Azure SQL Database connection
-- Valid credentials in `appsettings.json`
+* **Docker Desktop**
+* **Git** (optional, for cloning)
 
-### Using Local SQL Server
-To switch to local SQL Server:
+No local SQL Server installation is required. The database runs inside Docker.
 
-1. Open `appsettings.json`
-2. Update the connection string:
-```json
-"ConnectionStrings": {
-  "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=WashZone;Trusted_Connection=true;MultipleActiveResultSets=true;"
-}
+---
+
+# 🐳 Docker Setup
+
+The application consists of two containers:
+
+```
+              Browser
+                 |
+                 |
+        ASP.NET Core Container
+            (WashZone)
+                 |
+                 |
+          SQL Server Container
 ```
 
-3. Apply migrations:
+Docker Compose manages both containers and their network connection.
+
+---
+
+# 🚀 Getting Started
+
+## 1. Clone the project
+
+```bash
+git clone <repository-url>
+cd WashZone
+```
+
+---
+
+## 2. Configure environment variables
+
+Create a file called:
+
+```
+.env
+```
+
+in the project root.
+
+Example:
+
+```env
+ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=WashZone_new_db;User Id=sa;Password=YourStrong!Pass123;TrustServerCertificate=True
+
+GoogleMaps__ApiKey=your_google_maps_api_key
+```
+
+The `.env` file contains sensitive information and should **not** be committed to GitHub.
+
+Add it to `.gitignore`:
+
+```
+.env
+appsettings.Development.json
+```
+
+---
+
+## 3. Start the application
+
+Build and start all containers:
+
+```bash
+docker compose up --build
+```
+
+This starts:
+
+* ASP.NET Core application
+* SQL Server database
+
+The application will be available at:
+
+```
+http://localhost:8080
+```
+
+---
+
+## 4. Stop the application
+
+```bash
+docker compose down
+```
+
+To remove containers and the database volume:
+
+```bash
+docker compose down -v
+```
+
+⚠️ Removing volumes deletes the database data.
+
+---
+
+# 🗄️ Database
+
+The application uses:
+
+* Microsoft SQL Server 2022
+* Entity Framework Core
+* Code-first migrations
+
+The database runs inside a Docker container and data is persisted using a Docker volume.
+
+Database migrations are applied automatically when the application starts.
+
+To manually create/update migrations:
+
+Create migration:
+
+```bash
+dotnet ef migrations add MigrationName
+```
+
+Update database:
+
 ```bash
 dotnet ef database update
 ```
 
-## 🚀 Getting Started
+---
 
-### 1. Clone or Open the Project
-```bash
-cd d:\workspace\WashZone
-```
-
-### 2. Restore Dependencies
-```bash
-dotnet restore
-```
-
-### 3. Apply Database Migrations
-```bash
-dotnet ef database update
-```
-
-### 4. Run the Application
-
-**Note**: WashZone is a monolithic ASP.NET Core application. The frontend (Razor Pages) and backend run together. No separate frontend start needed!
-
-#### Option A: Using dotnet CLI
-```bash
-dotnet run
-```
-
-#### Option B: Using Visual Studio
-1. Open `WashZone.sln` in Visual Studio 2022+
-2. Press `F5` or click **Start Debugging**
-
-#### Option C: Using VS Code
-```bash
-dotnet run --urls "https://localhost:7000;http://localhost:5000"
-```
-
-### 5. Access the Application
-- **Development**: `https://localhost:7000` (or the port shown in terminal)
-- **Both frontend and backend start automatically** when you run the app
-- Default browser opens automatically
-
-## 📁 Project Structure
-
-**This is a monolithic ASP.NET Core application** - frontend and backend run together as one application.
+# 📁 Project Structure
 
 ```
 WashZone/
-├── Program.cs                 # Application entry point
-├── appsettings.json          # Configuration settings
+│
+├── Dockerfile
+├── docker-compose.yml
+├── .env                         # Local secrets (not committed)
+│
+├── Program.cs                   # Application entry point
+├── appsettings.json             # General configuration
 ├── appsettings.Development.json
-├── WashZone.csproj           # Project file
-├── WashZone.sln              # Solution file
+├── WashZone.csproj
+├── WashZone.sln
+│
 ├── Data/
 │   ├── ApplicationDbContext.cs
 │   └── SampleData.cs
-├── Models/                    # Database models
+│
+├── Models/
 │   ├── User.cs
 │   ├── Station.cs
 │   ├── Package.cs
 │   ├── Booking.cs
 │   └── Feature.cs
-├── Pages/                     # Razor Pages (Frontend UI)
+│
+├── Pages/                       # Razor Pages frontend
 │   ├── Index.cshtml
 │   ├── BookPage.cshtml
 │   ├── MyBookingsPage.cshtml
 │   ├── DetailsCarwash.cshtml
 │   ├── AdminDashboard.cshtml
 │   └── ...
-├── Migrations/               # Database migrations
-└── wwwroot/                  # Static files (CSS, JS, images)
+│
+├── Migrations/
+│
+└── wwwroot/                     # CSS, JS, images
 ```
 
-## 🔐 Authentication
+---
 
-The application uses ASP.NET Core Identity:
-- **Default Configuration**: No email confirmation required
-- **Roles**: Support for role-based authorization
-- **Login**: Available at `/Identity/Account/Login`
-- **Registration**: Available at `/Identity/Account/Register`
+# 🔐 Authentication
 
-### Sample Data
-The application automatically seeds sample data on startup, including:
-- Default users
-- Car wash stations
-- Service packages
-- Features
+The application uses **ASP.NET Core Identity**.
 
-## 🛠️ Development
+Features:
 
-### Useful Commands
+* User registration
+* User login
+* Role-based authorization
+* Admin dashboard
+* Booking management
 
-#### Rebuild Solution
+Login:
+
+```
+/Identity/Account/Login
+```
+
+Registration:
+
+```
+/Identity/Account/Register
+```
+
+---
+
+# 🌱 Sample Data
+
+On startup, the application seeds initial data:
+
+* Users
+* Car wash stations
+* Service packages
+* Features
+
+---
+
+# 🛠️ Useful Docker Commands
+
+## Build containers
+
 ```bash
-dotnet build
+docker compose build
 ```
 
-#### Clean Build
+## Start containers in background
+
 ```bash
-dotnet clean && dotnet build
+docker compose up -d
 ```
 
-#### Create Database Migration
+## View application logs
+
 ```bash
-dotnet ef migrations add MigrationName
+docker compose logs -f washzone
 ```
 
-#### Update Database with Migrations
+## View database logs
+
 ```bash
-dotnet ef database update
+docker compose logs -f sqlserver
 ```
 
-#### Remove Last Migration
+## Restart containers
+
 ```bash
-dotnet ef migrations remove
+docker compose restart
 ```
 
-#### View Database
-- Use **SQL Server Management Studio (SSMS)** to connect and view the database
-- Or use Visual Studio's **SQL Server Object Explorer**
+## Rebuild after changes
 
-## 🧪 Testing
+```bash
+docker compose up --build
+```
 
-To run tests (if configured):
+---
+
+# 🧪 Testing
+
+Run tests:
+
 ```bash
 dotnet test
 ```
 
-## 📦 Dependencies
+---
 
-Key NuGet packages used:
-- `Microsoft.AspNetCore.Identity.EntityFrameworkCore` - User authentication
-- `Microsoft.EntityFrameworkCore.SqlServer` - Database ORM
-- `Microsoft.AspNetCore.Identity.UI` - Identity UI components
-- `Microsoft.EntityFrameworkCore.Tools` - EF Core tooling
+# 📦 Main Dependencies
 
-## 🐛 Troubleshooting
-
-### Connection String Issues
-- Verify the connection string in `appsettings.json`
-- Ensure database server is running and accessible
-- Check firewall settings for Azure SQL
-
-### Migration Errors
-```bash
-# Reset database (development only)
-dotnet ef database drop --force
-dotnet ef database update
-```
-
-### Port Already in Use
-```bash
-dotnet run --urls "https://localhost:7001;http://localhost:5001"
-```
-
-## 📝 Pages Overview
-
-- **Index.cshtml** - Home page with available stations
-- **BookPage.cshtml** - Book a car wash service
-- **MyBookingsPage.cshtml** - View user's bookings
-- **DetailsCarwash.cshtml** - Station details
-- **AdminDashboard.cshtml** - Admin panel for managing bookings
-- **EditBooking.cshtml** - Edit existing bookings
-
-## 🌐 Configuration
-
-Edit `appsettings.Development.json` for development-specific settings:
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "your_connection_string_here"
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
-    }
-  }
-}
-```
-
-## 📄 License
-
-This project is part of a study/work environment.
-
-## 📞 Support
-
-For issues or questions, check the error logs in the console or application output.
+* ASP.NET Core 8 Razor Pages
+* Entity Framework Core
+* SQL Server Provider
+* ASP.NET Core Identity
+* Docker
+* Docker Compose
 
 ---
 
-**Last Updated**: 2026-07-05
+# 🌐 Configuration
+
+Sensitive configuration is stored outside the application using environment variables.
+
+Examples:
+
+```
+ConnectionStrings__DefaultConnection
+GoogleMaps__ApiKey
+```
+
+These values are provided through Docker Compose locally and can be configured as environment variables in production hosting platforms.
+
+---
+
+# 🐛 Troubleshooting
+
+## Database connection problems
+
+Check:
+
+* Docker Desktop is running
+* SQL Server container is started
+* `.env` exists
+* Connection string uses:
+
+```
+Server=sqlserver,1433
+```
+
+inside Docker Compose.
+
+---
+
+## Container problems
+
+Check logs:
+
+```bash
+docker compose logs -f
+```
+
+Rebuild everything:
+
+```bash
+docker compose down
+docker compose build --no-cache
+docker compose up
+```
+
+---
+
+## Port already in use
+
+Change the port mapping in:
+
+```
+docker-compose.yml
+```
+
+Example:
+
+```yaml
+ports:
+  - "8081:8080"
+```
+
+---
+
+# 📝 Pages Overview
+
+* **Index.cshtml** - Available car wash stations
+* **BookPage.cshtml** - Create booking
+* **MyBookingsPage.cshtml** - User bookings
+* **DetailsCarwash.cshtml** - Station details
+* **AdminDashboard.cshtml** - Administration panel
+* **EditBooking.cshtml** - Edit bookings
+
+---
+
+# 📄 License
+
+This project is part of a study/work environment.
+
+---
+
+**Last Updated:** 2026-07-07
