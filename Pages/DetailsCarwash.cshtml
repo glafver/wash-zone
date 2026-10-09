@@ -4,24 +4,22 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.DetailsCarwashModel
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
 @{
     ViewData["Title"] = "Station Details";
 }
 
 <div class="container px-3 mb-4">
-    <div class="row align-items-center rounded bg-dark my-5">
-        <div class="col-md-6 ps-5 text-light">
-            <h2 class="marker" style="font-size:2.6rem">@Model.Station?.Name</h2>
+    <div class="row align-items-center bg-dark my-5">
+        <div class="col-md-6 ps-5 py-4 text-light">
+            <h2 class="marker" style="font-size:clamp(2.5rem,6vw,4rem)">@Model.Station?.Name</h2>
             <p class="mb-3">@Model.Station?.Address</p>
             <p>+46761234578</p>
         </div>
 
-        <div class="col-md-6 text-md-end text-center px-0">
-            <iframe width="100%" height="200" style="border:0; border-radius:0 4px 4px 0; margin-bottom: -6px; filter: grayscale(1);"
-                    loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"
-                    src="https://www.google.com/maps?q=@Uri.EscapeDataString(Model.Station?.Address ?? "")&output=embed">
-            </iframe>
+        <div class="col-md-6">
+            <div id="map" style="height:280px; filter: grayscale(1);"></div>
         </div>
     </div>
 </div>
@@ -59,9 +57,32 @@
     </div>
 </div>
 
-
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const stationName = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Station?.Name ?? ""));
+        const stationAddress = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Station?.Address ?? ""));
 
+        const stationCoordinates = {
+            "Centrum": { lat: 55.6075, lng: 13.0015 },
+            "Västra Hamnen": { lat: 55.6176, lng: 12.9338 },
+            "Rosengård": { lat: 55.5888, lng: 13.0235 },
+            "Limhamn": { lat: 55.5708, lng: 12.9443 },
+            "Hyllie": { lat: 55.5432, lng: 12.9912 },
+            "Möllevången": { lat: 55.6130, lng: 12.9670 },
+            "Sorgenfri": { lat: 55.6305, lng: 13.0075 },
+            "Kirseberg": { lat: 55.5820, lng: 12.9895 }
+        };
+
+        const coords = stationCoordinates[stationName] || { lat: 55.6050, lng: 12.9850 };
+
+        const map = L.map('map').setView([coords.lat, coords.lng], 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([coords.lat, coords.lng]).addTo(map)
+            .bindPopup(`<strong>${stationName}</strong><br>${stationAddress}`);
+    </script>
+}
