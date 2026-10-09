@@ -1,0 +1,20 @@
+@model IList<WashZone.Models.Station>
+@inject IStringLocalizer<SharedResource> Localizer
+
+<div class="row g-4" id="stationsGrid">
+    @foreach (var station in Model)
+    {
+        <div class="col-md-6 col-lg-4">
+            <article class="station-card">
+                <div class="station-card__media">
+                    <img src="@Url.Content($"~/images/{station.Id}.jpg")" alt="@station.Name" onerror="this.src='/images/hero.jpg'" />
+                </div>
+                <div class="station-card__body">
+                    <h3 class="station-card__name">@station.Name</h3>
+                    <p class="station-card__address">@station.Address</p>
+                    <a href="@Url.Page("/DetailsCarwash", new { id = station.Id })" class="btn btn-dark btn-sm">@Localizer["IndexMoreInfo"] →</a>
+                </div>
+            </article>
+        </div>
+    }
+</div>

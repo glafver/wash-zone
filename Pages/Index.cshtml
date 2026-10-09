@@ -89,9 +89,8 @@
             <h2 class="section-head">@Localizer["IndexStationsHeading"]</h2>
         </div>
 
-        <form method="get" class="d-flex align-items-center gap-2" id="packageForm">
-            <label class="form-label mb-0" for="packageSelect">@Localizer["IndexFilterLabel"]</label>
-            <input type="hidden" name="SelectedPackageId" id="selectedPackageInput">
+        <div class="d-flex align-items-center gap-2">
+            <label class="form-label mb-0">@Localizer["IndexFilterLabel"]</label>
             <div class="dropdown">
                 <button class="btn btn-outline dropdown-toggle" type="button" data-bs-toggle="dropdown" id="dropdownMenuButton">
                     @Localizer["IndexAllPackages"]
@@ -104,26 +103,10 @@
                     }
                 </ul>
             </div>
-        </form>
+        </div>
     </div>
 
-    <div class="row g-4">
-        @foreach (var station in Model.Stations)
-        {
-            <div class="col-md-6 col-lg-4">
-                <article class="station-card">
-                    <div class="station-card__media">
-                        <img src="@Url.Content($"~/images/{station.Id}.jpg")" alt="@station.Name" onerror="this.src='/images/hero.jpg'" />
-                    </div>
-                    <div class="station-card__body">
-                        <h3 class="station-card__name">@station.Name</h3>
-                        <p class="station-card__address">@station.Address</p>
-                        <a href="@Url.Page("/DetailsCarwash", new { id = station.Id })" class="btn btn-dark btn-sm">@Localizer["IndexMoreInfo"] →</a>
-                    </div>
-                </article>
-            </div>
-        }
-    </div>
+    <partial name="_StationCards" model="Model.Stations" />
 </section>
 
 <!-- ============ VIDEO SHOWCASE ============ -->
@@ -196,22 +179,16 @@
 @section Scripts {
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Restore scroll position after a package-filter form submit
-        (function () {
-            var savedY = sessionStorage.getItem('washzoneScrollY');
-            if (savedY) {
-                window.scrollTo(0, parseInt(savedY, 10));
-                sessionStorage.removeItem('washzoneScrollY');
-            }
-        })();
-
-        // Package filter dropdown
+        // Package filter dropdown (AJAX, no page reload)
         document.querySelectorAll('.package-option').forEach(item => {
             item.addEventListener('click', function () {
-                document.getElementById('selectedPackageInput').value = this.getAttribute('data-value');
+                const packageId = this.getAttribute('data-value');
                 document.getElementById('dropdownMenuButton').textContent = this.textContent;
-                sessionStorage.setItem('washzoneScrollY', String(window.scrollY));
-                document.getElementById('packageForm').submit();
+                fetch(`/Index?handler=Stations&packageId=${packageId}`)
+                    .then(r => r.text())
+                    .then(html => {
+                        document.getElementById('stationsGrid').outerHTML = html;
+                    });
             });
         });
 

@@ -51,5 +51,11 @@ namespace WashZone.Pages
         {
             return RedirectToPage("BookPage");
         }
+
+        public async Task<IActionResult> OnGetStationsAsync(int? packageId)
+        {
+            var stations = await _stationService.GetStationsAsync(packageId);
+            return Partial("_StationCards", stations);
+        }
     }
 }
