@@ -154,7 +154,7 @@ namespace WashZone.Data
 
             if (await userManager.FindByEmailAsync("admin@washzone.se") == null)
             {
-                var adminUser = new User
+                var adminUser = new IdentityUser
                 {
                     UserName = "admin@washzone.se",
                     Email = "admin@washzone.se",
@@ -192,7 +192,7 @@ namespace WashZone.Data
                 var user = await userManager.FindByEmailAsync(email);
                 if (user == null)
                 {
-                    user = new User
+                    user = new IdentityUser
                     {
                         UserName = email,
                         Email = email,
