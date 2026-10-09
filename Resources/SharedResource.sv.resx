@@ -25,7 +25,7 @@
   <data name="IndexHeroTitle" xml:space="preserve"><value>Välkommen till WashZone</value></data>
   <data name="IndexHeroText" xml:space="preserve"><value>Oavsett om du vill ha en snabb utvändig tvätt, en fullständig invändig rengöring eller avancerad rekonditionering så finns vårt professionella team här för att få din bil att se ut och kännas helt ny.</value></data>
   <data name="IndexHeroTagline" xml:space="preserve"><value>Snabbt. Prisvärt. Professionellt. För din bil förtjänar det bästa.</value></data>
-  <data name="BookWash" xml:space="preserve"><value>Boka en tvätt</value></data>
+  <data name="BookWash" xml:space="preserve"><value>Boka tvätt</value></data>
   <data name="LoginToBook" xml:space="preserve"><value>Logga in för att boka</value></data>
   <data name="IndexStationsHeading" xml:space="preserve"><value>Våra biltvättstationer</value></data>
   <data name="IndexFilterLabel" xml:space="preserve"><value>Filtrera efter tvättpaket:</value></data>

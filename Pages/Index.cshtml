@@ -180,7 +180,6 @@
 <!-- ============ CTA ============ -->
 <section class="container py-6">
     <div class="cta-band text-center">
-        <div class="section-sub" style="color:var(--ink)">WashZone</div>
         <h2 class="cta-title">@Localizer["IndexCtaTitle"]</h2>
         <p class="lead mb-4 mx-auto" style="max-width:34rem">@Localizer["IndexCtaText"]</p>
         @if (SignInManager.IsSignedIn(User))
@@ -189,7 +188,7 @@
         }
         else
         {
-            <a href="/Identity/Account/Login" class="btn btn-lg">@Localizer["LoginToBook"]</a>
+            <a href="/Identity/Account/Login" class="btn btn-lg">@Localizer["BookWash"]</a>
         }
     </div>
 </section>
