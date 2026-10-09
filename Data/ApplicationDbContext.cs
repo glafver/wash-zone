@@ -18,6 +18,7 @@ namespace WashZone.Data
         public DbSet<PackageFeature> PackageFeatures { get; set; }
 
         public DbSet<StationPackage> StationPackages { get; set; }
+        public DbSet<StationAdmin> StationAdmins { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -51,6 +52,20 @@ namespace WashZone.Data
                 .HasOne(sp => sp.Package)
                 .WithMany(p => p.StationPackages)
                 .HasForeignKey(sp => sp.PackageId);
+
+            // StationAdmin: a user manages a single station.
+            modelBuilder.Entity<StationAdmin>()
+                .HasKey(sa => sa.UserId);
+
+            modelBuilder.Entity<StationAdmin>()
+                .HasOne(sa => sa.User)
+                .WithMany()
+                .HasForeignKey(sa => sa.UserId);
+
+            modelBuilder.Entity<StationAdmin>()
+                .HasOne(sa => sa.Station)
+                .WithMany()
+                .HasForeignKey(sa => sa.StationId);
         }
     }
 }

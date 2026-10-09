@@ -29,11 +29,11 @@ namespace WashZone.Data
             {
                 database.Packages.AddRange(new List<Package>
                     {
-                        new Package { Name = "Standard", Price = 150 },
-                        new Package { Name = "Premium", Price = 250 },
-                        new Package { Name = "Deluxe", Price = 400 },
-                        new Package { Name = "Exclusive", Price = 600 },
-                        new Package { Name = "Luxury", Price = 800 }
+                        new Package { Name = "Standard", Price = 150, DurationMinutes = 30 },
+                        new Package { Name = "Premium", Price = 250, DurationMinutes = 60 },
+                        new Package { Name = "Deluxe", Price = 400, DurationMinutes = 90 },
+                        new Package { Name = "Exclusive", Price = 600, DurationMinutes = 120 },
+                        new Package { Name = "Luxury", Price = 800, DurationMinutes = 180 }
                     });
                 database.SaveChanges();
             }
@@ -145,6 +145,10 @@ namespace WashZone.Data
             {
                 await roleManager.CreateAsync(new IdentityRole("User"));
             }
+            if (!await roleManager.RoleExistsAsync("StationAdmin"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("StationAdmin"));
+            }
 
             //Seed admin user data to database
 
@@ -162,6 +166,29 @@ namespace WashZone.Data
                 };
                 await userManager.CreateAsync(adminUser, "Admin123!");
                 await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+
+            //Seed station admin user (manages station 1)
+            //When log in as station admin, use:
+            //email: stationadmin@washzone.se
+            //password: Admin123!
+
+            if (await userManager.FindByEmailAsync("stationadmin@washzone.se") == null)
+            {
+                var stationAdminUser = new IdentityUser
+                {
+                    UserName = "stationadmin@washzone.se",
+                    Email = "stationadmin@washzone.se",
+                    EmailConfirmed = true
+                };
+                await userManager.CreateAsync(stationAdminUser, "Admin123!");
+                await userManager.AddToRoleAsync(stationAdminUser, "StationAdmin");
+
+                if (!database.StationAdmins.Any(sa => sa.UserId == stationAdminUser.Id))
+                {
+                    database.StationAdmins.Add(new StationAdmin { UserId = stationAdminUser.Id, StationId = 1 });
+                    await database.SaveChangesAsync();
+                }
             }
 
             //Seed user data to database
@@ -215,24 +242,24 @@ namespace WashZone.Data
                 var bookings = new List<Booking>
                     {
                         // Bookings for user1
-                        new Booking { UserId = userIds[0], RegistrationNumber = "ABC123", PackageId = 1, StationId = 1, Date = DateTime.UtcNow.AddDays(2) },
-                        new Booking { UserId = userIds[0],RegistrationNumber = "ABC123", PackageId = 2, StationId = 3, Date = DateTime.UtcNow.AddDays(5) },
-                        new Booking { UserId = userIds[0], RegistrationNumber = "ABC123",PackageId = 3, StationId = 5, Date = DateTime.UtcNow.AddDays(7) },
+                        new Booking { UserId = userIds[0], RegistrationNumber = "ABC123", PackageId = 1, StationId = 1, DurationMinutes = 30, Date = DateTime.UtcNow.AddDays(2) },
+                        new Booking { UserId = userIds[0],RegistrationNumber = "ABC123", PackageId = 2, StationId = 3, DurationMinutes = 60, Date = DateTime.UtcNow.AddDays(5) },
+                        new Booking { UserId = userIds[0], RegistrationNumber = "ABC123",PackageId = 3, StationId = 5, DurationMinutes = 90, Date = DateTime.UtcNow.AddDays(7) },
 
                         // Bookings for user2
-                        new Booking { UserId = userIds[1],RegistrationNumber = "XYZ789", PackageId = 2, StationId = 2, Date = DateTime.UtcNow.AddDays(3) },
-                        new Booking { UserId = userIds[1],RegistrationNumber = "XYZ789", PackageId = 4, StationId = 4, Date = DateTime.UtcNow.AddDays(6) },
-                        new Booking { UserId = userIds[1],RegistrationNumber = "TESLA", PackageId = 5, StationId = 6, Date = DateTime.UtcNow.AddDays(9) },
+                        new Booking { UserId = userIds[1],RegistrationNumber = "XYZ789", PackageId = 2, StationId = 2, DurationMinutes = 60, Date = DateTime.UtcNow.AddDays(3) },
+                        new Booking { UserId = userIds[1],RegistrationNumber = "XYZ789", PackageId = 4, StationId = 4, DurationMinutes = 120, Date = DateTime.UtcNow.AddDays(6) },
+                        new Booking { UserId = userIds[1],RegistrationNumber = "TESLA", PackageId = 5, StationId = 6, DurationMinutes = 180, Date = DateTime.UtcNow.AddDays(9) },
 
                         // Bookings for user3
-                        new Booking { UserId = userIds[2],RegistrationNumber = "LMN321", PackageId = 3, StationId = 3, Date = DateTime.UtcNow.AddDays(4) },
-                        new Booking { UserId = userIds[2],RegistrationNumber = "LMN321", PackageId = 1, StationId = 1, Date = DateTime.UtcNow.AddDays(8) },
-                        new Booking { UserId = userIds[2],RegistrationNumber = "LMN321", PackageId = 5, StationId = 7, Date = DateTime.UtcNow.AddDays(10) },
+                        new Booking { UserId = userIds[2],RegistrationNumber = "LMN321", PackageId = 3, StationId = 3, DurationMinutes = 90, Date = DateTime.UtcNow.AddDays(4) },
+                        new Booking { UserId = userIds[2],RegistrationNumber = "LMN321", PackageId = 1, StationId = 1, DurationMinutes = 30, Date = DateTime.UtcNow.AddDays(8) },
+                        new Booking { UserId = userIds[2],RegistrationNumber = "LMN321", PackageId = 5, StationId = 7, DurationMinutes = 180, Date = DateTime.UtcNow.AddDays(10) },
 
                         // Bookings for user4
-                        new Booking { UserId = userIds[3],RegistrationNumber = "DEF456", PackageId = 4, StationId = 4, Date = DateTime.UtcNow.AddDays(1) },
-                        new Booking { UserId = userIds[3],RegistrationNumber = "SUPERCAR", PackageId = 2, StationId = 2, Date = DateTime.UtcNow.AddDays(5) },
-                        new Booking { UserId = userIds[3],RegistrationNumber = "SUPERCAR", PackageId = 3, StationId = 8, Date = DateTime.UtcNow.AddDays(7) }
+                        new Booking { UserId = userIds[3],RegistrationNumber = "DEF456", PackageId = 4, StationId = 4, DurationMinutes = 120, Date = DateTime.UtcNow.AddDays(1) },
+                        new Booking { UserId = userIds[3],RegistrationNumber = "SUPERCAR", PackageId = 2, StationId = 2, DurationMinutes = 60, Date = DateTime.UtcNow.AddDays(5) },
+                        new Booking { UserId = userIds[3],RegistrationNumber = "SUPERCAR", PackageId = 3, StationId = 8, DurationMinutes = 90, Date = DateTime.UtcNow.AddDays(7) }
                     };
 
                 database.Bookings.AddRange(bookings);
