@@ -53,35 +53,11 @@
         .ToList();
     }
 
-    <div class="row justify-content-center">
+    <div class="row g-4">
         @foreach (var package in sortedPackages)
         {
-            <div class="col-md-4 d-flex">
-                <div class="card shadow mb-4 px-4 w-100 d-flex flex-column">
-                    <div class="card-body d-flex flex-column">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <h5 class="card-titlem fw-bold logo m-0 fs-2">@package.Name</h5>
-                            <p class="card-text fw-bold logo fs-1 m-auto" style="color:cadetblue">@package.Price kr</p>
-                        </div>
-                        <div class="row flex-grow-1 justify-content-around">
-                            @foreach (var featureChunk in package.PackageFeatures.Select(pf => pf.Feature).Chunk(5))
-                            {
-                                <div class="col-md-6">
-                                    <ul class="list-group list-group-flush">
-                                        @foreach (var feature in featureChunk)
-                                        {
-                                            <li class="list-group-item px-0 d-flex align-items-center">
-                                                <img src="~/images/@Model.FeatureImages[feature.Name]" alt="@feature.Name"
-                                                     width="40" class="me-2">
-                                                @feature.Name
-                                            </li>
-                                        }
-                                    </ul>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
+            <div class="col-md-6 col-lg-4">
+                <partial name="_PackageCard" model="package" />
             </div>
         }
     </div>

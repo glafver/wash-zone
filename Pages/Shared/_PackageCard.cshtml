@@ -1,0 +1,20 @@
+@model WashZone.Models.Package
+
+<article class="package-card">
+    <div class="package-card__head">
+        <div class="d-flex align-items-start justify-content-between gap-2">
+            <h2 class="package-card__name">@Model.Name</h2>
+            <span class="package-card__price">@Model.Price kr</span>
+        </div>
+        <div class="package-card__duration">@Model.DurationMinutes min</div>
+    </div>
+    <div class="package-card__body">
+        @foreach (var pf in Model.PackageFeatures)
+        {
+            <div class="package-card__feature">
+                <img src="~/images/@(pf.Feature.Name.ToLower().Replace(" ", "-")).png" alt="@pf.Feature.Name" onerror="this.style.display='none'" />
+                @pf.Feature.Name
+            </div>
+        }
+    </div>
+</article>

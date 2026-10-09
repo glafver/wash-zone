@@ -41,6 +41,13 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 1.05;
 }
 
+.marker {
+    font-family: "Permanent Marker", cursive;
+    text-transform: none !important;
+    letter-spacing: 0;
+    font-weight: 400;
+}
+
 a {
     color: var(--ink);
 }
@@ -120,12 +127,13 @@ a {
 }
 
 .brand {
-    font-family: var(--font-display);
-    font-size: 1.6rem;
-    text-transform: uppercase;
+    font-family: "Permanent Marker", cursive;
+    font-size: 1.7rem;
+    text-transform: none;
     text-decoration: none;
     color: var(--ink);
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
+    font-weight: 400;
 }
 
 .brand-mark {
@@ -697,14 +705,24 @@ a {
 }
 
 .package-card__name {
-    font-size: 1.2rem;
+    font-family: "Permanent Marker", cursive;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1;
     margin: 0;
 }
 
 .package-card__price {
-    font-family: var(--font-display);
-    font-size: 1.6rem;
-    margin: 0.3rem 0 0;
+    font-family: "Permanent Marker", cursive;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin: 0;
+    white-space: nowrap;
 }
 
 .package-card__duration {
@@ -721,14 +739,14 @@ a {
 .package-card__feature {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    font-size: 0.9rem;
-    padding: 0.3rem 0;
+    gap: 0.7rem;
+    font-size: 0.95rem;
+    padding: 0.35rem 0;
 }
 
 .package-card__feature img {
-    width: 22px;
-    height: 22px;
+    width: 32px;
+    height: 32px;
     object-fit: contain;
     flex-shrink: 0;
 }

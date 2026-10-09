@@ -13,22 +13,7 @@
         @foreach (var package in Model.Packages)
         {
             <div class="col-md-6 col-lg-4">
-                <article class="package-card">
-                    <div class="package-card__head">
-                        <h2 class="package-card__name">@package.Name</h2>
-                        <div class="package-card__price">@package.Price kr</div>
-                        <div class="package-card__duration">@package.DurationMinutes min</div>
-                    </div>
-                    <div class="package-card__body">
-                        @foreach (var pf in package.PackageFeatures)
-                        {
-                            <div class="package-card__feature">
-                                <img src="~/images/@(pf.Feature.Name.ToLower().Replace(" ", "-")).png" alt="@pf.Feature.Name" onerror="this.style.display='none'" />
-                                @pf.Feature.Name
-                            </div>
-                        }
-                    </div>
-                </article>
+                <partial name="_PackageCard" model="package" />
             </div>
         }
     </div>
