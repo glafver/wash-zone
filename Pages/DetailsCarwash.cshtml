@@ -19,7 +19,7 @@
         </div>
 
         <div class="col-md-6">
-            <div id="map" style="height:280px; filter: grayscale(1);"></div>
+            <div id="map" style="height:280px;"></div>
         </div>
     </div>
 </div>
@@ -84,5 +84,8 @@
         }).addTo(map);
         L.marker([coords.lat, coords.lng]).addTo(map)
             .bindPopup(`<strong>${stationName}</strong><br>${stationAddress}`);
+
+        // Fix a potential right-edge gap when the grid layout settles
+        setTimeout(() => map.invalidateSize(), 200);
     </script>
 }
