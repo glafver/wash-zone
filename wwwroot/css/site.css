@@ -806,7 +806,7 @@ a {
 }
 
 .faq-video {
-    aspect-ratio: 9 / 16;
+    position: relative;
     overflow: hidden;
     border: var(--border);
     width: 100%;
@@ -814,6 +814,8 @@ a {
 }
 
 .faq-video video {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
