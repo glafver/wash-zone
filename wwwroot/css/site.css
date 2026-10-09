@@ -414,6 +414,44 @@ a {
     font-size: 0.8rem;
 }
 
+/* ---- Dropdowns & focus (override Bootstrap blue) ----------------------- */
+
+.btn:focus,
+.btn:active:focus,
+.btn:focus-visible {
+    box-shadow: none;
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.dropdown-menu {
+    border: var(--border);
+    background: var(--white);
+    padding: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.dropdown-item {
+    font-family: var(--font-body);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    padding: 0.6rem 1rem;
+    color: var(--ink);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background: var(--accent);
+    color: var(--ink);
+}
+
+.dropdown-item:active {
+    background: var(--ink);
+    color: var(--paper);
+}
+
 /* ---- Tables ----------------------------------------------------------- */
 
 .table {
