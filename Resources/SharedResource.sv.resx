@@ -46,9 +46,7 @@
   <data name="Step3Title" xml:space="preserve"><value>Boka din tid</value></data>
   <data name="Step3Text" xml:space="preserve"><value>Reservera en tid i kalendern.</value></data>
   <data name="StatsStations" xml:space="preserve"><value>Stationer</value></data>
-  <data name="StatsPackages" xml:space="preserve"><value>Paket</value></data>
   <data name="StatsHours" xml:space="preserve"><value>Öppet dagligen</value></data>
-  <data name="StatsCity" xml:space="preserve"><value>Stad</value></data>
   <data name="OurServices" xml:space="preserve"><value>Våra tjänster</value></data>
   <data name="OurServicesSub" xml:space="preserve"><value>Varje tvätt inkluderar expertvård</value></data>
   <data name="VideoBandTitle" xml:space="preserve"><value>Se glansen</value></data>

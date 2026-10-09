@@ -249,19 +249,21 @@ a {
 }
 
 .marquee-track {
-    display: inline-flex;
-    gap: 2rem;
-    animation: marquee 22s linear infinite;
+    display: flex;
+    width: max-content;
+    animation: marquee 24s linear infinite;
     font-family: var(--font-display);
     font-size: 1.1rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
-.marquee-track span {
-    display: inline-flex;
+.marquee-group {
+    display: flex;
     align-items: center;
     gap: 2rem;
+    padding-right: 2rem;
+    flex-shrink: 0;
 }
 
 .marquee .dot {
@@ -458,41 +460,6 @@ a {
 .cal-cell.booked { background: #e0ddd6; }
 .cal-cell.selected { background: var(--ink); }
 
-/* ---- Stats band ------------------------------------------------------- */
-
-.stats-band {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    background: var(--ink);
-    color: var(--paper);
-    border-top: var(--border);
-    border-bottom: var(--border);
-}
-
-.stat {
-    padding: 1.6rem 1rem;
-    text-align: center;
-    border-right: var(--border);
-}
-
-.stat:last-child { border-right: none; }
-
-.stat__value {
-    font-family: var(--font-display);
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    color: var(--accent);
-    line-height: 1;
-}
-
-.stat__label {
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 0.75rem;
-    margin-top: 0.5rem;
-    color: var(--paper);
-}
-
 /* ---- How it works ------------------------------------------------------ */
 
 .steps {
@@ -678,15 +645,10 @@ a {
 /* ---- Responsive -------------------------------------------------------- */
 
 @media (max-width: 991px) {
-    .stats-band { grid-template-columns: repeat(2, 1fr); }
-    .stat:nth-child(2) { border-right: none; }
     .steps { grid-template-columns: 1fr; }
     .services-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 575px) {
-    .stats-band { grid-template-columns: 1fr; }
-    .stat { border-right: none; border-bottom: var(--border); }
-    .stat:last-child { border-bottom: none; }
     .services-grid { grid-template-columns: 1fr; }
 }

@@ -44,32 +44,19 @@
 <!-- ============ MARQUEE ============ -->
 <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
-        @for (int i = 0; i < 8; i++)
+        @for (int half = 0; half < 2; half++)
         {
-            <span>@Localizer["MarqueeText"] <span class="dot">•</span></span>
+            <div class="marquee-group">
+                @for (int i = 0; i < 4; i++)
+                {
+                    <span>@Localizer["MarqueeText"]</span><span class="dot">•</span>
+                    <span>@Localizer["StatsHours"] 08–20</span><span class="dot">•</span>
+                    <span>@Model.Stations.Count @Localizer["StatsStations"]</span><span class="dot">•</span>
+                }
+            </div>
         }
     </div>
 </div>
-
-<!-- ============ STATS ============ -->
-<section class="stats-band">
-    <div class="stat">
-        <div class="stat__value">@Model.Stations.Count</div>
-        <div class="stat__label">@Localizer["StatsStations"]</div>
-    </div>
-    <div class="stat">
-        <div class="stat__value">@Model.Packages.Count</div>
-        <div class="stat__label">@Localizer["StatsPackages"]</div>
-    </div>
-    <div class="stat">
-        <div class="stat__value">08–20</div>
-        <div class="stat__label">@Localizer["StatsHours"]</div>
-    </div>
-    <div class="stat">
-        <div class="stat__value">Malmö</div>
-        <div class="stat__label">@Localizer["StatsCity"]</div>
-    </div>
-</section>
 
 <!-- ============ HOW IT WORKS ============ -->
 <section class="container py-6">
