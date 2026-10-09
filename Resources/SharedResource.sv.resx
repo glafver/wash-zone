@@ -136,7 +136,8 @@
   <data name="Back" xml:space="preserve"><value>Tillbaka</value></data>
 
   <!-- Navigation & footer -->
-  <data name="NavHome" xml:space="preserve"><value>Hem</value></data>
+  <data name="NavStations" xml:space="preserve"><value>Stationer</value></data>
+  <data name="StationsTitle" xml:space="preserve"><value>Våra stationer</value></data>
   <data name="NavPackages" xml:space="preserve"><value>Paket</value></data>
   <data name="NavAbout" xml:space="preserve"><value>Om oss</value></data>
   <data name="NavContacts" xml:space="preserve"><value>Kontakt</value></data>

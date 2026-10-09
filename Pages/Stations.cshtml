@@ -1,0 +1,15 @@
+@page
+@inject IStringLocalizer<SharedResource> Localizer
+@model WashZone.Pages.StationsModel
+@{
+    ViewData["Title"] = "Stations";
+}
+
+<section class="container py-6">
+    <div class="section-sub">WashZone</div>
+    <h1 class="section-head" style="font-size:clamp(2.4rem,6vw,4.5rem)">@Localizer["StationsTitle"]</h1>
+
+    <div class="mt-4">
+        <partial name="_StationCards" model="Model.Stations" />
+    </div>
+</section>

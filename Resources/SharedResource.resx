@@ -136,7 +136,8 @@
   <data name="Back" xml:space="preserve"><value>Back</value></data>
 
   <!-- Navigation & footer -->
-  <data name="NavHome" xml:space="preserve"><value>Home</value></data>
+  <data name="NavStations" xml:space="preserve"><value>Stations</value></data>
+  <data name="StationsTitle" xml:space="preserve"><value>Our stations</value></data>
   <data name="NavPackages" xml:space="preserve"><value>Packages</value></data>
   <data name="NavAbout" xml:space="preserve"><value>About</value></data>
   <data name="NavContacts" xml:space="preserve"><value>Contacts</value></data>
