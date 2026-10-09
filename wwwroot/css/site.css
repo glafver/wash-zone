@@ -791,6 +791,10 @@ a {
     margin-bottom: 1rem;
 }
 
+.faq-item:last-child {
+    margin-bottom: 0;
+}
+
 .faq-q {
     font-size: 1.05rem;
     margin: 0 0 0.5rem;
