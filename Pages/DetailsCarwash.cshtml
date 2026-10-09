@@ -10,7 +10,7 @@
     ViewData["Title"] = "Station Details";
 }
 
-<div class="container px-3 mb-4">
+<div class="container mb-4">
     <div class="row align-items-center bg-dark my-5">
         <div class="col-md-6 ps-5 py-4 text-light">
             <h2 class="marker" style="font-size:clamp(2.5rem,6vw,4rem)">@Model.Station?.Name</h2>
@@ -18,7 +18,7 @@
             <p>+46761234578</p>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6 p-0">
             <div id="map" style="height:280px;"></div>
         </div>
     </div>
@@ -77,12 +77,18 @@
 
         const coords = stationCoordinates[stationName] || { lat: 55.6050, lng: 12.9850 };
 
+        const icon = L.icon({
+            iconUrl: '/images/car-wash.png',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+        });
+
         const map = L.map('map').setView([coords.lat, coords.lng], 14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
-        L.marker([coords.lat, coords.lng]).addTo(map)
+        L.marker([coords.lat, coords.lng], { icon }).addTo(map)
             .bindPopup(`<strong>${stationName}</strong><br>${stationAddress}`);
 
         // Fix a potential right-edge gap when the grid layout settles

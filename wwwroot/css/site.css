@@ -393,9 +393,6 @@ a {
 
 #map {
     height: 460px;
-}
-
-.leaflet-tile {
     filter: grayscale(1) contrast(0.95);
 }
 
