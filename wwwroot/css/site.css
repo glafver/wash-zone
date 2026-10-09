@@ -801,6 +801,21 @@ a {
     margin: 0;
 }
 
+.faq-video {
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    border: var(--border);
+    max-width: 380px;
+    margin: 0 auto;
+}
+
+.faq-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 /* ---- Nav user & footer ------------------------------------------------- */
 
 .nav-user {
