@@ -49,8 +49,6 @@
   <data name="StatsPackages" xml:space="preserve"><value>Paket</value></data>
   <data name="StatsHours" xml:space="preserve"><value>Öppet dagligen</value></data>
   <data name="StatsCity" xml:space="preserve"><value>Stad</value></data>
-  <data name="OurPackages" xml:space="preserve"><value>Tvättpaket</value></data>
-  <data name="OurPackagesSub" xml:space="preserve"><value>Tydliga priser, inga överraskningar</value></data>
   <data name="OurServices" xml:space="preserve"><value>Våra tjänster</value></data>
   <data name="OurServicesSub" xml:space="preserve"><value>Varje tvätt inkluderar expertvård</value></data>
   <data name="VideoBandTitle" xml:space="preserve"><value>Se glansen</value></data>

@@ -24,7 +24,6 @@ namespace WashZone.Pages
 
         public IList<Station> Stations { get; set; } = new List<Station>();
         public IList<Package> Packages { get; set; } = new List<Package>();
-        public IList<Package> PackagesWithFeatures { get; set; } = new List<Package>();
         public IList<Feature> Features { get; set; } = new List<Feature>();
 
         [BindProperty(SupportsGet = true)]
@@ -33,7 +32,6 @@ namespace WashZone.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             Packages = await _stationService.GetPackagesAsync();
-            PackagesWithFeatures = await _stationService.GetPackagesWithFeaturesAsync();
             Features = await _stationService.GetFeaturesAsync();
             Stations = await _stationService.GetStationsAsync(SelectedPackageId);
 

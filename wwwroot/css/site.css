@@ -60,33 +60,20 @@ a {
     letter-spacing: 0.04em;
     font-size: 0.9rem;
     padding: 0.6rem 1.4rem;
-    box-shadow: var(--shadow-sm);
     transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.12s ease;
-}
-
-.btn:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 var(--ink);
-}
-
-.btn:active {
-    transform: translate(4px, 4px);
-    box-shadow: 0 0 0 var(--ink);
 }
 
 .btn-accent {
     background: var(--accent);
     color: var(--accent-ink);
-}
-
-.btn-accent:hover {
-    background: var(--accent);
+    box-shadow: 4px 4px 0 var(--ink);
 }
 
 .btn-dark {
     background: var(--ink);
     color: var(--paper);
     border-color: var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
 }
 
 .btn-outline {
@@ -97,6 +84,23 @@ a {
 .btn-light {
     background: var(--white);
     color: var(--ink);
+}
+
+.btn-accent:hover,
+.btn-dark:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+}
+
+.btn-outline:hover,
+.btn-light:hover {
+    background: var(--ink);
+    color: var(--paper);
+}
+
+.btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 var(--ink);
 }
 
 .btn-lg {
@@ -183,7 +187,7 @@ a {
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(rgba(15, 15, 15, 0.62), rgba(15, 15, 15, 0.35) 40%, rgba(15, 15, 15, 0.72));
+    background: rgba(15, 15, 15, 0.22);
 }
 
 .hero-content {
@@ -210,6 +214,7 @@ a {
     color: var(--paper);
     line-height: 0.95;
     margin: 1.4rem 0 1rem;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55);
 }
 
 .hero-title .accent {
@@ -220,7 +225,8 @@ a {
 .hero-text {
     font-size: 1.15rem;
     max-width: 34rem;
-    color: rgba(243, 240, 234, 0.9);
+    color: var(--paper);
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6);
 }
 
 .hero-actions {
@@ -308,27 +314,11 @@ a {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(0.2);
-    transition: filter 0.2s ease, transform 0.2s ease;
+    transition: transform 0.2s ease;
 }
 
 .station-card:hover .station-card__media img {
-    filter: grayscale(0);
     transform: scale(1.04);
-}
-
-.station-card__tag {
-    position: absolute;
-    top: 0.75rem;
-    left: 0.75rem;
-    background: var(--accent);
-    color: var(--ink);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 0.25rem 0.5rem;
-    border: var(--border);
 }
 
 .station-card__body {
@@ -509,7 +499,6 @@ a {
 .step {
     background: var(--white);
     border: var(--border);
-    box-shadow: var(--shadow);
     padding: 1.5rem;
 }
 
@@ -532,65 +521,6 @@ a {
     margin: 0;
 }
 
-/* ---- Packages ---------------------------------------------------------- */
-
-.package-card {
-    background: var(--white);
-    border: var(--border);
-    box-shadow: var(--shadow);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.package-card--featured {
-    background: var(--accent);
-}
-
-.package-card__head {
-    padding: 1.2rem 1.2rem 0.8rem;
-    border-bottom: var(--border);
-}
-
-.package-card__name {
-    font-size: 1.2rem;
-    margin: 0;
-}
-
-.package-card__price {
-    font-family: var(--font-display);
-    font-size: 1.6rem;
-    margin: 0.3rem 0 0;
-}
-
-.package-card__duration {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--muted);
-}
-
-.package-card--featured .package-card__duration { color: var(--ink); }
-
-.package-card__body {
-    padding: 1rem 1.2rem;
-    flex: 1;
-}
-
-.package-card__feature {
-    display: flex;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    padding: 0.25rem 0;
-}
-
-.package-card__feature::before {
-    content: "✓";
-    color: var(--accent);
-    font-weight: 700;
-}
-
-.package-card--featured .package-card__feature::before { color: var(--ink); }
-
 /* ---- Services ---------------------------------------------------------- */
 
 .services-grid {
@@ -602,7 +532,6 @@ a {
 .service {
     background: var(--white);
     border: var(--border);
-    box-shadow: var(--shadow-sm);
     padding: 1rem;
     display: flex;
     align-items: center;
@@ -623,21 +552,23 @@ a {
     margin: 0;
 }
 
-/* ---- Vertical video frame --------------------------------------------- */
+/* ---- Video showcase ---------------------------------------------------- */
 
-.vertical-frame {
-    border: var(--border);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    aspect-ratio: 9 / 16;
-    max-width: 360px;
-    margin: 0 auto;
+.showcase {
+    padding-top: 1rem;
 }
 
-.vertical-frame video {
+.showcase-head {
+    max-width: 40rem;
+}
+
+.showcase-video {
+    line-height: 0;
+}
+
+.showcase-video video {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
     display: block;
 }
 

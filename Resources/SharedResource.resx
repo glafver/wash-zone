@@ -49,8 +49,6 @@
   <data name="StatsPackages" xml:space="preserve"><value>Packages</value></data>
   <data name="StatsHours" xml:space="preserve"><value>Open daily</value></data>
   <data name="StatsCity" xml:space="preserve"><value>City</value></data>
-  <data name="OurPackages" xml:space="preserve"><value>Wash packages</value></data>
-  <data name="OurPackagesSub" xml:space="preserve"><value>Transparent pricing, no surprises</value></data>
   <data name="OurServices" xml:space="preserve"><value>What we do</value></data>
   <data name="OurServicesSub" xml:space="preserve"><value>Every wash includes expert care</value></data>
   <data name="VideoBandTitle" xml:space="preserve"><value>See the shine</value></data>
