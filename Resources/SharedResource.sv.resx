@@ -91,4 +91,28 @@
   <data name="EnterPhonePlaceholder" xml:space="preserve"><value>Ange telefonnummer</value></data>
   <data name="ColUser" xml:space="preserve"><value>Användare</value></data>
   <data name="ColPhone" xml:space="preserve"><value>Telefonnummer</value></data>
+
+  <!-- Admin management -->
+  <data name="ManageStations" xml:space="preserve"><value>Stationer</value></data>
+  <data name="AddStation" xml:space="preserve"><value>Lägg till station</value></data>
+  <data name="StationName" xml:space="preserve"><value>Namn</value></data>
+  <data name="StationAddress" xml:space="preserve"><value>Adress</value></data>
+  <data name="StationAdmins" xml:space="preserve"><value>Stationsadministratörer</value></data>
+  <data name="EditStation" xml:space="preserve"><value>Redigera station</value></data>
+  <data name="StationPackages" xml:space="preserve"><value>Paket</value></data>
+  <data name="Save" xml:space="preserve"><value>Spara</value></data>
+  <data name="RemoveAdmin" xml:space="preserve"><value>Ta bort</value></data>
+  <data name="NoAdmins" xml:space="preserve"><value>Inga stationsadministratörer tilldelade</value></data>
+  <data name="SelectUser" xml:space="preserve"><value>Välj användare</value></data>
+  <data name="AssignAdmin" xml:space="preserve"><value>Tilldela</value></data>
+  <data name="ManagePackages" xml:space="preserve"><value>Paket</value></data>
+  <data name="AddPackage" xml:space="preserve"><value>Lägg till paket</value></data>
+  <data name="PackageName" xml:space="preserve"><value>Namn</value></data>
+  <data name="PackagePrice" xml:space="preserve"><value>Pris</value></data>
+  <data name="PackageDuration" xml:space="preserve"><value>Varaktighet (minuter)</value></data>
+  <data name="EditPackage" xml:space="preserve"><value>Redigera paket</value></data>
+  <data name="PackageFeatures" xml:space="preserve"><value>Tjänster</value></data>
+  <data name="MyStation" xml:space="preserve"><value>Min station</value></data>
+  <data name="Bookings" xml:space="preserve"><value>Bokningar</value></data>
+  <data name="Back" xml:space="preserve"><value>Tillbaka</value></data>
 </root>

@@ -1,0 +1,49 @@
+@page
+@inject IStringLocalizer<SharedResource> Localizer
+@model WashZone.Pages.AdminStationsModel
+@{
+    ViewData["Title"] = "Stations";
+}
+
+<h1>@Localizer["ManageStations"]</h1>
+<div class="mb-3">
+    <a asp-page="/StationEdit" class="btn btn-dark">@Localizer["AddStation"]</a>
+    <a asp-page="/AdminDashboard" class="btn btn-outline-dark">@Localizer["Back"]</a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Localizer["StationName"]</th>
+            <th>@Localizer["StationAddress"]</th>
+            <th>@Localizer["StationAdmins"]</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var station in Model.Stations)
+        {
+            <tr>
+                <td>@station.Name</td>
+                <td>@station.Address</td>
+                <td>@(Model.AdminNames.TryGetValue(station.Id, out var admins) ? admins : "")</td>
+                <td>
+                    <a asp-page="/StationEdit" asp-route-id="@station.Id" class="btn btn-outline-dark btn-sm">@Localizer["Edit"]</a>
+                    <form method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@station.Id" />
+                        <button type="submit" asp-page-handler="Delete" class="btn btn-danger btn-sm">@Localizer["Delete"]</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

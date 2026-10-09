@@ -9,18 +9,26 @@
         if (User.IsInRole("Admin"))
         {
             <li class="nav-item">
-                <a class="nav-link btn btn-link text-dark" asp-area="">@Localizer["NavAdminDashboard"]</a>
+                <a class="nav-link btn btn-link text-dark" asp-page="/AdminDashboard">@Localizer["NavAdminDashboard"]</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-link text-dark" asp-page="/AdminStations">@Localizer["ManageStations"]</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-link text-dark" asp-page="/AdminPackages">@Localizer["ManagePackages"]</a>
+            </li>
+        }
+        else if (User.IsInRole("StationAdmin"))
+        {
+            <li class="nav-item">
+                <a class="nav-link btn btn-link text-dark" asp-page="/StationDashboard">@Localizer["MyStation"]</a>
             </li>
         }
         else
         {
             <li class="nav-item">
-                <a class="nav-link btn btn-link text-dark" asp-area="" asp-page="/MyBookingsPage">@Localizer["NavMyBookings"]</a>
+                <a class="nav-link btn btn-link text-dark" asp-page="/MyBookingsPage">@Localizer["NavMyBookings"]</a>
             </li>
-            @* <li class="nav-item"> *@
-                @* <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity?.Name</a> *@
-                @* <a class="nav-link btn btn-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a> *@
-            @* </li> *@
         }
 
         <li class="nav-item">

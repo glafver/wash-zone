@@ -1,0 +1,49 @@
+@page
+@inject IStringLocalizer<SharedResource> Localizer
+@model WashZone.Pages.AdminPackagesModel
+@{
+    ViewData["Title"] = "Packages";
+}
+
+<h1>@Localizer["ManagePackages"]</h1>
+<div class="mb-3">
+    <a asp-page="/PackageEdit" class="btn btn-dark">@Localizer["AddPackage"]</a>
+    <a asp-page="/AdminDashboard" class="btn btn-outline-dark">@Localizer["Back"]</a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Localizer["PackageName"]</th>
+            <th>@Localizer["PackagePrice"]</th>
+            <th>@Localizer["PackageDuration"]</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var package in Model.Packages)
+        {
+            <tr>
+                <td>@package.Name</td>
+                <td>@package.Price kr</td>
+                <td>@package.DurationMinutes min</td>
+                <td>
+                    <a asp-page="/PackageEdit" asp-route-id="@package.Id" class="btn btn-outline-dark btn-sm">@Localizer["Edit"]</a>
+                    <form method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@package.Id" />
+                        <button type="submit" asp-page-handler="Delete" class="btn btn-danger btn-sm">@Localizer["Delete"]</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

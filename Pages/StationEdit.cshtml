@@ -1,0 +1,78 @@
+@page
+@inject IStringLocalizer<SharedResource> Localizer
+@model WashZone.Pages.StationEditModel
+@{
+    ViewData["Title"] = "Edit Station";
+}
+
+<h1>@Localizer["EditStation"]</h1>
+
+<form method="post" class="mb-4">
+    <input type="hidden" asp-for="Station.Id" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label class="form-label">@Localizer["StationName"]</label>
+        <input asp-for="Station.Name" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">@Localizer["StationAddress"]</label>
+        <input asp-for="Station.Address" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@Localizer["StationPackages"]</label>
+        @foreach (var p in Model.AllPackages)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="SelectedPackageIds" value="@p.Id" id="pkg_@p.Id"
+                       @(Model.SelectedPackageIds.Contains(p.Id) ? "checked" : "") />
+                <label class="form-check-label" for="pkg_@p.Id">@p.Name (@p.DurationMinutes min)</label>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-dark">@Localizer["Save"]</button>
+    <a asp-page="/AdminStations" class="btn btn-outline-dark">@Localizer["EditCancel"]</a>
+</form>
+
+@if (Model.Station.Id > 0)
+{
+    <h3>@Localizer["StationAdmins"]</h3>
+    @if (Model.CurrentAdmins.Any())
+    {
+        @foreach (var admin in Model.CurrentAdmins)
+        {
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <span>@admin.UserName</span>
+                <form method="post" asp-page-handler="RemoveAdmin" asp-route-id="@Model.Station.Id" asp-route-userId="@admin.Id">
+                    <button type="submit" class="btn btn-danger btn-sm">@Localizer["RemoveAdmin"]</button>
+                </form>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="text-muted">@Localizer["NoAdmins"]</p>
+    }
+
+    <form method="post" asp-page-handler="AssignAdmin" asp-route-id="@Model.Station.Id" class="d-flex gap-2 mt-3">
+        <select name="userId" class="form-select">
+            <option value="">@Localizer["SelectUser"]</option>
+            @foreach (var u in Model.AvailableUsers)
+            {
+                <option value="@u.Id">@u.UserName</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-dark">@Localizer["AssignAdmin"]</button>
+    </form>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">@TempData["ErrorMessage"]</div>
+}

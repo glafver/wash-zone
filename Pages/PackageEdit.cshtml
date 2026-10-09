@@ -1,0 +1,41 @@
+@page
+@inject IStringLocalizer<SharedResource> Localizer
+@model WashZone.Pages.PackageEditModel
+@{
+    ViewData["Title"] = "Edit Package";
+}
+
+<h1>@Localizer["EditPackage"]</h1>
+
+<form method="post" class="mb-4">
+    <input type="hidden" asp-for="Package.Id" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label class="form-label">@Localizer["PackageName"]</label>
+        <input asp-for="Package.Name" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">@Localizer["PackagePrice"]</label>
+        <input asp-for="Package.Price" type="number" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">@Localizer["PackageDuration"]</label>
+        <input asp-for="Package.DurationMinutes" type="number" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">@Localizer["PackageFeatures"]</label>
+        @foreach (var f in Model.AllFeatures)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="SelectedFeatureIds" value="@f.Id" id="feat_@f.Id"
+                       @(Model.SelectedFeatureIds.Contains(f.Id) ? "checked" : "") />
+                <label class="form-check-label" for="feat_@f.Id">@f.Name</label>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-dark">@Localizer["Save"]</button>
+    <a asp-page="/AdminPackages" class="btn btn-outline-dark">@Localizer["EditCancel"]</a>
+</form>

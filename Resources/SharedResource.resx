@@ -91,4 +91,28 @@
   <data name="EnterPhonePlaceholder" xml:space="preserve"><value>Enter Phone Number</value></data>
   <data name="ColUser" xml:space="preserve"><value>User</value></data>
   <data name="ColPhone" xml:space="preserve"><value>User Phone</value></data>
+
+  <!-- Admin management -->
+  <data name="ManageStations" xml:space="preserve"><value>Stations</value></data>
+  <data name="AddStation" xml:space="preserve"><value>Add station</value></data>
+  <data name="StationName" xml:space="preserve"><value>Name</value></data>
+  <data name="StationAddress" xml:space="preserve"><value>Address</value></data>
+  <data name="StationAdmins" xml:space="preserve"><value>Station admins</value></data>
+  <data name="EditStation" xml:space="preserve"><value>Edit station</value></data>
+  <data name="StationPackages" xml:space="preserve"><value>Packages</value></data>
+  <data name="Save" xml:space="preserve"><value>Save</value></data>
+  <data name="RemoveAdmin" xml:space="preserve"><value>Remove</value></data>
+  <data name="NoAdmins" xml:space="preserve"><value>No station admins assigned</value></data>
+  <data name="SelectUser" xml:space="preserve"><value>Select user</value></data>
+  <data name="AssignAdmin" xml:space="preserve"><value>Assign</value></data>
+  <data name="ManagePackages" xml:space="preserve"><value>Packages</value></data>
+  <data name="AddPackage" xml:space="preserve"><value>Add package</value></data>
+  <data name="PackageName" xml:space="preserve"><value>Name</value></data>
+  <data name="PackagePrice" xml:space="preserve"><value>Price</value></data>
+  <data name="PackageDuration" xml:space="preserve"><value>Duration (minutes)</value></data>
+  <data name="EditPackage" xml:space="preserve"><value>Edit package</value></data>
+  <data name="PackageFeatures" xml:space="preserve"><value>Features</value></data>
+  <data name="MyStation" xml:space="preserve"><value>My station</value></data>
+  <data name="Bookings" xml:space="preserve"><value>Bookings</value></data>
+  <data name="Back" xml:space="preserve"><value>Back</value></data>
 </root>
