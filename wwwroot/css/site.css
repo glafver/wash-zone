@@ -814,6 +814,7 @@ a {
     position: relative;
     overflow: hidden;
     border: var(--border);
+    box-shadow: var(--shadow);
     width: 100%;
     max-width: 300px;
 }
