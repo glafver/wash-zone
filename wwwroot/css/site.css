@@ -802,11 +802,9 @@ a {
 }
 
 .faq-video {
-    aspect-ratio: 9 / 16;
+    flex: 1;
     overflow: hidden;
     border: var(--border);
-    max-width: 380px;
-    margin: 0 auto;
 }
 
 .faq-video video {
