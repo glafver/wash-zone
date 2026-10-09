@@ -63,11 +63,19 @@
 @section Scripts {
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        const map = L.map('map').setView([55.6050, 12.9850], 12);
+        const icon = L.icon({
+            iconUrl: '/images/car-wash.png',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+        });
+
+        const map = L.map('map').setView([55.6075, 13.0015], 14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
-        L.marker([55.6075, 13.0015]).addTo(map).bindPopup('WashZone');
+        L.marker([55.6075, 13.0015], { icon }).addTo(map).bindPopup('WashZone');
+
+        setTimeout(() => map.invalidateSize(), 200);
     </script>
 }
