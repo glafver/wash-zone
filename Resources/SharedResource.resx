@@ -53,6 +53,7 @@
   <data name="OurServicesSub" xml:space="preserve"><value>Every wash includes expert care</value></data>
   <data name="VideoBandTitle" xml:space="preserve"><value>See the shine</value></data>
   <data name="VideoBandText" xml:space="preserve"><value>Professional equipment, expert hands.</value></data>
+  <data name="VideoBandExtra" xml:space="preserve"><value>From hand wash to ceramic coating — every car is treated like our own. Premium products, honest pricing.</value></data>
 
   <!-- Station details -->
   <data name="DetailsBack" xml:space="preserve"><value>Go back to all stations</value></data>
