@@ -680,6 +680,117 @@ a {
     50% { opacity: 0.25; }
 }
 
+/* ---- Packages ---------------------------------------------------------- */
+
+.package-card {
+    background: var(--white);
+    border: var(--border);
+    box-shadow: var(--shadow);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.package-card__head {
+    padding: 1.2rem 1.2rem 0.8rem;
+    border-bottom: var(--border);
+}
+
+.package-card__name {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.package-card__price {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    margin: 0.3rem 0 0;
+}
+
+.package-card__duration {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.package-card__body {
+    padding: 1rem 1.2rem;
+    flex: 1;
+}
+
+.package-card__feature {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    padding: 0.25rem 0;
+}
+
+.package-card__feature::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: 700;
+}
+
+/* ---- FAQ --------------------------------------------------------------- */
+
+.faq-item {
+    border: var(--border);
+    background: var(--white);
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.faq-q {
+    font-size: 1.05rem;
+    margin: 0 0 0.5rem;
+}
+
+.faq-a {
+    color: var(--muted);
+    margin: 0;
+}
+
+/* ---- Nav user & footer ------------------------------------------------- */
+
+.nav-user {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    background: var(--accent);
+    color: var(--ink);
+    padding: 0.25rem 0.6rem;
+    border: var(--border);
+}
+
+.footer-heading {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.8rem;
+}
+
+.footer-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-list li {
+    margin-bottom: 0.4rem;
+}
+
+.footer-list a {
+    color: var(--paper);
+    text-decoration: none;
+}
+
+.footer-list a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
 /* ---- Responsive -------------------------------------------------------- */
 
 @media (max-width: 991px) {

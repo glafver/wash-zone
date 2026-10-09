@@ -1,0 +1,73 @@
+@page
+@inject IStringLocalizer<SharedResource> Localizer
+@model WashZone.Pages.ContactsModel
+@{
+    ViewData["Title"] = "Contacts";
+}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<section class="container py-6">
+    <div class="section-sub">WashZone</div>
+    <h1 class="section-head" style="font-size:clamp(2.4rem,6vw,4.5rem)">@Localizer["ContactsTitle"]</h1>
+
+    <div class="services-grid mt-4">
+        <div class="service">
+            <span class="service__icon">📍</span>
+            <p class="service__name">@Localizer["ContactAddress"]: Gustav Adolfs Torg 10, Malmö</p>
+        </div>
+        <div class="service">
+            <span class="service__icon">📞</span>
+            <p class="service__name">@Localizer["ContactPhone"]: +46 761 234 578</p>
+        </div>
+        <div class="service">
+            <span class="service__icon">✉️</span>
+            <p class="service__name">@Localizer["ContactEmail"]: info@washzone.se</p>
+        </div>
+    </div>
+
+    <div class="row g-5 mt-2">
+        <div class="col-lg-6">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+            <form method="post" class="booking-form">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="mb-3">
+                    <label class="form-label">@Localizer["FormName"]</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">@Localizer["FormEmail"]</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">@Localizer["FormMessage"]</label>
+                    <textarea asp-for="Message" class="form-control" rows="5"></textarea>
+                    <span asp-validation-for="Message" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-accent">@Localizer["FormSend"]</button>
+            </form>
+        </div>
+        <div class="col-lg-6">
+            <div class="map-frame">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([55.6050, 12.9850], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([55.6075, 13.0015]).addTo(map).bindPopup('WashZone');
+    </script>
+}

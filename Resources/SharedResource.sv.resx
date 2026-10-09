@@ -133,4 +133,47 @@
   <data name="MyStation" xml:space="preserve"><value>Min station</value></data>
   <data name="Bookings" xml:space="preserve"><value>Bokningar</value></data>
   <data name="Back" xml:space="preserve"><value>Tillbaka</value></data>
+
+  <!-- Navigation & footer -->
+  <data name="NavHome" xml:space="preserve"><value>Hem</value></data>
+  <data name="NavPackages" xml:space="preserve"><value>Paket</value></data>
+  <data name="NavAbout" xml:space="preserve"><value>Om oss</value></data>
+  <data name="NavContacts" xml:space="preserve"><value>Kontakt</value></data>
+  <data name="NavFAQ" xml:space="preserve"><value>FAQ</value></data>
+  <data name="FooterTagline" xml:space="preserve"><value>Snabb, prisvärd och fläckfri bilvård i Malmö.</value></data>
+  <data name="FooterPages" xml:space="preserve"><value>Sidor</value></data>
+  <data name="FooterContact" xml:space="preserve"><value>Kontakt</value></data>
+
+  <!-- About -->
+  <data name="AboutTitle" xml:space="preserve"><value>Om WashZone</value></data>
+  <data name="AboutLead" xml:space="preserve"><value>Vi gör bilvård enkelt, snabbt och fläckfritt.</value></data>
+  <data name="AboutText1" xml:space="preserve"><value>WashZone började med en enkel idé — biltvätt ska vara enkelt. Boka online, kom förbi och kör iväg i en fläckfri bil.</value></data>
+  <data name="AboutText2" xml:space="preserve"><value>Våra stationer runt Malmö använder professionell utrustning och premiumprodukter, skött av experter som behandlar varje bil som sin egen.</value></data>
+
+  <!-- Packages -->
+  <data name="OurPackages" xml:space="preserve"><value>Tvättpaket</value></data>
+  <data name="OurPackagesSub" xml:space="preserve"><value>Tydliga priser, inga överraskningar</value></data>
+
+  <!-- Contacts -->
+  <data name="ContactsTitle" xml:space="preserve"><value>Kontakt</value></data>
+  <data name="ContactAddress" xml:space="preserve"><value>Adress</value></data>
+  <data name="ContactPhone" xml:space="preserve"><value>Telefon</value></data>
+  <data name="ContactEmail" xml:space="preserve"><value>E-post</value></data>
+  <data name="FormName" xml:space="preserve"><value>Namn</value></data>
+  <data name="FormEmail" xml:space="preserve"><value>E-post</value></data>
+  <data name="FormMessage" xml:space="preserve"><value>Meddelande</value></data>
+  <data name="FormSend" xml:space="preserve"><value>Skicka</value></data>
+
+  <!-- FAQ -->
+  <data name="FaqTitle" xml:space="preserve"><value>Vanliga frågor</value></data>
+  <data name="FaqQ1" xml:space="preserve"><value>Hur bokar jag en tvätt?</value></data>
+  <data name="FaqA1" xml:space="preserve"><value>Välj en station, välj ett paket och reservera en tid i kalendern.</value></data>
+  <data name="FaqQ2" xml:space="preserve"><value>Kan jag avboka eller ändra min bokning?</value></data>
+  <data name="FaqA2" xml:space="preserve"><value>Ja — logga in och hantera dina bokningar under "Mina bokningar".</value></data>
+  <data name="FaqQ3" xml:space="preserve"><value>Hur betalar jag?</value></data>
+  <data name="FaqA3" xml:space="preserve"><value>Du betalar på stationen när tvätten är klar.</value></data>
+  <data name="FaqQ4" xml:space="preserve"><value>När har ni öppet?</value></data>
+  <data name="FaqA4" xml:space="preserve"><value>Varje dag från 08:00 till 20:00.</value></data>
+  <data name="FaqQ5" xml:space="preserve"><value>Vad händer om jag är sen?</value></data>
+  <data name="FaqA5" xml:space="preserve"><value>Kontakta oss så snart som möjligt — vi gör vårt bästa för att hjälpa dig.</value></data>
 </root>

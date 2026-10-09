@@ -5,11 +5,12 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
+    var name = User.Identity?.Name?.Split('@')[0] ?? "User";
+    <span class="nav-user">@name</span>
+
     if (User.IsInRole("Admin"))
     {
         <a class="nav-link" asp-page="/AdminDashboard">@Localizer["NavAdminDashboard"]</a>
-        <a class="nav-link" asp-page="/AdminStations">@Localizer["ManageStations"]</a>
-        <a class="nav-link" asp-page="/AdminPackages">@Localizer["ManagePackages"]</a>
     }
     else if (User.IsInRole("StationAdmin"))
     {
@@ -26,6 +27,5 @@
 }
 else
 {
-    <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">@Localizer["NavRegister"]</a>
     <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">@Localizer["NavLogin"]</a>
 }

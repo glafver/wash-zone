@@ -1,0 +1,32 @@
+@page
+@inject IStringLocalizer<SharedResource> Localizer
+@model WashZone.Pages.PackagesModel
+@{
+    ViewData["Title"] = "Packages";
+}
+
+<section class="container py-6">
+    <div class="section-sub">@Localizer["OurPackagesSub"]</div>
+    <h1 class="section-head" style="font-size:clamp(2.4rem,6vw,4.5rem)">@Localizer["OurPackages"]</h1>
+
+    <div class="row g-4 mt-2">
+        @foreach (var package in Model.Packages)
+        {
+            <div class="col-md-6 col-lg-4">
+                <article class="package-card">
+                    <div class="package-card__head">
+                        <h2 class="package-card__name">@package.Name</h2>
+                        <div class="package-card__price">@package.Price kr</div>
+                        <div class="package-card__duration">@package.DurationMinutes min</div>
+                    </div>
+                    <div class="package-card__body">
+                        @foreach (var pf in package.PackageFeatures)
+                        {
+                            <div class="package-card__feature">@pf.Feature.Name</div>
+                        }
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+</section>

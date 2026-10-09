@@ -133,4 +133,47 @@
   <data name="MyStation" xml:space="preserve"><value>My station</value></data>
   <data name="Bookings" xml:space="preserve"><value>Bookings</value></data>
   <data name="Back" xml:space="preserve"><value>Back</value></data>
+
+  <!-- Navigation & footer -->
+  <data name="NavHome" xml:space="preserve"><value>Home</value></data>
+  <data name="NavPackages" xml:space="preserve"><value>Packages</value></data>
+  <data name="NavAbout" xml:space="preserve"><value>About</value></data>
+  <data name="NavContacts" xml:space="preserve"><value>Contacts</value></data>
+  <data name="NavFAQ" xml:space="preserve"><value>FAQ</value></data>
+  <data name="FooterTagline" xml:space="preserve"><value>Fast, affordable, flawless car care in Malmö.</value></data>
+  <data name="FooterPages" xml:space="preserve"><value>Pages</value></data>
+  <data name="FooterContact" xml:space="preserve"><value>Contact</value></data>
+
+  <!-- About -->
+  <data name="AboutTitle" xml:space="preserve"><value>About WashZone</value></data>
+  <data name="AboutLead" xml:space="preserve"><value>We make car care simple, fast and flawless.</value></data>
+  <data name="AboutText1" xml:space="preserve"><value>WashZone started with a simple idea — car washing should be effortless. Book online, show up, and drive away in a spotless car.</value></data>
+  <data name="AboutText2" xml:space="preserve"><value>Our stations around Malmö use professional equipment and premium products, handled by experts who treat every car like their own.</value></data>
+
+  <!-- Packages -->
+  <data name="OurPackages" xml:space="preserve"><value>Wash packages</value></data>
+  <data name="OurPackagesSub" xml:space="preserve"><value>Transparent pricing, no surprises</value></data>
+
+  <!-- Contacts -->
+  <data name="ContactsTitle" xml:space="preserve"><value>Contacts</value></data>
+  <data name="ContactAddress" xml:space="preserve"><value>Address</value></data>
+  <data name="ContactPhone" xml:space="preserve"><value>Phone</value></data>
+  <data name="ContactEmail" xml:space="preserve"><value>Email</value></data>
+  <data name="FormName" xml:space="preserve"><value>Name</value></data>
+  <data name="FormEmail" xml:space="preserve"><value>Email</value></data>
+  <data name="FormMessage" xml:space="preserve"><value>Message</value></data>
+  <data name="FormSend" xml:space="preserve"><value>Send</value></data>
+
+  <!-- FAQ -->
+  <data name="FaqTitle" xml:space="preserve"><value>Frequently asked questions</value></data>
+  <data name="FaqQ1" xml:space="preserve"><value>How do I book a wash?</value></data>
+  <data name="FaqA1" xml:space="preserve"><value>Pick a station, choose a package and reserve a time slot in the calendar.</value></data>
+  <data name="FaqQ2" xml:space="preserve"><value>Can I cancel or change my booking?</value></data>
+  <data name="FaqA2" xml:space="preserve"><value>Yes — log in and manage your bookings under "My bookings".</value></data>
+  <data name="FaqQ3" xml:space="preserve"><value>How do I pay?</value></data>
+  <data name="FaqA3" xml:space="preserve"><value>You pay at the station when your wash is done.</value></data>
+  <data name="FaqQ4" xml:space="preserve"><value>When are you open?</value></data>
+  <data name="FaqA4" xml:space="preserve"><value>Every day from 08:00 to 20:00.</value></data>
+  <data name="FaqQ5" xml:space="preserve"><value>What if I'm late?</value></data>
+  <data name="FaqA5" xml:space="preserve"><value>Contact us as soon as possible — we'll do our best to help.</value></data>
 </root>

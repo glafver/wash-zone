@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject IStringLocalizer<SharedResource> Localizer
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -29,7 +30,15 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-links">
+                        <li class="nav-item"><a class="nav-link" asp-page="/Index">@Localizer["NavHome"]</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-page="/Packages">@Localizer["NavPackages"]</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-page="/About">@Localizer["NavAbout"]</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-page="/Contacts">@Localizer["NavContacts"]</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-page="/FAQ">@Localizer["NavFAQ"]</a></li>
+                    </ul>
+
                     <div class="nav-links d-flex flex-column flex-lg-row align-items-lg-center gap-1 gap-lg-0 mt-2 mt-lg-0">
                         <partial name="_LoginPartial" />
                         @{
@@ -51,10 +60,35 @@
         @RenderBody()
     </main>
 
-    <footer class="site-footer py-4">
-        <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
-            <span class="brand" style="font-size:1.1rem">WashZone</span>
-            <span class="font-mono" style="font-family:var(--font-mono); font-size:0.8rem">&copy; @DateTime.Now.Year — clean. fast. flawless.</span>
+    <footer class="site-footer py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <span class="brand" style="font-size:1.4rem">WashZone</span>
+                    <p class="mt-2 mb-0" style="color:var(--paper); opacity:0.7; max-width:20rem">@Localizer["FooterTagline"]</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="footer-heading">@Localizer["FooterPages"]</div>
+                    <ul class="footer-list">
+                        <li><a asp-page="/Packages">@Localizer["NavPackages"]</a></li>
+                        <li><a asp-page="/About">@Localizer["NavAbout"]</a></li>
+                        <li><a asp-page="/Contacts">@Localizer["NavContacts"]</a></li>
+                        <li><a asp-page="/FAQ">@Localizer["NavFAQ"]</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <div class="footer-heading">@Localizer["FooterContact"]</div>
+                    <ul class="footer-list">
+                        <li>Gustav Adolfs Torg 10, Malmö</li>
+                        <li>+46 761 234 578</li>
+                        <li>info@washzone.se</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-top mt-4 pt-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <span style="font-family:var(--font-mono); font-size:0.8rem">&copy; @DateTime.Now.Year WashZone</span>
+                <span style="font-family:var(--font-mono); font-size:0.8rem">clean. fast. flawless.</span>
+            </div>
         </div>
     </footer>
 

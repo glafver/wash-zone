@@ -16,6 +16,13 @@ public class PackageService : IPackageService
     public async Task<List<Package>> GetPackagesAsync()
         => await _context.Packages.OrderBy(p => p.Name).ToListAsync();
 
+    public async Task<List<Package>> GetPackagesWithFeaturesAsync()
+        => await _context.Packages
+            .Include(p => p.PackageFeatures)
+                .ThenInclude(pf => pf.Feature)
+            .OrderBy(p => p.Price)
+            .ToListAsync();
+
     public async Task<Package?> GetPackageWithFeaturesAsync(int id)
         => await _context.Packages
             .Include(p => p.PackageFeatures)

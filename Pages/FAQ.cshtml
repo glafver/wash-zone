@@ -1,0 +1,34 @@
+@page
+@inject IStringLocalizer<SharedResource> Localizer
+@model WashZone.Pages.FAQModel
+@{
+    ViewData["Title"] = "FAQ";
+}
+
+<section class="container py-6">
+    <div class="section-sub">WashZone</div>
+    <h1 class="section-head" style="font-size:clamp(2.4rem,6vw,4.5rem)">@Localizer["FaqTitle"]</h1>
+
+    <div class="mt-4" style="max-width:52rem">
+        <div class="faq-item">
+            <h3 class="faq-q">@Localizer["FaqQ1"]</h3>
+            <p class="faq-a">@Localizer["FaqA1"]</p>
+        </div>
+        <div class="faq-item">
+            <h3 class="faq-q">@Localizer["FaqQ2"]</h3>
+            <p class="faq-a">@Localizer["FaqA2"]</p>
+        </div>
+        <div class="faq-item">
+            <h3 class="faq-q">@Localizer["FaqQ3"]</h3>
+            <p class="faq-a">@Localizer["FaqA3"]</p>
+        </div>
+        <div class="faq-item">
+            <h3 class="faq-q">@Localizer["FaqQ4"]</h3>
+            <p class="faq-a">@Localizer["FaqA4"]</p>
+        </div>
+        <div class="faq-item">
+            <h3 class="faq-q">@Localizer["FaqQ5"]</h3>
+            <p class="faq-a">@Localizer["FaqA5"]</p>
+        </div>
+    </div>
+</section>

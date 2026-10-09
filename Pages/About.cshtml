@@ -1,0 +1,17 @@
+@page
+@inject IStringLocalizer<SharedResource> Localizer
+@model WashZone.Pages.AboutModel
+@{
+    ViewData["Title"] = "About";
+}
+
+<section class="container py-6">
+    <div class="section-sub">WashZone</div>
+    <h1 class="section-head" style="font-size:clamp(2.4rem,6vw,4.5rem)">@Localizer["AboutTitle"]</h1>
+
+    <div class="mt-2" style="max-width:44rem">
+        <p class="lead fw-bold">@Localizer["AboutLead"]</p>
+        <p>@Localizer["AboutText1"]</p>
+        <p>@Localizer["AboutText2"]</p>
+    </div>
+</section>
