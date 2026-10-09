@@ -1,23 +1,20 @@
-FROM mcr.microsoft.com/mssql/server:2022-latest
-
-USER root
-
-RUN apt-get update && \
-    apt-get install -y wget ca-certificates && \
-    wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    apt-get update && \
-    apt-get install -y dotnet-sdk-8.0
-
+# ---- Build stage ----
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
+# Restore dependencies first (better layer caching)
+COPY ["WashZone.csproj", "./"]
+RUN dotnet restore "WashZone.csproj"
+
+# Copy the rest of the source and publish
 COPY . .
+RUN dotnet publish "WashZone.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-RUN dotnet publish WashZone.csproj -c Release -o /app/publish
+# ---- Runtime stage ----
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+EXPOSE 8080
 
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+COPY --from=build /app/publish .
 
-EXPOSE 8080 1433
-
-ENTRYPOINT ["/start.sh"]
+ENTRYPOINT ["dotnet", "WashZone.dll"]

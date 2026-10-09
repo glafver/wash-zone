@@ -5,16 +5,17 @@ using WashZone.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.UseUrls("http://0.0.0.0:8080");
-
-// Connection string
+// Connection string (set via environment variable or appsettings.Development.json locally,
+// or through docker-compose's environment section in production)
 var connectionString =
 	builder.Configuration.GetConnectionString("DefaultConnection")
-	?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+	?? throw new InvalidOperationException(
+		"Connection string 'DefaultConnection' is not configured. " +
+		"Set ConnectionStrings__DefaultConnection in your environment or appsettings.Development.json.");
 
-// DB
+// DB (retries transient SQL errors so the app can wait for SQL Server to become ready in Docker)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-	options.UseSqlServer(connectionString));
+	options.UseSqlServer(connectionString, sql => sql.EnableRetryOnFailure()));
 
 // Identity
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
