@@ -16,6 +16,7 @@ Users can browse car wash stations on a map, view available wash packages and th
 - "My bookings" page with sorting and filtering
 - Edit and delete your own bookings
 - Admin dashboard: view all bookings, filter by station / package / registration number / phone number, edit and delete
+- Bilingual UI (English / Swedish) with a language switcher
 - Seeded sample data (stations, packages, features, users, bookings)
 - CI build pipeline (GitHub Actions)
 

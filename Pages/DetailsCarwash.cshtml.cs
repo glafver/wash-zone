@@ -16,15 +16,15 @@ namespace WashZone.Pages
 
         public IReadOnlyDictionary<string, string> FeatureImages { get; } = new Dictionary<string, string>
         {
-            { "Utvändig tvätt", "exterior-wash.png" },
-            { "Invändig rengöring", "interior-cleaning.png" },
-            { "Vaxning", "waxing.png" },
-            { "Däckglans", "tire-shine.png" },
-            { "Fönsterputs", "window-cleaning.png" },
-            { "Motortvätt", "engine-wash.png" },
-            { "Interiör desinficering", "interior-disinfection.png" },
-            { "Luktsanering", "odor-removal.png" },
-            { "Keramisk beläggning", "ceramic-coating.png" }
+            { "Exterior wash", "exterior-wash.png" },
+            { "Interior cleaning", "interior-cleaning.png" },
+            { "Waxing", "waxing.png" },
+            { "Tire shine", "tire-shine.png" },
+            { "Window cleaning", "window-cleaning.png" },
+            { "Engine wash", "engine-wash.png" },
+            { "Interior disinfection", "interior-disinfection.png" },
+            { "Odor removal", "odor-removal.png" },
+            { "Ceramic coating", "ceramic-coating.png" }
         };
 
         public Station? Station { get; set; }

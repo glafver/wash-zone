@@ -1,26 +1,27 @@
 ﻿@page
+@inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.MyBookingsPageModel
 
 @{
     ViewData["Title"] = "My Bookings";
 }
 
-<h2>My Bookings</h2>
+<h2>@Localizer["MyBookingsTitle"]</h2>
 
 <div class="mb-3">
     <form method="get" class="d-flex gap-3 align-items-end">
         <div>
-            <label class="form-label">Sort by Date:</label>
+            <label class="form-label">@Localizer["SortByDate"]</label>
             <select name="sortOrder" class="form-select w-auto" onchange="this.form.submit()">
-                <option value="asc" selected="@(Model.SortOrder == "asc" ? "selected" : null)">Oldest First</option>
-                <option value="desc" selected="@(Model.SortOrder == "desc" ? "selected" : null)">Newest First</option>
+                <option value="asc" selected="@(Model.SortOrder == "asc" ? "selected" : null)">@Localizer["OldestFirst"]</option>
+                <option value="desc" selected="@(Model.SortOrder == "desc" ? "selected" : null)">@Localizer["NewestFirst"]</option>
             </select>
         </div>
 
         <div>
-            <label class="form-label">Filter by Station:</label>
+            <label class="form-label">@Localizer["FilterByStation"]</label>
             <select name="stationId" class="form-select w-auto" onchange="this.form.submit()">
-                <option value="">All Stations</option>
+                <option value="">@Localizer["AllStations"]</option>
                 @foreach (var station in Model.Stations)
                 {
                     <option value="@station.Id" selected="@(Model.SelectedStationId == station.Id ? "selected" : null)">@station.Name</option>
@@ -29,9 +30,9 @@
         </div>
 
         <div>
-            <label class="form-label">Filter by Package:</label>
+            <label class="form-label">@Localizer["FilterByPackage"]</label>
             <select name="packageId" class="form-select w-auto" onchange="this.form.submit()">
-                <option value="">All Packages</option>
+                <option value="">@Localizer["AllPackages"]</option>
                 @foreach (var package in Model.Packages)
                 {
                     <option value="@package.Id" selected="@(Model.SelectedPackageId == package.Id ? "selected" : null)">@package.Name</option>
@@ -40,13 +41,13 @@
         </div>
 
         <div>
-            <label class="form-label">Filter by Reg Number:</label>
-            <input type="text" name="regNumber" value="@Model.RegNumberFilter" class="form-control w-auto" placeholder="Enter Reg Number" onchange="this.form.submit()" />
+            <label class="form-label">@Localizer["FilterByRegNumber"]</label>
+            <input type="text" name="regNumber" value="@Model.RegNumberFilter" class="form-control w-auto" placeholder="@Localizer["EnterRegNumberPlaceholder"]" onchange="this.form.submit()" />
         </div>
 
         <div>
             <label class="form-label d-block">&nbsp;</label>
-            <a href="/MyBookingsPage" class="btn btn-outline-dark">Reset Filters</a>
+            <a href="/MyBookingsPage" class="btn btn-outline-dark">@Localizer["ResetFilters"]</a>
         </div>
     </form>
 </div>
@@ -56,11 +57,11 @@
     <table class="table booking-table">
         <thead>
             <tr>
-                <th>Station</th>
-                <th>Package</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Reg Number</th>
+                <th>@Localizer["ColStation"]</th>
+                <th>@Localizer["ColPackage"]</th>
+                <th>@Localizer["ColDate"]</th>
+                <th>@Localizer["ColTime"]</th>
+                <th>@Localizer["ColRegNumber"]</th>
                 <th></th>
             </tr>
         </thead>
@@ -75,10 +76,10 @@
                     <td>@booking.RegistrationNumber</td>
                     <td>
                         <div class="d-flex justify-content-center gap-3">
-                            <a asp-page="/EditBooking" asp-route-id="@booking.Id" class="btn btn-outline-dark btn-sm d-inline">Edit</a>
+                            <a asp-page="/EditBooking" asp-route-id="@booking.Id" class="btn btn-outline-dark btn-sm d-inline">@Localizer["Edit"]</a>
                             <form method="post" class="d-inline">
                                 <input type="hidden" name="id" value="@booking.Id" />
-                                <button type="submit" asp-page-handler="Delete" class="delete-button btn-sm">Delete</button>
+                                <button type="submit" asp-page-handler="Delete" class="delete-button btn-sm">@Localizer["Delete"]</button>
                             </form>
                         </div>
                     </td>
@@ -90,11 +91,11 @@
 }
 else
 {
-    <p>No bookings found.</p>
+    <p>@Localizer["NoBookings"]</p>
 }
 
 <div class="d-flex justify-content-center">
-    <a asp-page="/BookPage" class="btn btn-dark mt-3">Book a new wash</a>
+    <a asp-page="/BookPage" class="btn btn-dark mt-3">@Localizer["BookNewWash"]</a>
 </div>
 @if (TempData["SuccessMessage"] != null) //popupwindow for success message
 {

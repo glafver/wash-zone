@@ -1,6 +1,7 @@
 ﻿@page "{id:int}"
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
+@inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.DetailsCarwashModel
 
 
@@ -10,7 +11,7 @@
 
 <div class="container px-3 mb-4">
     <a asp-page="/Index" class="btn btn-outline-dark mb-3">
-        ← Go back to all stations
+        ← @Localizer["DetailsBack"]
     </a>
 
     <div class="row align-items-center rounded bg-dark my-5">
@@ -29,23 +30,23 @@
     </div>
 </div>
 
-<!-- Visa rätt knapp baserat på inloggningsstatus -->
+<!-- Show the right button based on login status -->
 <div class="container text-center my-5">
     @if (SignInManager.IsSignedIn(User))
     {
-        <h3>Ready to book your wash?</h3>
-        <a asp-page="/BookPage" class="btn btn-dark mt-3">Book a wash</a>
+        <h3>@Localizer["DetailsReadyTitle"]</h3>
+        <a asp-page="/BookPage" class="btn btn-dark mt-3">@Localizer["BookWash"]</a>
     }
     else
     {
-        <h3>You need to log in to book a wash</h3>
-        <a href="/Identity/Account/Login" class="btn btn-dark mt-3">Log in to book</a>
+        <h3>@Localizer["DetailsLoginTitle"]</h3>
+        <a href="/Identity/Account/Login" class="btn btn-dark mt-3">@Localizer["LoginToBook"]</a>
     }
 </div>
 
 <div class="container">
-    <!-- Visar paket som finns på stationen -->
-    <h3 class="mb-4">Available Packages</h3>
+    <!-- Shows packages available at the station -->
+    <h3 class="mb-4">@Localizer["DetailsAvailablePackages"]</h3>
     @{
         var sortedPackages = Model.AvailablePackages
         .OrderByDescending(p => p.PackageFeatures.Count)
@@ -62,7 +63,6 @@
                             <h5 class="card-titlem fw-bold logo m-0 fs-2">@package.Name</h5>
                             <p class="card-text fw-bold logo fs-1 m-auto" style="color:cadetblue">@package.Price kr</p>
                         </div>
-                        @* <h6>Ingår i paketet:</h6> *@
                         <div class="row flex-grow-1 justify-content-around">
                             @foreach (var featureChunk in package.PackageFeatures.Select(pf => pf.Feature).Chunk(5))
                             {

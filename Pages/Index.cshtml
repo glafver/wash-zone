@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject IStringLocalizer<SharedResource> Localizer
 
 @model WashZone.Pages.IndexModel
 @{
@@ -21,29 +22,23 @@
         @if (SignInManager.IsSignedIn(User))
         {
             <div class="text-center my-5">
-                <h1 class="text-center">Welcome, @(User.Identity?.Name?.Split('@')[0] ?? "User")!</h1>
-                <p class="mt-3 lead mx-auto w-75">
-                    Whether you're looking for a quick exterior wash, a full interior refresh, or advanced detailing,
-                    our professional team is here to make your vehicle look and feel brand new.
-                </p>
-                <p class="fw-bold lead">Fast. Affordable. Professional. Because your car deserves the best.</p>
+                <h1 class="text-center">@Localizer["IndexWelcomeUser", User.Identity?.Name?.Split('@')[0] ?? "User"]</h1>
+                <p class="mt-3 lead mx-auto w-75">@Localizer["IndexHeroText"]</p>
+                <p class="fw-bold lead">@Localizer["IndexHeroTagline"]</p>
                 <form method="post" class="mt-4">
-                    <button class="btn btn-light" type="submit" asp-page-handler="BookPage">Book a wash</button>
+                    <button class="btn btn-light" type="submit" asp-page-handler="BookPage">@Localizer["BookWash"]</button>
                 </form>
             </div>
         }
         else
         {
             <div class="text-center my-5 w-75 mx-auto">
-                <h1 class="display-4 fw-bold">Welcome to WashZone</h1>
-                <p class="mt-3 lead mx-auto w-75">
-                    Whether you're looking for a quick exterior wash, a full interior refresh, or advanced detailing,
-                    our professional team is here to make your vehicle look and feel brand new.
-                </p>
-                <p class="fw-bold lead">Fast. Affordable. Professional. Because your car deserves the best.</p>
+                <h1 class="display-4 fw-bold">@Localizer["IndexHeroTitle"]</h1>
+                <p class="mt-3 lead mx-auto w-75">@Localizer["IndexHeroText"]</p>
+                <p class="fw-bold lead">@Localizer["IndexHeroTagline"]</p>
                 <div class="d-flex justify-content-center gap-3 mt-4">
-                    <a href="~/Identity/Account/Login" class="btn btn-light">Login</a>
-                    <a href="~/Identity/Account/Register" class="btn btn-outline-light">Register</a>
+                    <a href="~/Identity/Account/Login" class="btn btn-light">@Localizer["NavLogin"]</a>
+                    <a href="~/Identity/Account/Register" class="btn btn-outline-light">@Localizer["NavRegister"]</a>
                 </div>
             </div>
         }
@@ -52,19 +47,19 @@
 
 
 <div class="my-3 mx-3">
-    <h2 class="text-center mb-5 fs-1 fw-bold">Our carwash stations</h2>
-    <!-- Dropdown-lista för att välja paket -->
+    <h2 class="text-center mb-5 fs-1 fw-bold">@Localizer["IndexStationsHeading"]</h2>
+    <!-- Dropdown to filter stations by package -->
     <form method="get" class="d-flex align-items-center gap-3" id="packageForm">
-        <label class="form-label mb-0" for="packageSelect">Filter by wash plans:</label>
+        <label class="form-label mb-0" for="packageSelect">@Localizer["IndexFilterLabel"]</label>
         <input type="hidden" name="SelectedPackageId" id="selectedPackageInput">
 
         <div class="dropdown">
             <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     id="dropdownMenuButton">
-                Alla paket
+                @Localizer["IndexAllPackages"]
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item package-option" data-value="">Alla paket</a></li>
+                <li><a class="dropdown-item package-option" data-value="">@Localizer["IndexAllPackages"]</a></li>
                 @foreach (var package in Model.Packages)
                 {
                     <li><a class="dropdown-item package-option" data-value="@package.Id">@package.Name</a></li>
@@ -86,8 +81,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title logo">@station.Name</h5>
                         <p class="card-text">@station.Address</p>
-                        <a href="@Url.Page("/DetailsCarwash", new { id = station.Id })" class="btn btn-dark mb-3">More
-                            info</a>
+                        <a href="@Url.Page("/DetailsCarwash", new { id = station.Id })" class="btn btn-dark mb-3">@Localizer["IndexMoreInfo"]</a>
                         </div>
                     </div>
                 </div>
@@ -96,7 +90,7 @@
     </div>
 
     <section class="mx-3 mt-5">
-        <h2 class="text-center mb-4 fs-1 fw-bold">Find Our Locations</h2>
+        <h2 class="text-center mb-4 fs-1 fw-bold">@Localizer["IndexLocationsHeading"]</h2>
         <div id="map"
              style="width: 100%; height: 500px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
         </div>
@@ -106,19 +100,18 @@
         <div class="container px-5 py-5">
             <div class="row align-items-center">
                 <div class="col-md-7 ps-5">
-                    <h2 class="fw-bold">Give Your Car a Sparkling Clean Wash</h2>
-                    <p class="lead mb-0">Book a professional car wash today and let us take care of your car with care and
-                        precision.</p>
+                    <h2 class="fw-bold">@Localizer["IndexCtaTitle"]</h2>
+                    <p class="lead mb-0">@Localizer["IndexCtaText"]</p>
                     </div>
                     <div class="col-md-5 text-center">
 
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <a asp-page="/BookPage" class="btn btn-light btn-lg mt-5 mt-lg-0">Book a wash</a>
+                            <a asp-page="/BookPage" class="btn btn-light btn-lg mt-5 mt-lg-0">@Localizer["BookWash"]</a>
                         }
                         else
                         {
-                            <a href="/Identity/Account/Login" class="btn btn-light btn-lg mt-5 mt-lg-0">Log in to book</a>
+                            <a href="/Identity/Account/Login" class="btn btn-light btn-lg mt-5 mt-lg-0">@Localizer["LoginToBook"]</a>
                         }
                     </div>
                 </div>

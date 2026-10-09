@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject IStringLocalizer<SharedResource> Localizer
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
@@ -8,13 +9,13 @@
         if (User.IsInRole("Admin"))
         {
             <li class="nav-item">
-                <a class="nav-link btn btn-link text-dark" asp-area="">Admin Dashboard</a>
+                <a class="nav-link btn btn-link text-dark" asp-area="">@Localizer["NavAdminDashboard"]</a>
             </li>
         }
         else
         {
             <li class="nav-item">
-                <a class="nav-link btn btn-link text-dark" asp-area="" asp-page="/MyBookingsPage">My bookings</a>
+                <a class="nav-link btn btn-link text-dark" asp-area="" asp-page="/MyBookingsPage">@Localizer["NavMyBookings"]</a>
             </li>
             @* <li class="nav-item"> *@
                 @* <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity?.Name</a> *@
@@ -24,17 +25,17 @@
 
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                <button type="submit" class="nav-link btn btn-link text-dark">@Localizer["NavLogout"]</button>
             </form>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link btn btn-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            <a class="nav-link btn btn-link text-dark" asp-area="Identity" asp-page="/Account/Register">@Localizer["NavRegister"]</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link btn btn-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <a class="nav-link btn btn-link text-dark" asp-area="Identity" asp-page="/Account/Login">@Localizer["NavLogin"]</a>
         </li>
     }
 </ul>

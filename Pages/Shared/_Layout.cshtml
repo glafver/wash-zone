@@ -31,6 +31,11 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
                     <partial name="_LoginPartial" />
+                    <form method="post" action="/set-language" class="d-flex align-items-center ms-2 gap-1">
+                        <input type="hidden" name="returnUrl" value="@($"{Context.Request.Path}{Context.Request.QueryString}")" />
+                        <button type="submit" name="culture" value="en" class="btn btn-sm btn-outline-secondary px-2" title="English">EN</button>
+                        <button type="submit" name="culture" value="sv" class="btn btn-sm btn-outline-secondary px-2" title="Svenska">SV</button>
+                    </form>
                 </div>
             </div>
         </nav>

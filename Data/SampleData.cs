@@ -32,8 +32,8 @@ namespace WashZone.Data
                         new Package { Name = "Standard", Price = 150 },
                         new Package { Name = "Premium", Price = 250 },
                         new Package { Name = "Deluxe", Price = 400 },
-                        new Package { Name = "Exklusiv", Price = 600 },
-                        new Package { Name = "Lyxpaket", Price = 800 }
+                        new Package { Name = "Exclusive", Price = 600 },
+                        new Package { Name = "Luxury", Price = 800 }
                     });
                 database.SaveChanges();
             }
@@ -43,15 +43,15 @@ namespace WashZone.Data
             {
                 database.Features.AddRange(new List<Feature>
                     {
-                        new Feature { Name = "Utvändig tvätt" },
-                        new Feature { Name = "Invändig rengöring" },
-                        new Feature { Name = "Vaxning" },
-                        new Feature { Name = "Däckglans" },
-                        new Feature { Name = "Fönsterputs" },
-                        new Feature { Name = "Motortvätt" },
-                        new Feature { Name = "Interiör desinficering" },
-                        new Feature { Name = "Luktsanering" },
-                        new Feature { Name = "Keramisk beläggning" }
+                        new Feature { Name = "Exterior wash" },
+                        new Feature { Name = "Interior cleaning" },
+                        new Feature { Name = "Waxing" },
+                        new Feature { Name = "Tire shine" },
+                        new Feature { Name = "Window cleaning" },
+                        new Feature { Name = "Engine wash" },
+                        new Feature { Name = "Interior disinfection" },
+                        new Feature { Name = "Odor removal" },
+                        new Feature { Name = "Ceramic coating" }
                     });
                 database.SaveChanges();
             }
@@ -61,28 +61,28 @@ namespace WashZone.Data
             {
                 database.PackageFeatures.AddRange(new List<PackageFeature>
                     {
-                        new PackageFeature { PackageId = 1, FeatureId = 1 }, // Standard: Utvändig tvätt
-                        new PackageFeature { PackageId = 2, FeatureId = 1 }, // Premium: Utvändig tvätt
-                        new PackageFeature { PackageId = 2, FeatureId = 2 }, // + Invändig rengöring
-                        new PackageFeature { PackageId = 3, FeatureId = 1 }, // Deluxe: Utvändig tvätt
-                        new PackageFeature { PackageId = 3, FeatureId = 2 }, // + Invändig rengöring
-                        new PackageFeature { PackageId = 3, FeatureId = 3 }, // + Vaxning
-                        new PackageFeature { PackageId = 3, FeatureId = 4 }, // + Däckglans
-                        new PackageFeature { PackageId = 4, FeatureId = 1 }, // Exklusiv: Utvändig tvätt
+                        new PackageFeature { PackageId = 1, FeatureId = 1 }, // Standard: Exterior wash
+                        new PackageFeature { PackageId = 2, FeatureId = 1 }, // Premium: Exterior wash
+                        new PackageFeature { PackageId = 2, FeatureId = 2 }, // + Interior cleaning
+                        new PackageFeature { PackageId = 3, FeatureId = 1 }, // Deluxe: Exterior wash
+                        new PackageFeature { PackageId = 3, FeatureId = 2 }, // + Interior cleaning
+                        new PackageFeature { PackageId = 3, FeatureId = 3 }, // + Waxing
+                        new PackageFeature { PackageId = 3, FeatureId = 4 }, // + Tire shine
+                        new PackageFeature { PackageId = 4, FeatureId = 1 }, // Exclusive: Exterior wash
                         new PackageFeature { PackageId = 4, FeatureId = 2 },
                         new PackageFeature { PackageId = 4, FeatureId = 3 },
                         new PackageFeature { PackageId = 4, FeatureId = 4 },
-                        new PackageFeature { PackageId = 4, FeatureId = 5 }, // + Fönsterputs
-                        new PackageFeature { PackageId = 4, FeatureId = 6 }, // + Motortvätt
-                        new PackageFeature { PackageId = 5, FeatureId = 1 }, // Lyxpaket: Allt
+                        new PackageFeature { PackageId = 4, FeatureId = 5 }, // + Window cleaning
+                        new PackageFeature { PackageId = 4, FeatureId = 6 }, // + Engine wash
+                        new PackageFeature { PackageId = 5, FeatureId = 1 }, // Luxury: All
                         new PackageFeature { PackageId = 5, FeatureId = 2 },
                         new PackageFeature { PackageId = 5, FeatureId = 3 },
                         new PackageFeature { PackageId = 5, FeatureId = 4 },
                         new PackageFeature { PackageId = 5, FeatureId = 5 },
                         new PackageFeature { PackageId = 5, FeatureId = 6 },
-                        new PackageFeature { PackageId = 5, FeatureId = 7 }, // + Interiör desinficering
-                        new PackageFeature { PackageId = 5, FeatureId = 8 }, // + Luktsanering
-                        new PackageFeature { PackageId = 5, FeatureId = 9 }  // + Keramisk beläggning
+                        new PackageFeature { PackageId = 5, FeatureId = 7 }, // + Interior disinfection
+                        new PackageFeature { PackageId = 5, FeatureId = 8 }, // + Odor removal
+                        new PackageFeature { PackageId = 5, FeatureId = 9 }  // + Ceramic coating
                     });
                 database.SaveChanges();
             }

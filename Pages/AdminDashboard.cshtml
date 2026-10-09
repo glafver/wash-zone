@@ -1,26 +1,27 @@
 ﻿@page
+@inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.AdminDashboardModel
 @{
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<h1>@ViewData["Title"]</h1>
-<h3 class="mb-4">Manage All Bookings</h3>
+<h1>@Localizer["AdminTitle"]</h1>
+<h3 class="mb-4">@Localizer["AdminSubtitle"]</h3>
 
 <div class="mb-3">
     <div>
         <form method="get" class="d-flex gap-3">
             <div>
-                <label class="form-label my-auto mb-2">Sort by Date:</label>
+                <label class="form-label my-auto mb-2">@Localizer["SortByDate"]</label>
                 <select name="sortOrder" class="form-select w-auto" onchange="this.form.submit()">
-                    <option value="asc" selected="@(Model.SortOrder == "asc" ? "selected" : null)">Oldest First</option>
-                    <option value="desc" selected="@(Model.SortOrder == "desc" ? "selected" : null)">Newest First</option>
+                    <option value="asc" selected="@(Model.SortOrder == "asc" ? "selected" : null)">@Localizer["OldestFirst"]</option>
+                    <option value="desc" selected="@(Model.SortOrder == "desc" ? "selected" : null)">@Localizer["NewestFirst"]</option>
                 </select>
             </div>
             <div>
-                <label class="form-label my-auto mb-2">Filter by Station:</label>
+                <label class="form-label my-auto mb-2">@Localizer["FilterByStation"]</label>
                 <select name="stationId" class="form-select w-auto" onchange="this.form.submit()">
-                    <option value="">All Stations</option>
+                    <option value="">@Localizer["AllStations"]</option>
                     @foreach (var station in Model.Stations)
                     {
                         <option value="@station.Id" selected="@(Model.SelectedStationId == station.Id ? "selected" : null)">@station.Name</option>
@@ -28,9 +29,9 @@
                 </select>
             </div>
             <div>
-                <label class="form-label">Filter by Package:</label>
+                <label class="form-label">@Localizer["FilterByPackage"]</label>
                 <select name="packageId" class="form-select w-auto" onchange="this.form.submit()">
-                    <option value="">All Packages</option>
+                    <option value="">@Localizer["AllPackages"]</option>
                     @foreach (var package in Model.Packages)
                     {
                         <option value="@package.Id" selected="@(Model.SelectedPackageId == package.Id ? "selected" : null)">@package.Name</option>
@@ -38,16 +39,16 @@
                 </select>
             </div>
             <div>
-                <label class="form-label">Filter by Reg Number:</label>
-                <input type="text" name="regNumber" value="@Model.RegNumberFilter" class="form-control w-auto" placeholder="Enter Reg Number" onchange="this.form.submit()" />
+                <label class="form-label">@Localizer["FilterByRegNumber"]</label>
+                <input type="text" name="regNumber" value="@Model.RegNumberFilter" class="form-control w-auto" placeholder="@Localizer["EnterRegNumberPlaceholder"]" onchange="this.form.submit()" />
             </div>
             <div>
-                <label class="form-label">Filter by Phone Number:</label>
-                <input type="text" name="phoneNumber" value="@Model.PhoneNumberFilter" class="form-control w-auto" placeholder="Enter Phone Number" onchange="this.form.submit()" />
+                <label class="form-label">@Localizer["FilterByPhone"]</label>
+                <input type="text" name="phoneNumber" value="@Model.PhoneNumberFilter" class="form-control w-auto" placeholder="@Localizer["EnterPhonePlaceholder"]" onchange="this.form.submit()" />
             </div>
             <div>
                 <label class="form-label d-block">&nbsp;</label>
-                <a href="/AdminDashboard" class="btn btn-outline-dark">Reset Filters</a>
+                <a href="/AdminDashboard" class="btn btn-outline-dark">@Localizer["ResetFilters"]</a>
             </div>
 
         </form>
@@ -58,13 +59,13 @@
 <table class="table booking-table">
     <thead>
         <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>User</th>
-            <th>User Phone</th>
-            <th>Station</th>
-            <th>Package</th>
-            <th>Reg Number</th>
+            <th>@Localizer["ColDate"]</th>
+            <th>@Localizer["ColTime"]</th>
+            <th>@Localizer["ColUser"]</th>
+            <th>@Localizer["ColPhone"]</th>
+            <th>@Localizer["ColStation"]</th>
+            <th>@Localizer["ColPackage"]</th>
+            <th>@Localizer["ColRegNumber"]</th>
             <th></th>
         </tr>
     </thead>
@@ -81,10 +82,10 @@
                 <td>@booking.RegistrationNumber</td>
                 <td>
                     <div class="d-flex justify-content-center gap-3">
-                        <a asp-page="/EditBooking" asp-route-id="@booking.Id" class="btn btn-outline-dark btn-sm d-inline">Edit</a>
+                        <a asp-page="/EditBooking" asp-route-id="@booking.Id" class="btn btn-outline-dark btn-sm d-inline">@Localizer["Edit"]</a>
                         <form method="post">
                             <input type="hidden" name="id" value="@booking.Id" />
-                            <button type="submit" asp-page-handler="Delete" class="delete-button btn-sm">Delete</button>
+                            <button type="submit" asp-page-handler="Delete" class="delete-button btn-sm">@Localizer["Delete"]</button>
                         </form>
                     </div>
                 </td>

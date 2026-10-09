@@ -30,8 +30,8 @@ namespace WashZone.Pages
         [Range(1, int.MaxValue, ErrorMessage = "Please select a package.")]
         public int SelectedPackageId { get; set; }
         [BindProperty]
-        [Required(ErrorMessage = "Please select a month.")]
-        public string SelectedMonth { get; set; } = string.Empty;
+        [Range(1, 12, ErrorMessage = "Please select a month.")]
+        public int SelectedMonth { get; set; }
         [BindProperty]
         [Range(1, 31, ErrorMessage = "Please select a valid day.")]
         public int SelectedDay { get; set; }
@@ -128,12 +128,6 @@ namespace WashZone.Pages
         {
             bookingDate = default;
 
-            if (!DateTime.TryParseExact(SelectedMonth, "MMMM", CultureInfo.InvariantCulture, DateTimeStyles.None, out var monthDate))
-            {
-                ModelState.AddModelError(nameof(SelectedMonth), "Invalid month.");
-                return false;
-            }
-
             if (!TimeSpan.TryParseExact(SelectedTime, @"hh\:mm", CultureInfo.InvariantCulture, out var time))
             {
                 ModelState.AddModelError(nameof(SelectedTime), "Invalid time.");
@@ -142,19 +136,19 @@ namespace WashZone.Pages
 
             // If the selected month has already passed this year, assume the booking is for next year.
             int year = DateTime.Now.Year;
-            if (monthDate.Month < DateTime.Now.Month)
+            if (SelectedMonth < DateTime.Now.Month)
             {
                 year += 1;
             }
 
-            int maxDay = DateTime.DaysInMonth(year, monthDate.Month);
+            int maxDay = DateTime.DaysInMonth(year, SelectedMonth);
             if (SelectedDay < 1 || SelectedDay > maxDay)
             {
                 ModelState.AddModelError(nameof(SelectedDay), $"Invalid day for the selected month (max {maxDay}).");
                 return false;
             }
 
-            bookingDate = new DateTime(year, monthDate.Month, SelectedDay, time.Hours, time.Minutes, 0);
+            bookingDate = new DateTime(year, SelectedMonth, SelectedDay, time.Hours, time.Minutes, 0);
 
             if (bookingDate < DateTime.Now)
             {

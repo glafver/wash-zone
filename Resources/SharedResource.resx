@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Navigation -->
+  <data name="NavAdminDashboard" xml:space="preserve"><value>Admin Dashboard</value></data>
+  <data name="NavMyBookings" xml:space="preserve"><value>My bookings</value></data>
+  <data name="NavLogout" xml:space="preserve"><value>Logout</value></data>
+  <data name="NavRegister" xml:space="preserve"><value>Register</value></data>
+  <data name="NavLogin" xml:space="preserve"><value>Login</value></data>
+
+  <!-- Index -->
+  <data name="IndexWelcomeUser" xml:space="preserve"><value>Welcome, {0}!</value></data>
+  <data name="IndexHeroTitle" xml:space="preserve"><value>Welcome to WashZone</value></data>
+  <data name="IndexHeroText" xml:space="preserve"><value>Whether you're looking for a quick exterior wash, a full interior refresh, or advanced detailing, our professional team is here to make your vehicle look and feel brand new.</value></data>
+  <data name="IndexHeroTagline" xml:space="preserve"><value>Fast. Affordable. Professional. Because your car deserves the best.</value></data>
+  <data name="BookWash" xml:space="preserve"><value>Book a wash</value></data>
+  <data name="LoginToBook" xml:space="preserve"><value>Log in to book</value></data>
+  <data name="IndexStationsHeading" xml:space="preserve"><value>Our carwash stations</value></data>
+  <data name="IndexFilterLabel" xml:space="preserve"><value>Filter by wash plans:</value></data>
+  <data name="IndexAllPackages" xml:space="preserve"><value>All packages</value></data>
+  <data name="IndexMoreInfo" xml:space="preserve"><value>More info</value></data>
+  <data name="IndexLocationsHeading" xml:space="preserve"><value>Find Our Locations</value></data>
+  <data name="IndexCtaTitle" xml:space="preserve"><value>Give Your Car a Sparkling Clean Wash</value></data>
+  <data name="IndexCtaText" xml:space="preserve"><value>Book a professional car wash today and let us take care of your car with care and precision.</value></data>
+
+  <!-- Station details -->
+  <data name="DetailsBack" xml:space="preserve"><value>Go back to all stations</value></data>
+  <data name="DetailsReadyTitle" xml:space="preserve"><value>Ready to book your wash?</value></data>
+  <data name="DetailsLoginTitle" xml:space="preserve"><value>You need to log in to book a wash</value></data>
+  <data name="DetailsAvailablePackages" xml:space="preserve"><value>Available Packages</value></data>
+
+  <!-- Booking form -->
+  <data name="BookTitle" xml:space="preserve"><value>Service Booking Form</value></data>
+  <data name="EditTitle" xml:space="preserve"><value>Edit Booking</value></data>
+  <data name="BookStation" xml:space="preserve"><value>Station:</value></data>
+  <data name="BookMonth" xml:space="preserve"><value>Month:</value></data>
+  <data name="BookDay" xml:space="preserve"><value>Day:</value></data>
+  <data name="BookTime" xml:space="preserve"><value>Time of Day:</value></data>
+  <data name="BookPackage" xml:space="preserve"><value>Package:</value></data>
+  <data name="BookRegNumber" xml:space="preserve"><value>Registration Number:</value></data>
+  <data name="BookSelectStationFirst" xml:space="preserve"><value>Select a station first</value></data>
+  <data name="BookNoStations" xml:space="preserve"><value>No stations available</value></data>
+  <data name="BookNoPackages" xml:space="preserve"><value>No packages available</value></data>
+  <data name="BookCustomPlate" xml:space="preserve"><value>Custom license plate</value></data>
+  <data name="BookSubmit" xml:space="preserve"><value>Book Now</value></data>
+  <data name="BookRegPlaceholder" xml:space="preserve"><value>Enter Car Registration Number</value></data>
+  <data name="BookRegError" xml:space="preserve"><value>Enter a valid licenseplate (e.g., ABC123).</value></data>
+  <data name="EditSubmit" xml:space="preserve"><value>Update Booking</value></data>
+  <data name="EditCancel" xml:space="preserve"><value>Cancel</value></data>
+
+  <!-- My bookings -->
+  <data name="MyBookingsTitle" xml:space="preserve"><value>My Bookings</value></data>
+  <data name="SortByDate" xml:space="preserve"><value>Sort by Date:</value></data>
+  <data name="OldestFirst" xml:space="preserve"><value>Oldest First</value></data>
+  <data name="NewestFirst" xml:space="preserve"><value>Newest First</value></data>
+  <data name="FilterByStation" xml:space="preserve"><value>Filter by Station:</value></data>
+  <data name="AllStations" xml:space="preserve"><value>All Stations</value></data>
+  <data name="FilterByPackage" xml:space="preserve"><value>Filter by Package:</value></data>
+  <data name="AllPackages" xml:space="preserve"><value>All Packages</value></data>
+  <data name="FilterByRegNumber" xml:space="preserve"><value>Filter by Reg Number:</value></data>
+  <data name="ResetFilters" xml:space="preserve"><value>Reset Filters</value></data>
+  <data name="ColStation" xml:space="preserve"><value>Station</value></data>
+  <data name="ColPackage" xml:space="preserve"><value>Package</value></data>
+  <data name="ColDate" xml:space="preserve"><value>Date</value></data>
+  <data name="ColTime" xml:space="preserve"><value>Time</value></data>
+  <data name="ColRegNumber" xml:space="preserve"><value>Reg Number</value></data>
+  <data name="Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="NoBookings" xml:space="preserve"><value>No bookings found.</value></data>
+  <data name="BookNewWash" xml:space="preserve"><value>Book a new wash</value></data>
+  <data name="EnterRegNumberPlaceholder" xml:space="preserve"><value>Enter Reg Number</value></data>
+
+  <!-- Admin -->
+  <data name="AdminTitle" xml:space="preserve"><value>Admin Dashboard</value></data>
+  <data name="AdminSubtitle" xml:space="preserve"><value>Manage All Bookings</value></data>
+  <data name="FilterByPhone" xml:space="preserve"><value>Filter by Phone Number:</value></data>
+  <data name="EnterPhonePlaceholder" xml:space="preserve"><value>Enter Phone Number</value></data>
+  <data name="ColUser" xml:space="preserve"><value>User</value></data>
+  <data name="ColPhone" xml:space="preserve"><value>User Phone</value></data>
+</root>

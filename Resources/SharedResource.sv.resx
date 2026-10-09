@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Navigation -->
+  <data name="NavAdminDashboard" xml:space="preserve"><value>Adminpanel</value></data>
+  <data name="NavMyBookings" xml:space="preserve"><value>Mina bokningar</value></data>
+  <data name="NavLogout" xml:space="preserve"><value>Logga ut</value></data>
+  <data name="NavRegister" xml:space="preserve"><value>Registrera</value></data>
+  <data name="NavLogin" xml:space="preserve"><value>Logga in</value></data>
+
+  <!-- Index -->
+  <data name="IndexWelcomeUser" xml:space="preserve"><value>Välkommen, {0}!</value></data>
+  <data name="IndexHeroTitle" xml:space="preserve"><value>Välkommen till WashZone</value></data>
+  <data name="IndexHeroText" xml:space="preserve"><value>Oavsett om du vill ha en snabb utvändig tvätt, en fullständig invändig rengöring eller avancerad rekonditionering så finns vårt professionella team här för att få din bil att se ut och kännas helt ny.</value></data>
+  <data name="IndexHeroTagline" xml:space="preserve"><value>Snabbt. Prisvärt. Professionellt. För din bil förtjänar det bästa.</value></data>
+  <data name="BookWash" xml:space="preserve"><value>Boka en tvätt</value></data>
+  <data name="LoginToBook" xml:space="preserve"><value>Logga in för att boka</value></data>
+  <data name="IndexStationsHeading" xml:space="preserve"><value>Våra biltvättstationer</value></data>
+  <data name="IndexFilterLabel" xml:space="preserve"><value>Filtrera efter tvättpaket:</value></data>
+  <data name="IndexAllPackages" xml:space="preserve"><value>Alla paket</value></data>
+  <data name="IndexMoreInfo" xml:space="preserve"><value>Mer info</value></data>
+  <data name="IndexLocationsHeading" xml:space="preserve"><value>Hitta våra stationer</value></data>
+  <data name="IndexCtaTitle" xml:space="preserve"><value>Ge din bil en glänsande ren tvätt</value></data>
+  <data name="IndexCtaText" xml:space="preserve"><value>Boka en professionell biltvätt idag och låt oss ta hand om din bil med omsorg och precision.</value></data>
+
+  <!-- Station details -->
+  <data name="DetailsBack" xml:space="preserve"><value>Tillbaka till alla stationer</value></data>
+  <data name="DetailsReadyTitle" xml:space="preserve"><value>Redo att boka din tvätt?</value></data>
+  <data name="DetailsLoginTitle" xml:space="preserve"><value>Du måste logga in för att boka en tvätt</value></data>
+  <data name="DetailsAvailablePackages" xml:space="preserve"><value>Tillgängliga paket</value></data>
+
+  <!-- Booking form -->
+  <data name="BookTitle" xml:space="preserve"><value>Bokningsformulär</value></data>
+  <data name="EditTitle" xml:space="preserve"><value>Redigera bokning</value></data>
+  <data name="BookStation" xml:space="preserve"><value>Station:</value></data>
+  <data name="BookMonth" xml:space="preserve"><value>Månad:</value></data>
+  <data name="BookDay" xml:space="preserve"><value>Dag:</value></data>
+  <data name="BookTime" xml:space="preserve"><value>Tid på dagen:</value></data>
+  <data name="BookPackage" xml:space="preserve"><value>Paket:</value></data>
+  <data name="BookRegNumber" xml:space="preserve"><value>Registreringsnummer:</value></data>
+  <data name="BookSelectStationFirst" xml:space="preserve"><value>Välj en station först</value></data>
+  <data name="BookNoStations" xml:space="preserve"><value>Inga stationer tillgängliga</value></data>
+  <data name="BookNoPackages" xml:space="preserve"><value>Inga paket tillgängliga</value></data>
+  <data name="BookCustomPlate" xml:space="preserve"><value>Anpassat registreringsnummer</value></data>
+  <data name="BookSubmit" xml:space="preserve"><value>Boka nu</value></data>
+  <data name="BookRegPlaceholder" xml:space="preserve"><value>Ange bilens registreringsnummer</value></data>
+  <data name="BookRegError" xml:space="preserve"><value>Ange ett giltigt registreringsnummer (t.ex. ABC123).</value></data>
+  <data name="EditSubmit" xml:space="preserve"><value>Uppdatera bokning</value></data>
+  <data name="EditCancel" xml:space="preserve"><value>Avbryt</value></data>
+
+  <!-- My bookings -->
+  <data name="MyBookingsTitle" xml:space="preserve"><value>Mina bokningar</value></data>
+  <data name="SortByDate" xml:space="preserve"><value>Sortera efter datum:</value></data>
+  <data name="OldestFirst" xml:space="preserve"><value>Äldst först</value></data>
+  <data name="NewestFirst" xml:space="preserve"><value>Nyast först</value></data>
+  <data name="FilterByStation" xml:space="preserve"><value>Filtrera efter station:</value></data>
+  <data name="AllStations" xml:space="preserve"><value>Alla stationer</value></data>
+  <data name="FilterByPackage" xml:space="preserve"><value>Filtrera efter paket:</value></data>
+  <data name="AllPackages" xml:space="preserve"><value>Alla paket</value></data>
+  <data name="FilterByRegNumber" xml:space="preserve"><value>Filtrera efter regnummer:</value></data>
+  <data name="ResetFilters" xml:space="preserve"><value>Återställ filter</value></data>
+  <data name="ColStation" xml:space="preserve"><value>Station</value></data>
+  <data name="ColPackage" xml:space="preserve"><value>Paket</value></data>
+  <data name="ColDate" xml:space="preserve"><value>Datum</value></data>
+  <data name="ColTime" xml:space="preserve"><value>Tid</value></data>
+  <data name="ColRegNumber" xml:space="preserve"><value>Regnummer</value></data>
+  <data name="Edit" xml:space="preserve"><value>Redigera</value></data>
+  <data name="Delete" xml:space="preserve"><value>Radera</value></data>
+  <data name="NoBookings" xml:space="preserve"><value>Inga bokningar hittades.</value></data>
+  <data name="BookNewWash" xml:space="preserve"><value>Boka en ny tvätt</value></data>
+  <data name="EnterRegNumberPlaceholder" xml:space="preserve"><value>Ange regnummer</value></data>
+
+  <!-- Admin -->
+  <data name="AdminTitle" xml:space="preserve"><value>Adminpanel</value></data>
+  <data name="AdminSubtitle" xml:space="preserve"><value>Hantera alla bokningar</value></data>
+  <data name="FilterByPhone" xml:space="preserve"><value>Filtrera efter telefonnummer:</value></data>
+  <data name="EnterPhonePlaceholder" xml:space="preserve"><value>Ange telefonnummer</value></data>
+  <data name="ColUser" xml:space="preserve"><value>Användare</value></data>
+  <data name="ColPhone" xml:space="preserve"><value>Telefonnummer</value></data>
+</root>

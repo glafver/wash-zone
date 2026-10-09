@@ -1,15 +1,16 @@
 ﻿@page
+@inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.EditBookingModel
 @{
     ViewData["Title"] = "Edit Booking";
 }
 
-<h2 class="text-center">Service Booking Form</h2>
+<h2 class="text-center">@Localizer["EditTitle"]</h2>
 <form method="post" class="booking-form">
     <input type="hidden" asp-for="Booking.Id" />
     <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-    <label for="Station">Station:</label>
+    <label for="Station">@Localizer["BookStation"]</label>
     <select id="Station" name="SelectedStationId" asp-for="SelectedStationId" required>
         @if (Model.Stations != null && Model.Stations.Any())
         {
@@ -20,30 +21,22 @@
         }
         else
         {
-            <option disabled>No stations available</option>
+            <option disabled>@Localizer["BookNoStations"]</option>
         }
 
     </select>
     <span asp-validation-for="SelectedStationId" class="text-danger"></span>
 
-    <label for="month">Month:</label>
+    <label for="month">@Localizer["BookMonth"]</label>
     <select id="month" name="SelectedMonth" asp-for="SelectedMonth" required>
-        <option value="January">January</option>
-        <option value="February">February</option>
-        <option value="March">March</option>
-        <option value="April">April</option>
-        <option value="May">May</option>
-        <option value="June">June</option>
-        <option value="July">July</option>
-        <option value="August">August</option>
-        <option value="September">September</option>
-        <option value="October">October</option>
-        <option value="November">November</option>
-        <option value="December">December</option>
+        @for (int month = 1; month <= 12; month++)
+        {
+            <option value="@month">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)</option>
+        }
     </select>
     <span asp-validation-for="SelectedMonth" class="text-danger"></span>
 
-    <label for="day">Day:</label>
+    <label for="day">@Localizer["BookDay"]</label>
     <select id="day" name="SelectedDay" asp-for="SelectedDay" required>
         @for (int i = 1; i <= 31; i++)
         {
@@ -52,7 +45,7 @@
     </select>
     <span asp-validation-for="SelectedDay" class="text-danger"></span>
 
-    <label for="time">Time of Day:</label>
+    <label for="time">@Localizer["BookTime"]</label>
     <select id="time" name="SelectedTime" asp-for="SelectedTime" required>
         @for (int hour = 8; hour < 22; hour++)
         {
@@ -66,26 +59,26 @@
     </select>
     <span asp-validation-for="SelectedTime" class="text-danger"></span>
 
-    <label for="package">Package:</label>
+    <label for="package">@Localizer["BookPackage"]</label>
 
     <select id="package" name="SelectedPackageId" asp-for="SelectedPackageId" required>
-        <option value="">Select a station first</option>
+        <option value="">@Localizer["BookSelectStationFirst"]</option>
     </select>
     <span asp-validation-for="SelectedPackageId" class="text-danger"></span>
 
-    <label for="regNumber">Registration Number:</label>
+    <label for="regNumber">@Localizer["BookRegNumber"]</label>
     <input class="form-control mb-3" type="text" id="regNumber" name="RegistrationNumber"
-           pattern="[A-Z]{3}[0-9]{3}" asp-for="RegistrationNumber" placeholder="Enter Car Registration Number" required />
+           pattern="[A-Z]{3}[0-9]{3}" asp-for="RegistrationNumber" placeholder="@Localizer["BookRegPlaceholder"]" required />
     <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
 
-    <div id="regError" class="custom-error">Enter a valid licenseplate (e.g., ABC123).</div>
+    <div id="regError" class="custom-error">@Localizer["BookRegError"]</div>
     <label>
-        <input type="checkbox" id="customPlateCheckbox"> Custom license plate
+        <input type="checkbox" id="customPlateCheckbox"> @Localizer["BookCustomPlate"]
     </label>
 
     <div class="form-group d-flex gap-2 mt-4 justify-content-center">
-        <button type="submit" class="btn btn-dark">Update Booking</button>
-        <a asp-page="@(User.IsInRole("Admin") ? "/AdminDashboard" : "/MyBookingsPage")" class="btn btn-outline-dark d-inline-block">Cancel</a>
+        <button type="submit" class="btn btn-dark">@Localizer["EditSubmit"]</button>
+        <a asp-page="@(User.IsInRole("Admin") ? "/AdminDashboard" : "/MyBookingsPage")" class="btn btn-outline-dark d-inline-block">@Localizer["EditCancel"]</a>
     </div>
 </form>
 
@@ -168,7 +161,7 @@
             const stationId = this.value;
 
             if (!stationId) {
-                packageSelect.innerHTML = '<option value="">Select a station first</option>';
+                packageSelect.innerHTML = '<option value="">@Localizer["BookSelectStationFirst"]</option>';
                 return;
             }
 
@@ -184,7 +177,7 @@
                             packageSelect.appendChild(option);
                         });
                     } else {
-                        packageSelect.innerHTML = '<option value="">No packages available</option>';
+                        packageSelect.innerHTML = '<option value="">@Localizer["BookNoPackages"]</option>';
                     }
                 })
                 .catch(error => console.error("Error fetching packages:", error));
