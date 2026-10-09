@@ -12,6 +12,8 @@ namespace WashZone.Pages
     [Authorize]
     public class BookPageModel : PageModel
     {
+        private const int CalendarDays = 7;
+
         private readonly IStationService _stationService;
         private readonly IBookingService _bookingService;
         private readonly ILogger<BookPageModel> _logger;
@@ -26,18 +28,14 @@ namespace WashZone.Pages
         [BindProperty]
         [Range(1, int.MaxValue, ErrorMessage = "Please select a station.")]
         public int SelectedStationId { get; set; }
+
         [BindProperty]
         [Range(1, int.MaxValue, ErrorMessage = "Please select a package.")]
         public int SelectedPackageId { get; set; }
+
         [BindProperty]
-        [Range(1, 12, ErrorMessage = "Please select a month.")]
-        public int SelectedMonth { get; set; }
-        [BindProperty]
-        [Range(1, 31, ErrorMessage = "Please select a valid day.")]
-        public int SelectedDay { get; set; }
-        [BindProperty]
-        [Required(ErrorMessage = "Please select a time.")]
-        public string SelectedTime { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Please select a time slot.")]
+        public string SelectedSlot { get; set; } = string.Empty; // "yyyy-MM-ddTHH:mm:ss"
 
         [BindProperty]
         [Required(ErrorMessage = "Registration number is required.")]
@@ -45,30 +43,71 @@ namespace WashZone.Pages
         [RegularExpression("^[A-Za-z0-9]+$", ErrorMessage = "Registration number may only contain letters and digits.")]
         public string RegistrationNumber { get; set; } = string.Empty;
 
-        public List<Station> Stations { get; set; } = new List<Station>();
-        public List<Package> Packages { get; set; } = new List<Package>();
+        public List<Station> Stations { get; set; } = new();
+        public List<Package> Packages { get; set; } = new();
 
-        public async Task<IActionResult> OnGetPackagesAsync(int stationId)
-        {
-            var packages = await _stationService.GetPackagesForStationAsync(stationId);
-            var result = packages.Select(p => new { p.Id, p.Name }).ToList();
-            return new JsonResult(result);
-        }
+        public TimeSpan OpeningTime { get; } = new(8, 0, 0);
+        public TimeSpan ClosingTime { get; } = new(20, 0, 0);
 
         public async Task OnGetAsync()
         {
             Stations = await _stationService.GetStationsAsync();
             Packages = await _stationService.GetPackagesAsync();
 
-            if (Stations == null || !Stations.Any()) //if fail to get station and package data
+            if (Stations == null || !Stations.Any())
             {
                 ModelState.AddModelError("", "No stations found. Please check your database.");
             }
+        }
 
-            if (Packages == null || !Packages.Any())
+        // Returns the packages (with duration) offered by a station.
+        public async Task<IActionResult> OnGetPackagesAsync(int stationId)
+        {
+            var packages = await _stationService.GetPackagesForStationAsync(stationId);
+            var result = packages.Select(p => new { p.Id, p.Name, p.DurationMinutes, p.Price }).ToList();
+            return new JsonResult(result);
+        }
+
+        // Returns the data the client needs to render the weekly booking calendar.
+        public async Task<IActionResult> OnGetCalendarAsync(int stationId, int packageId)
+        {
+            var package = await _stationService.GetPackageAsync(packageId);
+            if (package == null)
             {
-                ModelState.AddModelError("", "No packages found. Please check your database.");
+                return NotFound();
             }
+
+            var today = DateTime.Today;
+            var from = today.Add(OpeningTime);
+            var to = today.AddDays(CalendarDays).Add(ClosingTime);
+
+            var bookings = await _bookingService.GetBookingsForStationAsync(stationId, from, to);
+
+            var days = Enumerable.Range(0, CalendarDays)
+                .Select(offset => today.AddDays(offset))
+                .Select(d => new
+                {
+                    date = d.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                    weekday = d.ToString("ddd", CultureInfo.InvariantCulture),
+                    day = d.Day,
+                    month = d.ToString("MMM", CultureInfo.InvariantCulture),
+                })
+                .ToList();
+
+            var booked = bookings.Select(b => new
+            {
+                start = b.Date.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture),
+                duration = b.DurationMinutes,
+            }).ToList();
+
+            return new JsonResult(new
+            {
+                durationMinutes = package.DurationMinutes,
+                openingTime = OpeningTime.ToString(@"hh\:mm"),
+                closingTime = ClosingTime.ToString(@"hh\:mm"),
+                days,
+                booked,
+            });
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -80,22 +119,42 @@ namespace WashZone.Pages
                 return Page();
             }
 
-            // Parse and validate the chosen date/time (also rejects dates in the past).
-            if (!TryBuildBookingDate(out var finalBookingDate))
+            if (!TryParseSlot(out var slot))
             {
                 return Page();
             }
 
-            // Ensure the station exists and actually offers the selected package.
-            if (!await _stationService.StationExistsAsync(SelectedStationId))
+            var stationExists = await _stationService.StationExistsAsync(SelectedStationId);
+            if (!stationExists)
             {
                 ModelState.AddModelError(nameof(SelectedStationId), "The selected station does not exist.");
                 return Page();
             }
 
-            if (!await _stationService.StationOffersPackageAsync(SelectedStationId, SelectedPackageId))
+            var package = await _stationService.GetPackageAsync(SelectedPackageId);
+            if (package == null)
+            {
+                ModelState.AddModelError(nameof(SelectedPackageId), "The selected package does not exist.");
+                return Page();
+            }
+
+            var packageOffered = await _stationService.StationOffersPackageAsync(SelectedStationId, SelectedPackageId);
+            if (!packageOffered)
             {
                 ModelState.AddModelError(nameof(SelectedPackageId), "The selected package is not offered at this station.");
+                return Page();
+            }
+
+            // Reject past slots and slots outside opening hours.
+            if (slot < DateTime.Now)
+            {
+                ModelState.AddModelError("", "The selected time is in the past. Please choose a future time.");
+                return Page();
+            }
+
+            if (slot.TimeOfDay < OpeningTime || slot.AddMinutes(package.DurationMinutes).TimeOfDay > ClosingTime)
+            {
+                ModelState.AddModelError("", "The selected time is outside opening hours.");
                 return Page();
             }
 
@@ -106,7 +165,8 @@ namespace WashZone.Pages
                 StationId = SelectedStationId,
                 PackageId = SelectedPackageId,
                 RegistrationNumber = RegistrationNumber.Trim().ToUpperInvariant(),
-                Date = finalBookingDate,
+                Date = slot,
+                DurationMinutes = package.DurationMinutes,
             });
 
             if (!result.Succeeded)
@@ -119,43 +179,17 @@ namespace WashZone.Pages
             return RedirectToPage("/MyBookingsPage");
         }
 
-        /// <summary>
-        /// Builds and validates the final booking <see cref="DateTime"/> from the selected
-        /// month, day and time. Rolls over to next year when the selected month has already
-        /// passed this year, and rejects dates/times in the past.
-        /// </summary>
-        private bool TryBuildBookingDate(out DateTime bookingDate)
+        private bool TryParseSlot(out DateTime slot)
         {
-            bookingDate = default;
+            slot = default;
 
-            if (!TimeSpan.TryParseExact(SelectedTime, @"hh\:mm", CultureInfo.InvariantCulture, out var time))
+            if (!DateTime.TryParseExact(SelectedSlot, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsed))
             {
-                ModelState.AddModelError(nameof(SelectedTime), "Invalid time.");
+                ModelState.AddModelError(nameof(SelectedSlot), "Invalid time slot.");
                 return false;
             }
 
-            // If the selected month has already passed this year, assume the booking is for next year.
-            int year = DateTime.Now.Year;
-            if (SelectedMonth < DateTime.Now.Month)
-            {
-                year += 1;
-            }
-
-            int maxDay = DateTime.DaysInMonth(year, SelectedMonth);
-            if (SelectedDay < 1 || SelectedDay > maxDay)
-            {
-                ModelState.AddModelError(nameof(SelectedDay), $"Invalid day for the selected month (max {maxDay}).");
-                return false;
-            }
-
-            bookingDate = new DateTime(year, SelectedMonth, SelectedDay, time.Hours, time.Minutes, 0);
-
-            if (bookingDate < DateTime.Now)
-            {
-                ModelState.AddModelError("", "The selected date and time is in the past. Please choose a future time.");
-                return false;
-            }
-
+            slot = parsed;
             return true;
         }
     }

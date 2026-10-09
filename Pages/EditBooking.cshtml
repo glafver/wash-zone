@@ -6,75 +6,37 @@
 }
 
 <h2 class="text-center">@Localizer["EditTitle"]</h2>
-<form method="post" class="booking-form">
+<form method="post" class="booking-form" id="bookingForm">
     <input type="hidden" asp-for="Booking.Id" />
     <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
     <label for="Station">@Localizer["BookStation"]</label>
     <select id="Station" name="SelectedStationId" asp-for="SelectedStationId" required>
-        @if (Model.Stations != null && Model.Stations.Any())
+        @foreach (var station in Model.Stations)
         {
-            @foreach (var Station in Model.Stations)
-            {
-                <option value="@Station.Id">@Station.Name</option>
-            }
+            <option value="@station.Id">@station.Name</option>
         }
-        else
-        {
-            <option disabled>@Localizer["BookNoStations"]</option>
-        }
-
     </select>
     <span asp-validation-for="SelectedStationId" class="text-danger"></span>
 
-    <label for="month">@Localizer["BookMonth"]</label>
-    <select id="month" name="SelectedMonth" asp-for="SelectedMonth" required>
-        @for (int month = 1; month <= 12; month++)
-        {
-            <option value="@month">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)</option>
-        }
-    </select>
-    <span asp-validation-for="SelectedMonth" class="text-danger"></span>
-
-    <label for="day">@Localizer["BookDay"]</label>
-    <select id="day" name="SelectedDay" asp-for="SelectedDay" required>
-        @for (int i = 1; i <= 31; i++)
-        {
-            <option value="@i">@i</option>
-        }
-    </select>
-    <span asp-validation-for="SelectedDay" class="text-danger"></span>
-
-    <label for="time">@Localizer["BookTime"]</label>
-    <select id="time" name="SelectedTime" asp-for="SelectedTime" required>
-        @for (int hour = 8; hour < 22; hour++)
-        {
-            @for (int minutes = 0; minutes < 60; minutes += 15)
-            {
-                var time = $"{hour:D2}:{minutes:D2}";
-                <option value="@time">@time</option>
-            }
-        }
-        <option value="22:00">22:00</option>
-    </select>
-    <span asp-validation-for="SelectedTime" class="text-danger"></span>
-
     <label for="package">@Localizer["BookPackage"]</label>
-
     <select id="package" name="SelectedPackageId" asp-for="SelectedPackageId" required>
         <option value="">@Localizer["BookSelectStationFirst"]</option>
     </select>
     <span asp-validation-for="SelectedPackageId" class="text-danger"></span>
 
+    <input type="hidden" name="SelectedSlot" id="selectedSlot" asp-for="SelectedSlot" />
+
+    <label>@Localizer["BookChooseSlot"]</label>
+    <div id="calendar" class="calendar-container mb-3">
+        <p class="text-muted">@Localizer["CalendarPrompt"]</p>
+    </div>
+    <span asp-validation-for="SelectedSlot" class="text-danger"></span>
+
     <label for="regNumber">@Localizer["BookRegNumber"]</label>
     <input class="form-control mb-3" type="text" id="regNumber" name="RegistrationNumber"
-           pattern="[A-Z]{3}[0-9]{3}" asp-for="RegistrationNumber" placeholder="@Localizer["BookRegPlaceholder"]" required />
+           asp-for="RegistrationNumber" placeholder="@Localizer["BookRegPlaceholder"]" required />
     <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
-
-    <div id="regError" class="custom-error">@Localizer["BookRegError"]</div>
-    <label>
-        <input type="checkbox" id="customPlateCheckbox"> @Localizer["BookCustomPlate"]
-    </label>
 
     <div class="form-group d-flex gap-2 mt-4 justify-content-center">
         <button type="submit" class="btn btn-dark">@Localizer["EditSubmit"]</button>
@@ -83,108 +45,135 @@
 </form>
 
 <style>
-    .booking-form {
-        max-width: 600px;
-        margin: auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        background-color: #f9f9f9;
-    }
-
-        .booking-form label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .booking-form select,
-        .booking-form input[type="submit"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-    #BookingHead {
-        text-align: center;
-    }
-
-    .custom-error {
-        display: none;
-        color: #C41E3A;
-        font-size: 14px;
-        margin-top: 5px;
-        margin-bottom: 5px;
-        background: #ffdddd;
-        padding: 5px;
-        border: 1px solid #C41E3A;
-        border-radius: 5px;
-    }
+    .booking-form { max-width: 900px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #f9f9f9; }
+    .booking-form label { display: block; margin-bottom: 8px; font-weight: bold; }
+    .booking-form select, .booking-form input[type="text"] { width: 100%; padding: 8px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; }
+    .calendar-container { overflow-x: auto; }
+    .calendar-grid { display: grid; grid-template-columns: 70px repeat(7, 1fr); gap: 2px; }
+    .cal-header { font-weight: bold; text-align: center; background: #212529; color: #fff; padding: 6px 2px; font-size: 0.85rem; }
+    .cal-time { text-align: right; padding-right: 8px; font-size: 0.8rem; color: #555; align-self: center; }
+    .cal-cell { height: 30px; border-radius: 4px; cursor: default; background: #eee; }
+    .cal-cell.available { background: #d4edda; cursor: pointer; }
+    .cal-cell.available:hover { background: #a8d8b0; }
+    .cal-cell.booked { background: #f8d7da; }
+    .cal-cell.selected { background: #0d6efd; outline: 2px solid #084298; }
 </style>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const regInput = document.getElementById("regNumber");
-        const errorBox = document.getElementById("regError");
-        const customPlateCheckbox = document.getElementById("customPlateCheckbox");
+    const bookingId = @Model.Booking.Id;
+    let selectedSlot = '@Model.SelectedSlot';
 
-        regInput.addEventListener("input", function () {
-            const pattern = /^[A-Z]{3}[0-9]{3}$/;
-            if (!customPlateCheckbox.checked && !pattern.test(regInput.value)) {
-                errorBox.style.display = "block";
-            } else {
-                errorBox.style.display = "none";
-            }
-        });
+    function parseSlot(s) {
+        const parts = s.split('T');
+        const d = parts[0].split('-').map(Number);
+        const t = parts[1].split(':').map(Number);
+        return new Date(d[0], d[1] - 1, d[2], t[0], t[1], t[2]);
+    }
+    function toHHMM(minutes) {
+        const h = String(Math.floor(minutes / 60)).padStart(2, '0');
+        const m = String(minutes % 60).padStart(2, '0');
+        return h + ':' + m;
+    }
+    function toMinutes(hhmm) {
+        const p = hhmm.split(':').map(Number);
+        return p[0] * 60 + p[1];
+    }
 
-        customPlateCheckbox.addEventListener("change", function () {
-            if (customPlateCheckbox.checked) {
-                regInput.removeAttribute("pattern");
-                regInput.removeAttribute("title");
-                regInput.classList.remove("invalid");
-                errorBox.style.display = "none";
-            } else {
-                regInput.setAttribute("pattern", "[A-Z]{3}[0-9]{3}");
-                regInput.setAttribute("title", "Enter a valid car registration number (ABC123)");
+    function renderCalendar(data) {
+        const calendar = document.getElementById('calendar');
+        const step = 30;
+        const opening = toMinutes(data.openingTime);
+        const closing = toMinutes(data.closingTime);
+        const duration = data.durationMinutes;
+        const now = new Date();
+        const booked = data.booked.map(b => ({ start: parseSlot(b.start), duration: b.duration }));
+
+        function isBooked(start) {
+            const end = new Date(start.getTime() + duration * 60000);
+            return booked.some(b => {
+                const bEnd = new Date(b.start.getTime() + b.duration * 60000);
+                return start < bEnd && b.start < end;
+            });
+        }
+
+        let html = '<div class="calendar-grid">';
+        html += '<div class="cal-header"></div>';
+        for (const day of data.days) {
+            html += `<div class="cal-header">${day.weekday}<br>${day.day} ${day.month}</div>`;
+        }
+        for (let t = opening; t + duration <= closing; t += step) {
+            const timeLabel = toHHMM(t);
+            html += `<div class="cal-time">${timeLabel}</div>`;
+            for (const day of data.days) {
+                const slotStr = `${day.date}T${timeLabel}:00`;
+                const start = parseSlot(slotStr);
+                const past = start < now;
+                const bookedCell = isBooked(start);
+                const isSelected = selectedSlot === slotStr;
+                let cls;
+                if (bookedCell || past) cls = 'cal-cell booked';
+                else if (isSelected) cls = 'cal-cell selected';
+                else cls = 'cal-cell available';
+                html += `<div class="${cls}" data-slot="${slotStr}"></div>`;
             }
+        }
+        html += '</div>';
+        calendar.innerHTML = html;
+
+        calendar.querySelectorAll('.cal-cell.available').forEach(cell => {
+            cell.addEventListener('click', () => {
+                selectedSlot = cell.getAttribute('data-slot');
+                document.getElementById('selectedSlot').value = selectedSlot;
+                calendar.querySelectorAll('.cal-cell').forEach(c => c.classList.remove('selected'));
+                cell.classList.add('selected');
+            });
         });
+    }
+
+    function renderEmpty() {
+        document.getElementById('calendar').innerHTML = '<p class="text-muted">@Localizer["CalendarPrompt"]</p>';
+    }
+
+    function loadPackages(initial) {
+        const stationId = document.getElementById('Station').value;
+        const packageSelect = document.getElementById('package');
+        packageSelect.innerHTML = '<option value="">@Localizer["BookSelectStationFirst"]</option>';
+        if (!stationId) { renderEmpty(); return; }
+        fetch(`/EditBooking?handler=Packages&stationId=${stationId}`)
+            .then(r => r.json())
+            .then(data => {
+                data.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.id;
+                    opt.textContent = `${p.name} (${p.durationMinutes} min, ${p.price} kr)`;
+                    packageSelect.appendChild(opt);
+                });
+                if (initial) {
+                    packageSelect.value = '@Model.SelectedPackageId';
+                    fetchCalendar();
+                } else {
+                    renderEmpty();
+                }
+            })
+            .catch(() => {});
+    }
+
+    function fetchCalendar() {
+        const stationId = document.getElementById('Station').value;
+        const packageId = document.getElementById('package').value;
+        document.getElementById('selectedSlot').value = selectedSlot;
+        if (!stationId || !packageId) { renderEmpty(); return; }
+        fetch(`/EditBooking?handler=Calendar&stationId=${stationId}&packageId=${packageId}&bookingId=${bookingId}`)
+            .then(r => r.json())
+            .then(renderCalendar)
+            .catch(() => {});
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('Station').addEventListener('change', () => loadPackages(false));
+        document.getElementById('package').addEventListener('change', fetchCalendar);
+        if (document.getElementById('Station').value) {
+            loadPackages(true);
+        }
     });
-</script><!--script for validation of reg number-->
-<script>
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const stationSelect = document.getElementById("Station");
-        const packageSelect = document.getElementById("package");
-
-        stationSelect.addEventListener("change", function () {
-            const stationId = this.value;
-
-            if (!stationId) {
-                packageSelect.innerHTML = '<option value="">@Localizer["BookSelectStationFirst"]</option>';
-                return;
-            }
-
-            fetch(`/BookPage?handler=Packages&stationId=${stationId}`)
-                .then(response => response.json())
-                .then(data => {
-                    packageSelect.innerHTML = '';
-                    if (data.length > 0) {
-                        data.forEach(pkg => {
-                            const option = document.createElement("option");
-                            option.value = pkg.id;
-                            option.textContent = pkg.name;
-                            packageSelect.appendChild(option);
-                        });
-                    } else {
-                        packageSelect.innerHTML = '<option value="">@Localizer["BookNoPackages"]</option>';
-                    }
-                })
-                .catch(error => console.error("Error fetching packages:", error));
-        });
-    });
-</script><!--script for fetching packages based on selected station-->
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+</script>

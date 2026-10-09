@@ -49,9 +49,15 @@ public class BookingService : IBookingService
     public Task<Booking?> GetBookingAsync(int id)
         => _context.Bookings.FindAsync(id).AsTask();
 
+    public async Task<List<Booking>> GetBookingsForStationAsync(int stationId, DateTime from, DateTime to)
+        => await _context.Bookings
+            .Where(b => b.StationId == stationId && b.Date >= from && b.Date < to)
+            .OrderBy(b => b.Date)
+            .ToListAsync();
+
     public async Task<ServiceResult> CreateBookingAsync(string userId, BookingInput input)
     {
-        if (await IsSlotTakenAsync(input.StationId, input.Date))
+        if (!await IsSlotAvailableAsync(input.StationId, input.Date, input.DurationMinutes))
         {
             return ServiceResult.Conflict("This time is already booked at the selected station. Please choose another time.");
         }
@@ -63,6 +69,7 @@ public class BookingService : IBookingService
             PackageId = input.PackageId,
             RegistrationNumber = input.RegistrationNumber,
             Date = input.Date,
+            DurationMinutes = input.DurationMinutes,
         });
 
         await _context.SaveChangesAsync();
@@ -75,7 +82,7 @@ public class BookingService : IBookingService
         if (booking == null) return ServiceResult.NotFound("Booking not found.");
         if (booking.UserId != userId && !isAdmin) return ServiceResult.Forbidden();
 
-        if (await IsSlotTakenAsync(input.StationId, input.Date, bookingId))
+        if (!await IsSlotAvailableAsync(input.StationId, input.Date, input.DurationMinutes, bookingId))
         {
             return ServiceResult.Conflict("This time is already booked at the selected station. Please choose another time.");
         }
@@ -84,6 +91,7 @@ public class BookingService : IBookingService
         booking.PackageId = input.PackageId;
         booking.RegistrationNumber = input.RegistrationNumber;
         booking.Date = input.Date;
+        booking.DurationMinutes = input.DurationMinutes;
 
         await _context.SaveChangesAsync();
         return ServiceResult.Success();
@@ -100,10 +108,21 @@ public class BookingService : IBookingService
         return ServiceResult.Success();
     }
 
-    private Task<bool> IsSlotTakenAsync(int stationId, DateTime date, int? excludeBookingId = null)
+    /// <summary>
+    /// Returns true if the time window [start, start + durationMinutes) is free for the given
+    /// station, i.e. it does not overlap any existing booking.
+    /// </summary>
+    public async Task<bool> IsSlotAvailableAsync(int stationId, DateTime start, int durationMinutes, int? excludeBookingId = null)
     {
-        IQueryable<Booking> query = _context.Bookings.Where(b => b.StationId == stationId && b.Date == date);
+        var end = start.AddMinutes(durationMinutes);
+
+        IQueryable<Booking> query = _context.Bookings.Where(b =>
+            b.StationId == stationId &&
+            b.Date < end &&
+            b.Date.AddMinutes(b.DurationMinutes) > start);
+
         if (excludeBookingId.HasValue) query = query.Where(b => b.Id != excludeBookingId);
-        return query.AnyAsync();
+
+        return !await query.AnyAsync();
     }
 }

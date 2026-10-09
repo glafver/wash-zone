@@ -43,6 +43,8 @@
 
   <!-- Booking form -->
   <data name="BookTitle" xml:space="preserve"><value>Service Booking Form</value></data>
+  <data name="BookChooseSlot" xml:space="preserve"><value>Choose a time slot:</value></data>
+  <data name="CalendarPrompt" xml:space="preserve"><value>Select a station and package to view available time slots</value></data>
   <data name="EditTitle" xml:space="preserve"><value>Edit Booking</value></data>
   <data name="BookStation" xml:space="preserve"><value>Station:</value></data>
   <data name="BookMonth" xml:space="preserve"><value>Month:</value></data>

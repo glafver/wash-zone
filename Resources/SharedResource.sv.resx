@@ -43,6 +43,8 @@
 
   <!-- Booking form -->
   <data name="BookTitle" xml:space="preserve"><value>Bokningsformulär</value></data>
+  <data name="BookChooseSlot" xml:space="preserve"><value>Välj en tid:</value></data>
+  <data name="CalendarPrompt" xml:space="preserve"><value>Välj station och paket för att se lediga tider</value></data>
   <data name="EditTitle" xml:space="preserve"><value>Redigera bokning</value></data>
   <data name="BookStation" xml:space="preserve"><value>Station:</value></data>
   <data name="BookMonth" xml:space="preserve"><value>Månad:</value></data>

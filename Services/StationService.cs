@@ -42,6 +42,9 @@ public class StationService : IStationService
             .Select(sp => sp.Package)
             .ToListAsync();
 
+    public async Task<Package?> GetPackageAsync(int id)
+        => await _context.Packages.FindAsync(id);
+
     public Task<bool> StationExistsAsync(int id)
         => _context.Stations.AnyAsync(s => s.Id == id);
 
