@@ -51,7 +51,8 @@
   <data name="OurServicesSub" xml:space="preserve"><value>Varje tvätt inkluderar expertvård</value></data>
   <data name="VideoBandTitle" xml:space="preserve"><value>Se glansen</value></data>
   <data name="VideoBandText" xml:space="preserve"><value>Professionell utrustning, expertens handlag.</value></data>
-  <data name="VideoBandExtra" xml:space="preserve"><value>Från handtvätt till keramisk beläggning — varje bil behandlas som vår egen. Premiumprodukter, ärliga priser.</value></data>
+  <data name="VideoBandExtra" xml:space="preserve"><value>Från handtvätt till keramisk beläggning — varje bil behandlas som vår egen.</value></data>
+  <data name="VideoBandExtra2" xml:space="preserve"><value>Premiumprodukter, ärliga priser.</value></data>
 
   <!-- Station details -->
   <data name="DetailsBack" xml:space="preserve"><value>Tillbaka till alla stationer</value></data>
