@@ -288,6 +288,11 @@ a {
     color: var(--muted);
 }
 
+.py-6 {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+}
+
 /* ---- Station cards ---------------------------------------------------- */
 
 .station-card {
@@ -555,7 +560,7 @@ a {
 /* ---- Video showcase ---------------------------------------------------- */
 
 .showcase {
-    padding-top: 1rem;
+    padding: 4rem 0;
 }
 
 .showcase-frame {
