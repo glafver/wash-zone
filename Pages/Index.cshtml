@@ -196,11 +196,21 @@
 @section Scripts {
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        // Restore scroll position after a package-filter form submit
+        (function () {
+            var savedY = sessionStorage.getItem('washzoneScrollY');
+            if (savedY) {
+                window.scrollTo(0, parseInt(savedY, 10));
+                sessionStorage.removeItem('washzoneScrollY');
+            }
+        })();
+
         // Package filter dropdown
         document.querySelectorAll('.package-option').forEach(item => {
             item.addEventListener('click', function () {
                 document.getElementById('selectedPackageInput').value = this.getAttribute('data-value');
                 document.getElementById('dropdownMenuButton').textContent = this.textContent;
+                sessionStorage.setItem('washzoneScrollY', String(window.scrollY));
                 document.getElementById('packageForm').submit();
             });
         });
