@@ -3,10 +3,10 @@
    ========================================================================== */
 
 :root {
-    --ink: #0f0f0f;
+    --ink: #212529;
     --paper: #f3f0ea;
     --accent: #5f9ea0;
-    --accent-ink: #0f0f0f;
+    --accent-ink: #212529;
     --white: #ffffff;
     --muted: #6b6b6b;
 
@@ -213,7 +213,7 @@ a {
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(15, 15, 15, 0.22);
+    background: rgba(33, 37, 41, 0.22);
 }
 
 .hero-content {
@@ -322,6 +322,10 @@ a {
 
 .py-6 {
     padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+}
+
+.pb-6 {
     padding-bottom: 5rem !important;
 }
 
@@ -626,7 +630,7 @@ a {
 .showcase-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(15, 15, 15, 0.38);
+    background: rgba(33, 37, 41, 0.38);
     z-index: 1;
 }
 

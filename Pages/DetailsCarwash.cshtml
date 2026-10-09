@@ -10,19 +10,15 @@
 }
 
 <div class="container px-3 mb-4">
-    <a asp-page="/Index" class="btn btn-outline-dark mb-3">
-        ← @Localizer["DetailsBack"]
-    </a>
-
     <div class="row align-items-center rounded bg-dark my-5">
         <div class="col-md-6 ps-5 text-light">
-            <h2>@Model.Station?.Name</h2>
+            <h2 class="marker" style="font-size:2.6rem">@Model.Station?.Name</h2>
             <p class="mb-3">@Model.Station?.Address</p>
             <p>+46761234578</p>
         </div>
 
         <div class="col-md-6 text-md-end text-center px-0">
-            <iframe width="100%" height="200" style="border:0; border-radius:0 4px 4px 0; margin-bottom: -6px"
+            <iframe width="100%" height="200" style="border:0; border-radius:0 4px 4px 0; margin-bottom: -6px; filter: grayscale(1);"
                     loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"
                     src="https://www.google.com/maps?q=@Uri.EscapeDataString(Model.Station?.Address ?? "")&output=embed">
             </iframe>
@@ -44,7 +40,7 @@
     }
 </div>
 
-<div class="container">
+<div class="container pb-6">
     <!-- Shows packages available at the station -->
     <h3 class="mb-4">@Localizer["DetailsAvailablePackages"]</h3>
     @{
