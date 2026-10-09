@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WashZone.Data;
 using WashZone.Models;
+using WashZone.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<IStationService, StationService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 
 var app = builder.Build();
 

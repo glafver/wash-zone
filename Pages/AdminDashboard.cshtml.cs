@@ -1,29 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using WashZone.Data;
 using WashZone.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using WashZone.Services;
 
 namespace WashZone.Pages
 {
     [Authorize(Roles = "Admin")]
     public class AdminDashboardModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IBookingService _bookingService;
+        private readonly IStationService _stationService;
 
-        public AdminDashboardModel(ApplicationDbContext context)
+        public AdminDashboardModel(IBookingService bookingService, IStationService stationService)
         {
-            _context = context;
+            _bookingService = bookingService;
+            _stationService = stationService;
         }
 
         public List<Booking> Bookings { get; set; } = new List<Booking>();
         public List<Station> Stations { get; set; } = new List<Station>();
         public List<Package> Packages { get; set; } = new List<Package>();
+
         public string SortOrder { get; set; } = string.Empty;
         public int? SelectedStationId { get; set; }
         public int? SelectedPackageId { get; set; }
@@ -32,70 +30,38 @@ namespace WashZone.Pages
 
         public async Task<IActionResult> OnGetAsync(string sortOrder = "desc", int? stationId = null, int? packageId = null, string? regNumber = null, string? phoneNumber = null)
         {
-            if (!User.IsInRole("Admin"))
-            {
-                return RedirectToPage("/Index");
-            }
-
             SortOrder = sortOrder;
             SelectedStationId = stationId;
             SelectedPackageId = packageId;
             RegNumberFilter = regNumber;
+            PhoneNumberFilter = phoneNumber;
 
-            Stations = await _context.Stations.ToListAsync();
-            Packages = await _context.Packages.ToListAsync();
+            Stations = await _stationService.GetStationsAsync();
+            Packages = await _stationService.GetPackagesAsync();
 
-            IQueryable<Booking> bookingsQuery = _context.Bookings
-                .Include(b => b.Station)
-                .Include(b => b.Package)
-                .Include(b => b.User);
+            // Default sort order is descending ("newest first").
+            var descending = sortOrder != "asc";
 
-            if (stationId.HasValue)
-            {
-                bookingsQuery = bookingsQuery.Where(b => b.Station.Id == stationId);
-            }
-
-            if (packageId.HasValue)
-            {
-                bookingsQuery = bookingsQuery.Where(b => b.Package.Id == packageId);
-            }
-
-            if (!string.IsNullOrEmpty(regNumber))
-            {
-                bookingsQuery = bookingsQuery.Where(b => b.RegistrationNumber.Contains(regNumber));
-            }
-
-            if (!string.IsNullOrWhiteSpace(phoneNumber))
-                bookingsQuery = bookingsQuery.Where(b => b.User != null && b.User.PhoneNumber != null && b.User.PhoneNumber.Contains(phoneNumber));
-
-            bookingsQuery = sortOrder == "asc"
-                ? bookingsQuery.OrderBy(b => b.Date)
-                : bookingsQuery.OrderByDescending(b => b.Date);
-
-            Bookings = await bookingsQuery.ToListAsync();
+            Bookings = await _bookingService.GetAllBookingsAsync(descending, stationId, packageId, regNumber, phoneNumber);
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            if (!User.IsInRole("Admin"))
-            {
-                return RedirectToPage("/Index");
-            }
+            var result = await _bookingService.DeleteBookingAsync(id, string.Empty, isAdmin: true);
 
-            var booking = await _context.Bookings.FindAsync(id);
-            if (booking == null)
+            if (!result.Succeeded)
             {
-                return NotFound();
+                return result.ErrorType switch
+                {
+                    ServiceErrorType.NotFound => (IActionResult)NotFound(),
+                    _ => RedirectToPage(),
+                };
             }
-
-            _context.Bookings.Remove(booking);
-            await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "Booking successfully deleted!";
             return RedirectToPage();
         }
     }
 }
-

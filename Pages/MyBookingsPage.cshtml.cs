@@ -1,27 +1,22 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Security.Claims;
-using WashZone.Data;
 using WashZone.Models;
+using WashZone.Services;
 
 namespace WashZone.Pages
 {
     [Authorize]
     public class MyBookingsPageModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IBookingService _bookingService;
+        private readonly IStationService _stationService;
 
-        public MyBookingsPageModel(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public MyBookingsPageModel(IBookingService bookingService, IStationService stationService)
         {
-            _context = context;
-            _userManager = userManager;
+            _bookingService = bookingService;
+            _stationService = stationService;
         }
 
         public List<Booking> Bookings { get; set; } = new List<Booking>();
@@ -46,51 +41,34 @@ namespace WashZone.Pages
             SelectedPackageId = packageId;
             RegNumberFilter = regNumber;
 
-            IQueryable<Booking> query = _context.Bookings
-                .Include(b => b.Station)
-                .Include(b => b.Package)
-                .Where(b => b.UserId == userId);
+            // Default sort order is ascending ("oldest first").
+            var descending = sortOrder == "desc";
 
-            if (stationId.HasValue)
-                query = query.Where(b => b.StationId == stationId);
-
-            if (packageId.HasValue)
-                query = query.Where(b => b.PackageId == packageId);
-
-            if (!string.IsNullOrWhiteSpace(regNumber))
-                query = query.Where(b => b.RegistrationNumber.Contains(regNumber));
-
-            query = sortOrder == "desc"
-                ? query.OrderByDescending(b => b.Date)
-                : query.OrderBy(b => b.Date);
-
-            Bookings = await query.ToListAsync();
-            Stations = await _context.Stations.ToListAsync();
-            Packages = await _context.Packages.ToListAsync();
+            Bookings = await _bookingService.GetUserBookingsAsync(userId, descending, stationId, packageId, regNumber);
+            Stations = await _stationService.GetStationsAsync();
+            Packages = await _stationService.GetPackagesAsync();
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            var booking = await _context.Bookings.FindAsync(id);
-            if (booking == null)
-            {
-                return NotFound();
-            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (booking.UserId != userId)
-            {
-                return Forbid();
-            }
+            var result = await _bookingService.DeleteBookingAsync(id, userId, isAdmin: false);
 
-            _context.Bookings.Remove(booking);
-            await _context.SaveChangesAsync();
+            if (!result.Succeeded)
+            {
+                return result.ErrorType switch
+                {
+                    ServiceErrorType.NotFound => (IActionResult)NotFound(),
+                    ServiceErrorType.Forbidden => Forbid(),
+                    _ => RedirectToPage(),
+                };
+            }
 
             TempData["SuccessMessage"] = "Booking successfully deleted!";
             return RedirectToPage();
         }
     }
 }
-

@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using WashZone.Data;
 using WashZone.Models;
+using WashZone.Services;
 
 namespace WashZone.Pages
 {
     public class DetailsCarwashModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IStationService _stationService;
 
-        public DetailsCarwashModel(ApplicationDbContext context)
+        public DetailsCarwashModel(IStationService stationService)
         {
-            _context = context;
+            _stationService = stationService;
         }
 
         public IReadOnlyDictionary<string, string> FeatureImages { get; } = new Dictionary<string, string>
@@ -31,14 +30,9 @@ namespace WashZone.Pages
         public Station? Station { get; set; }
         public List<Package> AvailablePackages { get; set; } = new();
 
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            Station = _context.Stations
-                .Include(s => s.StationPackages)
-                .ThenInclude(sp => sp.Package)
-                .ThenInclude(p => p.PackageFeatures) // Inkludera kopplingen till features
-                .ThenInclude(pf => pf.Feature) // Inkludera själva feature-data
-                .FirstOrDefault(s => s.Id == id);
+            Station = await _stationService.GetStationDetailsAsync(id);
 
             if (Station == null)
             {
@@ -54,4 +48,3 @@ namespace WashZone.Pages
         }
     }
 }
-

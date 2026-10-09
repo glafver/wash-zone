@@ -1,32 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Security.Claims;
-using WashZone.Data;
 using WashZone.Models;
+using WashZone.Services;
 
 namespace WashZone.Pages
 {
     [Authorize]
     public class BookPageModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _UserManager;
-
+        private readonly IStationService _stationService;
+        private readonly IBookingService _bookingService;
         private readonly ILogger<BookPageModel> _logger;
 
-        public BookPageModel(ApplicationDbContext context, ILogger<BookPageModel> logger, UserManager<IdentityUser> UserManager)
+        public BookPageModel(IStationService stationService, IBookingService bookingService, ILogger<BookPageModel> logger)
         {
-            _context = context;
-            _UserManager = UserManager;
+            _stationService = stationService;
+            _bookingService = bookingService;
             _logger = logger;
         }
-
 
         [BindProperty]
         [Range(1, int.MaxValue, ErrorMessage = "Please select a station.")]
@@ -53,37 +48,17 @@ namespace WashZone.Pages
         public List<Station> Stations { get; set; } = new List<Station>();
         public List<Package> Packages { get; set; } = new List<Package>();
 
-        public Booking Booking { get; set; } = new Booking();
-
-
         public async Task<IActionResult> OnGetPackagesAsync(int stationId)
         {
-            var station = await _context.Stations
-                .Include(s => s.StationPackages)
-                .ThenInclude(sp => sp.Package)
-                .FirstOrDefaultAsync(s => s.Id == stationId);
-
-            if (station == null)
-            {
-                return NotFound();
-            }
-
-            // Extract available packages
-            var packages = station.StationPackages.Select(sp => new
-            {
-                sp.Package.Id,
-                sp.Package.Name
-            }).ToList();
-
-            return new JsonResult(packages);
+            var packages = await _stationService.GetPackagesForStationAsync(stationId);
+            var result = packages.Select(p => new { p.Id, p.Name }).ToList();
+            return new JsonResult(result);
         }
 
         public async Task OnGetAsync()
         {
-
-            Stations = await _context.Stations.ToListAsync();
-            Packages = await _context.Packages.ToListAsync();
-
+            Stations = await _stationService.GetStationsAsync();
+            Packages = await _stationService.GetPackagesAsync();
 
             if (Stations == null || !Stations.Any()) //if fail to get station and package data
             {
@@ -94,9 +69,7 @@ namespace WashZone.Pages
             {
                 ModelState.AddModelError("", "No packages found. Please check your database.");
             }
-
         }
-
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -114,46 +87,36 @@ namespace WashZone.Pages
             }
 
             // Ensure the station exists and actually offers the selected package.
-            var stationExists = await _context.Stations.AnyAsync(s => s.Id == SelectedStationId);
-            if (!stationExists)
+            if (!await _stationService.StationExistsAsync(SelectedStationId))
             {
                 ModelState.AddModelError(nameof(SelectedStationId), "The selected station does not exist.");
                 return Page();
             }
 
-            var packageOffered = await _context.StationPackages.AnyAsync(sp =>
-                sp.StationId == SelectedStationId && sp.PackageId == SelectedPackageId);
-            if (!packageOffered)
+            if (!await _stationService.StationOffersPackageAsync(SelectedStationId, SelectedPackageId))
             {
                 ModelState.AddModelError(nameof(SelectedPackageId), "The selected package is not offered at this station.");
                 return Page();
             }
 
-            // Prevent double-booking the same station at the same time.
-            var slotTaken = await _context.Bookings.AnyAsync(b =>
-                b.StationId == SelectedStationId && b.Date == finalBookingDate);
-            if (slotTaken)
-            {
-                ModelState.AddModelError("", "This time is already booked at the selected station. Please choose another time.");
-                return Page();
-            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            Booking = new Booking // creates the booking based on user input
+            var result = await _bookingService.CreateBookingAsync(userId, new BookingInput
             {
-                UserId = userId ?? string.Empty,
                 StationId = SelectedStationId,
                 PackageId = SelectedPackageId,
                 RegistrationNumber = RegistrationNumber.Trim().ToUpperInvariant(),
-                Date = finalBookingDate
-            };
+                Date = finalBookingDate,
+            });
 
-            _context.Bookings.Add(Booking); //adds it to database
-            await _context.SaveChangesAsync();//saves database
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", result.Error ?? "Could not create the booking.");
+                return Page();
+            }
 
-            TempData["SuccessMessage"] = "Your booking was successful!"; //prints success message
-            return RedirectToPage("/MyBookingsPage");//return to Mybookings page
+            TempData["SuccessMessage"] = "Your booking was successful!";
+            return RedirectToPage("/MyBookingsPage");
         }
 
         /// <summary>
@@ -201,8 +164,5 @@ namespace WashZone.Pages
 
             return true;
         }
-
-
     }
 }
-

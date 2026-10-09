@@ -1,29 +1,24 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using WashZone.Data;
 using WashZone.Models;
+using WashZone.Services;
 
 namespace WashZone.Pages
 {
     [Authorize]
     public class EditBookingModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IBookingService _bookingService;
+        private readonly IStationService _stationService;
 
-        public EditBookingModel(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public EditBookingModel(IBookingService bookingService, IStationService stationService)
         {
-            _context = context;
-            _userManager = userManager;
+            _bookingService = bookingService;
+            _stationService = stationService;
         }
 
         [BindProperty]
@@ -31,7 +26,6 @@ namespace WashZone.Pages
 
         public List<Station> Stations { get; set; } = new List<Station>();
         public List<Package> Packages { get; set; } = new List<Package>();
-        public List<Booking> Bookings { get; set; } = new List<Booking>();
 
         [BindProperty]
         [Range(1, int.MaxValue, ErrorMessage = "Please select a station.")]
@@ -54,15 +48,13 @@ namespace WashZone.Pages
         [StringLength(10, MinimumLength = 2, ErrorMessage = "Registration number must be 2-10 characters.")]
         [RegularExpression("^[A-Za-z0-9]+$", ErrorMessage = "Registration number may only contain letters and digits.")]
         public string RegistrationNumber { get; set; } = string.Empty;
+
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            // Load stations and packages when the page loads
-            Stations = await _context.Stations.ToListAsync();
-            Packages = await _context.Packages.ToListAsync();
+            Stations = await _stationService.GetStationsAsync();
+            Packages = await _stationService.GetPackagesAsync();
 
-            // Fetch the booking from the database
-            var booking = await _context.Bookings.FindAsync(id);
-
+            var booking = await _bookingService.GetBookingAsync(id);
             if (booking == null)
             {
                 return NotFound();
@@ -80,29 +72,15 @@ namespace WashZone.Pages
 
             return Page();
         }
+
         public async Task<IActionResult> OnPostAsync()
         {
-            Stations = await _context.Stations.ToListAsync();
-            Packages = await _context.Packages.ToListAsync();
+            Stations = await _stationService.GetStationsAsync();
+            Packages = await _stationService.GetPackagesAsync();
 
             if (!ModelState.IsValid)
             {
                 return Page();
-            }
-
-            // Fetch the existing booking from the database
-            var existingBooking = await _context.Bookings.FindAsync(Booking.Id);
-
-            if (existingBooking == null)
-            {
-                return NotFound();
-            }
-
-            // Ensure the current user owns the booking (or is an admin)
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (existingBooking.UserId != userId && !User.IsInRole("Admin"))
-            {
-                return Forbid();
             }
 
             // Parse and validate the chosen date/time (also rejects dates in the past).
@@ -112,47 +90,40 @@ namespace WashZone.Pages
             }
 
             // Ensure the station exists and actually offers the selected package.
-            var stationExists = await _context.Stations.AnyAsync(s => s.Id == SelectedStationId);
-            if (!stationExists)
+            if (!await _stationService.StationExistsAsync(SelectedStationId))
             {
                 ModelState.AddModelError(nameof(SelectedStationId), "The selected station does not exist.");
                 return Page();
             }
 
-            var packageOffered = await _context.StationPackages.AnyAsync(sp =>
-                sp.StationId == SelectedStationId && sp.PackageId == SelectedPackageId);
-            if (!packageOffered)
+            if (!await _stationService.StationOffersPackageAsync(SelectedStationId, SelectedPackageId))
             {
                 ModelState.AddModelError(nameof(SelectedPackageId), "The selected package is not offered at this station.");
                 return Page();
             }
 
-            // Prevent double-booking the same station at the same time (excluding this booking).
-            var slotTaken = await _context.Bookings.AnyAsync(b =>
-                b.StationId == SelectedStationId && b.Date == finalBookingDate && b.Id != existingBooking.Id);
-            if (slotTaken)
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            var isAdmin = User.IsInRole("Admin");
+
+            var result = await _bookingService.UpdateBookingAsync(Booking.Id, userId, isAdmin, new BookingInput
             {
-                ModelState.AddModelError("", "This time is already booked at the selected station. Please choose another time.");
+                StationId = SelectedStationId,
+                PackageId = SelectedPackageId,
+                RegistrationNumber = RegistrationNumber.Trim().ToUpperInvariant(),
+                Date = finalBookingDate,
+            });
+
+            if (!result.Succeeded)
+            {
+                if (result.ErrorType == ServiceErrorType.NotFound) return NotFound();
+                if (result.ErrorType == ServiceErrorType.Forbidden) return Forbid();
+
+                ModelState.AddModelError("", result.Error ?? "Could not update the booking.");
                 return Page();
             }
 
-            // Update the booking properties
-            existingBooking.StationId = SelectedStationId;
-            existingBooking.PackageId = SelectedPackageId;
-            existingBooking.Date = finalBookingDate;
-            existingBooking.RegistrationNumber = RegistrationNumber.Trim().ToUpperInvariant();
-
-            await _context.SaveChangesAsync();
-
             TempData["SuccessMessage"] = "Booking updated successfully!";
-            if (User.IsInRole("Admin"))
-            {
-                return RedirectToPage("/AdminDashboard");
-            }
-            else
-            {
-                return RedirectToPage("/MyBookingsPage");
-            }
+            return RedirectToPage(isAdmin ? "/AdminDashboard" : "/MyBookingsPage");
         }
 
         /// <summary>

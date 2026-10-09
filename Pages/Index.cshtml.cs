@@ -1,26 +1,25 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using WashZone.Data;
 using WashZone.Models;
+using WashZone.Services;
 
 namespace WashZone.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IStationService _stationService;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
 
         public IndexModel(
-            ApplicationDbContext context,
+            IStationService stationService,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             IConfiguration configuration)
         {
-            _context = context;
+            _stationService = stationService;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
@@ -33,25 +32,14 @@ namespace WashZone.Pages
         [BindProperty(SupportsGet = true)]
         public int? SelectedPackageId { get; set; }
 
-
         public async Task<IActionResult> OnGetAsync()
         {
             GoogleMapsApiKey = _configuration["GoogleMaps:ApiKey"]
                 ?? _configuration["GoogleMapsApiKey"]
                 ?? "";
 
-            Packages = _context.Packages.ToList();
-
-            if (SelectedPackageId.HasValue && SelectedPackageId > 0)
-            {
-                Stations = _context.Stations
-                    .Where(s => s.StationPackages.Any(sp => sp.PackageId == SelectedPackageId))
-                    .ToList();
-            }
-            else
-            {
-                Stations = _context.Stations.ToList();
-            }
+            Packages = await _stationService.GetPackagesAsync();
+            Stations = await _stationService.GetStationsAsync(SelectedPackageId);
 
             if (_signInManager.IsSignedIn(User))
             {
@@ -71,4 +59,3 @@ namespace WashZone.Pages
         }
     }
 }
-
