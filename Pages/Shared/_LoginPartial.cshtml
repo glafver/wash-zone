@@ -3,47 +3,29 @@
 @inject UserManager<IdentityUser> UserManager
 @inject IStringLocalizer<SharedResource> Localizer
 
-<ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
+@if (SignInManager.IsSignedIn(User))
+{
+    if (User.IsInRole("Admin"))
     {
-        if (User.IsInRole("Admin"))
-        {
-            <li class="nav-item">
-                <a class="nav-link btn btn-link text-dark" asp-page="/AdminDashboard">@Localizer["NavAdminDashboard"]</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link btn btn-link text-dark" asp-page="/AdminStations">@Localizer["ManageStations"]</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link btn btn-link text-dark" asp-page="/AdminPackages">@Localizer["ManagePackages"]</a>
-            </li>
-        }
-        else if (User.IsInRole("StationAdmin"))
-        {
-            <li class="nav-item">
-                <a class="nav-link btn btn-link text-dark" asp-page="/StationDashboard">@Localizer["MyStation"]</a>
-            </li>
-        }
-        else
-        {
-            <li class="nav-item">
-                <a class="nav-link btn btn-link text-dark" asp-page="/MyBookingsPage">@Localizer["NavMyBookings"]</a>
-            </li>
-        }
-
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark">@Localizer["NavLogout"]</button>
-            </form>
-        </li>
+        <a class="nav-link" asp-page="/AdminDashboard">@Localizer["NavAdminDashboard"]</a>
+        <a class="nav-link" asp-page="/AdminStations">@Localizer["ManageStations"]</a>
+        <a class="nav-link" asp-page="/AdminPackages">@Localizer["ManagePackages"]</a>
+    }
+    else if (User.IsInRole("StationAdmin"))
+    {
+        <a class="nav-link" asp-page="/StationDashboard">@Localizer["MyStation"]</a>
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link btn btn-link text-dark" asp-area="Identity" asp-page="/Account/Register">@Localizer["NavRegister"]</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link btn btn-link text-dark" asp-area="Identity" asp-page="/Account/Login">@Localizer["NavLogin"]</a>
-        </li>
+        <a class="nav-link" asp-page="/MyBookingsPage">@Localizer["NavMyBookings"]</a>
     }
-</ul>
+
+    <form class="d-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+        <button type="submit" class="nav-link border-0 bg-transparent">@Localizer["NavLogout"]</button>
+    </form>
+}
+else
+{
+    <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">@Localizer["NavRegister"]</a>
+    <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">@Localizer["NavLogin"]</a>
+}

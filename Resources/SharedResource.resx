@@ -34,6 +34,10 @@
   <data name="IndexLocationsHeading" xml:space="preserve"><value>Find Our Locations</value></data>
   <data name="IndexCtaTitle" xml:space="preserve"><value>Give Your Car a Sparkling Clean Wash</value></data>
   <data name="IndexCtaText" xml:space="preserve"><value>Book a professional car wash today and let us take care of your car with care and precision.</value></data>
+  <data name="HeroEyebrow" xml:space="preserve"><value>Malmö • Car wash</value></data>
+  <data name="HeroTitleLine1" xml:space="preserve"><value>Clean. Fast.</value></data>
+  <data name="HeroTitleLine2" xml:space="preserve"><value>Brutal.</value></data>
+  <data name="MarqueeText" xml:space="preserve"><value>Wash • Shine • Repeat</value></data>
 
   <!-- Station details -->
   <data name="DetailsBack" xml:space="preserve"><value>Go back to all stations</value></data>

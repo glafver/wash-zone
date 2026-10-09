@@ -9,229 +9,174 @@
     ViewData["Title"] = "Home Page";
 }
 
-@{
-    var backgroundImage = "hero.jpg";
-}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-<section class="hero text-white text-center shadow d-flex align-items-center justify-content-center mb-5 rounded" style="
-    background: url('/images/@backgroundImage') center/cover no-repeat;
-    min-height: 30vh;
-    position: relative;">
+<!-- ============ HERO ============ -->
+<section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline poster="/images/hero.jpg">
+        <source src="/videos/hero.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-overlay"></div>
 
-    <div class="container position-relative z-1">
+    <div class="container hero-content">
         @if (SignInManager.IsSignedIn(User))
         {
-            <div class="text-center my-5">
-                <h1 class="text-center">@Localizer["IndexWelcomeUser", User.Identity?.Name?.Split('@')[0] ?? "User"]</h1>
-                <p class="mt-3 lead mx-auto w-75">@Localizer["IndexHeroText"]</p>
-                <p class="fw-bold lead">@Localizer["IndexHeroTagline"]</p>
-                <form method="post" class="mt-4">
-                    <button class="btn btn-light" type="submit" asp-page-handler="BookPage">@Localizer["BookWash"]</button>
+            <span class="hero-eyebrow">@Localizer["IndexWelcomeUser", User.Identity?.Name?.Split('@')[0] ?? "User"]</span>
+            <h1 class="hero-title">@Localizer["HeroTitleLine1"]<br><span class="accent">@Localizer["HeroTitleLine2"]</span></h1>
+            <p class="hero-text">@Localizer["IndexHeroText"]</p>
+            <div class="hero-actions">
+                <form method="post">
+                    <button class="btn btn-accent btn-lg" type="submit" asp-page-handler="BookPage">@Localizer["BookWash"]</button>
                 </form>
             </div>
         }
         else
         {
-            <div class="text-center my-5 w-75 mx-auto">
-                <h1 class="display-4 fw-bold">@Localizer["IndexHeroTitle"]</h1>
-                <p class="mt-3 lead mx-auto w-75">@Localizer["IndexHeroText"]</p>
-                <p class="fw-bold lead">@Localizer["IndexHeroTagline"]</p>
-                <div class="d-flex justify-content-center gap-3 mt-4">
-                    <a href="~/Identity/Account/Login" class="btn btn-light">@Localizer["NavLogin"]</a>
-                    <a href="~/Identity/Account/Register" class="btn btn-outline-light">@Localizer["NavRegister"]</a>
-                </div>
+            <span class="hero-eyebrow">@Localizer["HeroEyebrow"]</span>
+            <h1 class="hero-title">@Localizer["HeroTitleLine1"]<br><span class="accent">@Localizer["HeroTitleLine2"]</span></h1>
+            <p class="hero-text">@Localizer["IndexHeroText"]</p>
+            <div class="hero-actions">
+                <a href="~/Identity/Account/Login" class="btn btn-accent btn-lg">@Localizer["NavLogin"]</a>
+                <a href="~/Identity/Account/Register" class="btn btn-light btn-lg">@Localizer["NavRegister"]</a>
             </div>
         }
     </div>
 </section>
 
-
-<div class="my-3 mx-3">
-    <h2 class="text-center mb-5 fs-1 fw-bold">@Localizer["IndexStationsHeading"]</h2>
-    <!-- Dropdown to filter stations by package -->
-    <form method="get" class="d-flex align-items-center gap-3" id="packageForm">
-        <label class="form-label mb-0" for="packageSelect">@Localizer["IndexFilterLabel"]</label>
-        <input type="hidden" name="SelectedPackageId" id="selectedPackageInput">
-
-        <div class="dropdown">
-            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                    id="dropdownMenuButton">
-                @Localizer["IndexAllPackages"]
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item package-option" data-value="">@Localizer["IndexAllPackages"]</a></li>
-                @foreach (var package in Model.Packages)
-                {
-                    <li><a class="dropdown-item package-option" data-value="@package.Id">@package.Name</a></li>
-                }
-            </ul>
-        </div>
-    </form>
-
+<!-- ============ MARQUEE ============ -->
+<div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+        @for (int i = 0; i < 8; i++)
+        {
+            <span>@Localizer["MarqueeText"] <span class="dot">•</span></span>
+        }
+    </div>
 </div>
 
-<div class="container">
-    <div class="row">
-        @foreach (var station in Model.Stations)
-        {
-            <div class="col-md-4">
-                <div class="card shadow mb-4">
-                    <img src="@Url.Content($"~/images/{station.Id}.jpg")" class="card-img-top w-100" alt="@station.Name"
-                         style="height: 120px; object-fit: cover;">
-                    <div class="card-body text-center">
-                        <h5 class="card-title logo">@station.Name</h5>
-                        <p class="card-text">@station.Address</p>
-                        <a href="@Url.Page("/DetailsCarwash", new { id = station.Id })" class="btn btn-dark mb-3">@Localizer["IndexMoreInfo"]</a>
-                        </div>
-                    </div>
-                </div>
-            }
+<!-- ============ STATIONS ============ -->
+<section class="container py-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-3">
+        <div>
+            <div class="section-sub">@Localizer["HeroEyebrow"]</div>
+            <h2 class="section-head">@Localizer["IndexStationsHeading"]</h2>
         </div>
+
+        <form method="get" class="d-flex align-items-center gap-2" id="packageForm">
+            <label class="form-label mb-0" for="packageSelect">@Localizer["IndexFilterLabel"]</label>
+            <input type="hidden" name="SelectedPackageId" id="selectedPackageInput">
+            <div class="dropdown">
+                <button class="btn btn-outline dropdown-toggle" type="button" data-bs-toggle="dropdown" id="dropdownMenuButton">
+                    @Localizer["IndexAllPackages"]
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item package-option" data-value="">@Localizer["IndexAllPackages"]</a></li>
+                    @foreach (var package in Model.Packages)
+                    {
+                        <li><a class="dropdown-item package-option" data-value="@package.Id">@package.Name</a></li>
+                    }
+                </ul>
+            </div>
+        </form>
     </div>
 
-    <section class="mx-3 mt-5">
-        <h2 class="text-center mb-4 fs-1 fw-bold">@Localizer["IndexLocationsHeading"]</h2>
-        <div id="map"
-             style="width: 100%; height: 500px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-        </div>
-    </section>
-
-    <section class="bg-dark text-light py-5 mx-3 mb-5 rounded-bottom">
-        <div class="container px-5 py-5">
-            <div class="row align-items-center">
-                <div class="col-md-7 ps-5">
-                    <h2 class="fw-bold">@Localizer["IndexCtaTitle"]</h2>
-                    <p class="lead mb-0">@Localizer["IndexCtaText"]</p>
+    <div class="row g-4">
+        @foreach (var station in Model.Stations)
+        {
+            <div class="col-md-6 col-lg-4">
+                <article class="station-card">
+                    <div class="station-card__media">
+                        <img src="@Url.Content($"~/images/{station.Id}.jpg")" alt="@station.Name" onerror="this.src='/images/hero.jpg'" />
+                        <span class="station-card__tag">@Localizer["HeroEyebrow"]</span>
                     </div>
-                    <div class="col-md-5 text-center">
-
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            <a asp-page="/BookPage" class="btn btn-light btn-lg mt-5 mt-lg-0">@Localizer["BookWash"]</a>
-                        }
-                        else
-                        {
-                            <a href="/Identity/Account/Login" class="btn btn-light btn-lg mt-5 mt-lg-0">@Localizer["LoginToBook"]</a>
-                        }
+                    <div class="station-card__body">
+                        <h3 class="station-card__name">@station.Name</h3>
+                        <p class="station-card__address">@station.Address</p>
+                        <a href="@Url.Page("/DetailsCarwash", new { id = station.Id })" class="btn btn-dark btn-sm">@Localizer["IndexMoreInfo"] →</a>
                     </div>
-                </div>
+                </article>
             </div>
-        </section>
+        }
+    </div>
+</section>
 
+<!-- ============ MAP ============ -->
+<section class="container pb-5">
+    <div class="mb-4">
+        <div class="section-sub">Malmö</div>
+        <h2 class="section-head">@Localizer["IndexLocationsHeading"]</h2>
+    </div>
+    <div class="map-frame">
+        <div id="map"></div>
+    </div>
+</section>
 
-        @section Scripts {
-            <partial name="_ValidationScriptsPartial" />
-            <script src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleMapsApiKey&libraries=marker"></script>
-            <script>
-                document.querySelectorAll('.package-option').forEach(item => {
-                item.addEventListener('click', function () {
+<!-- ============ CTA ============ -->
+<section class="container pb-5">
+    <div class="cta-band text-center">
+        <div class="section-sub" style="color:var(--ink)">WashZone</div>
+        <h2 class="cta-title">@Localizer["IndexCtaTitle"]</h2>
+        <p class="lead mb-4 mx-auto" style="max-width:34rem">@Localizer["IndexCtaText"]</p>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a asp-page="/BookPage" class="btn btn-lg">@Localizer["BookWash"]</a>
+        }
+        else
+        {
+            <a href="/Identity/Account/Login" class="btn btn-lg">@Localizer["LoginToBook"]</a>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Package filter dropdown
+        document.querySelectorAll('.package-option').forEach(item => {
+            item.addEventListener('click', function () {
                 document.getElementById('selectedPackageInput').value = this.getAttribute('data-value');
                 document.getElementById('dropdownMenuButton').textContent = this.textContent;
                 document.getElementById('packageForm').submit();
-                });
-                });
+            });
+        });
 
-                // Initialize Google Map
-                function initMap() {
-                const stations = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Stations.Select(s => new { name = s.Name, address = s.Address, id = s.Id })));
+        // --- Leaflet map ---
+        const stations = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Stations.Select(s => new { name = s.Name, address = s.Address, id = s.Id })));
 
-                if (stations.length === 0) {
-                return;
-                }
+        const stationCoordinates = {
+            "Centrum": { lat: 55.6075, lng: 13.0015 },
+            "Västra Hamnen": { lat: 55.6176, lng: 12.9338 },
+            "Rosengård": { lat: 55.5888, lng: 13.0235 },
+            "Limhamn": { lat: 55.5708, lng: 12.9443 },
+            "Hyllie": { lat: 55.5432, lng: 12.9912 },
+            "Möllevången": { lat: 55.6130, lng: 12.9670 },
+            "Sorgenfri": { lat: 55.6305, lng: 13.0075 },
+            "Kirseberg": { lat: 55.5820, lng: 12.9895 }
+        };
 
-                // Hardcoded coordinates for Malmö stations (more reliable than geocoding)
-                const stationCoordinates = {
-                "Centrum": { lat: 55.6075, lng: 13.0015 },
-                "Västra Hamnen": { lat: 55.6176, lng: 12.9338 },
-                "Rosengård": { lat: 55.5888, lng: 13.0235 },
-                "Limhamn": { lat: 55.5708, lng: 12.9443 },
-                "Hyllie": { lat: 55.5432, lng: 12.9912 },
-                "Möllevången": { lat: 55.6130, lng: 12.9670 },
-                "Sorgenfri": { lat: 55.6305, lng: 13.0075 },
-                "Kirseberg": { lat: 55.5820, lng: 12.9895 }
-                };
+        const map = L.map('map').setView([55.6050, 12.9850], 11);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-                // Default center - Malmö, Sweden
-                const malmoCenterLat = 55.6050;
-                const malmoCenterLng = 12.9850;
-                const defaultCenter = { lat: malmoCenterLat, lng: malmoCenterLng };
+        const icon = L.icon({
+            iconUrl: '/images/car-wash.png',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+        });
 
-                const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 11,
-                center: defaultCenter,
-                mapTypeControl: true,
-                fullscreenControl: true,
-                });
+        const bounds = L.latLngBounds([]);
+        stations.forEach(station => {
+            const coords = stationCoordinates[station.name];
+            if (!coords) return;
+            L.marker([coords.lat, coords.lng], { icon })
+                .addTo(map)
+                .bindPopup(`<strong>${station.name}</strong><br>${station.address}<br><a href="/DetailsCarwash/${station.id}">View details →</a>`);
+            bounds.extend([coords.lat, coords.lng]);
+        });
 
-                const bounds = new google.maps.LatLngBounds();
-                let markersPlaced = 0;
-
-                stations.forEach((station, index) => {
-                const coords = stationCoordinates[station.name];
-
-                if (coords) {
-                const location = coords;
-                markersPlaced++;
-
-                // Create marker with custom car wash icon
-                const marker = new google.maps.Marker({
-                position: location,
-                map: map,
-                title: station.name,
-                icon: {
-                url: '/images/car-wash.png',
-                scaledSize: new google.maps.Size(40, 40),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(20, 20)
-                }
-                });
-
-                // Add info window with station details
-                const infoWindow = new google.maps.InfoWindow({
-                content: `<div style="padding: 0; max-width: 300px; font-family: Arial, sans-serif; border-radius: 8px; overflow: hidden;">
-                <img src="/images/${station.id}.jpg" style="width: 100%; height: 150px; object-fit: cover; display: block;">
-                <div style="padding: 12px;">
-                <h5 style="margin: 0 0 8px 0; font-weight: bold; font-size: 15px; color: #1f2937;">${station.name}</h5>
-                <p style="margin: 0 0 10px 0; font-size: 13px; color: #6b7280;">
-                <strong>Address:</strong> ${station.address}
-                </p>
-                <a href="/DetailsCarwash/${station.id}" style="display: inline-block; padding: 8px 16px; background-color: #212529; color: white; text-decoration: none; font-weight: 500; border-radius: 4px; font-size: 13px; border: none; cursor: pointer;">
-                View Details →
-                </a>
-                </div>
-                </div>`
-                });
-
-                marker.addListener("click", () => {
-                infoWindow.open(map, marker);
-                });
-
-                bounds.extend(location);
-                } else {
-                console.warn(`✗ No coordinates found for station: ${station.name}`);
-                }
-                });
-
-                // Fit map to all markers
-                if (markersPlaced > 0) {
-                setTimeout(() => {
-                map.fitBounds(bounds);
-                // Adjust zoom if too zoomed in
-                const currentZoom = map.getZoom();
-                if (currentZoom > 12) {
-                map.setZoom(12);
-                }
-                }, 100);
-                }
-                }
-
-                // Initialize map when DOM is loaded
-                if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', initMap);
-                } else {
-                initMap();
-                }
-            </script>
+        if (bounds.isValid()) {
+            map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
         }
-
-
+    </script>
+}

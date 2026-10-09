@@ -10,45 +10,47 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" href="https://img.icons8.com/?size=100&id=2nqOdSG5BPti&format=png&color=000000">
     <link
-    href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Permanent+Marker&display=swap"
-    rel="stylesheet">
+        href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/WashZone.styles.css" asp-append-version="true" />
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header class="site-header sticky-top">
+        <nav class="navbar navbar-expand-lg">
             <div class="container">
-                <div class="d-flex align-items-end">
-                    <img src="~/images/logo.png" alt="logo" style="width: 100px" />
-                    <a class="navbar-brand logo fw-bold py-0 ps-1" asp-area="" asp-page="/Index">WashZone</a>
-                </div>
+                <a class="navbar-brand d-flex align-items-center gap-2" asp-page="/Index">
+                    <span class="brand-mark">W</span>
+                    <span class="brand">WashZone</span>
+                </a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
-                    <partial name="_LoginPartial" />
-                    <form method="post" action="/set-language" class="d-flex align-items-center ms-2 gap-1">
-                        <input type="hidden" name="returnUrl" value="@($"{Context.Request.Path}{Context.Request.QueryString}")" />
-                        <button type="submit" name="culture" value="en" class="btn btn-sm btn-outline-secondary px-2" title="English">EN</button>
-                        <button type="submit" name="culture" value="sv" class="btn btn-sm btn-outline-secondary px-2" title="Svenska">SV</button>
-                    </form>
+
+                <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+                    <div class="nav-links d-flex flex-column flex-lg-row align-items-lg-center gap-1 gap-lg-0 mt-2 mt-lg-0">
+                        <partial name="_LoginPartial" />
+                        <form method="post" action="/set-language" class="d-flex gap-1 ms-lg-3 mt-2 mt-lg-0">
+                            <input type="hidden" name="returnUrl" value="@($"{Context.Request.Path}{Context.Request.QueryString}")" />
+                            <button type="submit" name="culture" value="en" class="lang-btn" title="English">EN</button>
+                            <button type="submit" name="culture" value="sv" class="lang-btn" title="Svenska">SV</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container text-center">
-            &copy; @DateTime.Now.Year - WashZone
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer py-4">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <span class="brand" style="font-size:1.1rem">WashZone</span>
+            <span class="font-mono" style="font-family:var(--font-mono); font-size:0.8rem">&copy; @DateTime.Now.Year — clean. fast. brutal.</span>
         </div>
     </footer>
 

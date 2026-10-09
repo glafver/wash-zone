@@ -1,42 +1,464 @@
-html {
-  font-size: 14px;
+/* ==========================================================================
+   WashZone — Neo-brutalist design system
+   ========================================================================== */
+
+:root {
+    --ink: #0f0f0f;
+    --paper: #f3f0ea;
+    --accent: #5f9ea0;
+    --accent-ink: #0f0f0f;
+    --white: #ffffff;
+    --muted: #6b6b6b;
+
+    --border: 2px solid var(--ink);
+    --shadow: 6px 6px 0 var(--ink);
+    --shadow-sm: 4px 4px 0 var(--ink);
+
+    --font-display: "Archivo Black", "Arial Black", sans-serif;
+    --font-body: "Space Grotesk", "Segoe UI", sans-serif;
+    --font-mono: "Space Mono", "Courier New", monospace;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+* {
+    border-radius: 0 !important;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    font-size: 15px;
 }
 
 body {
-    margin-bottom: 60px;
-    font-family: "Mulish", sans-serif;
+    font-family: var(--font-body);
+    color: var(--ink);
+    background-color: var(--paper);
+    margin: 0;
 }
 
-.logo {
-    font-family: "Permanent Marker", cursive;
-    font-weight: 400;
-    font-style: normal;
-    color: #212529;
-    opacity: 90%;
-    font-size: 2rem;
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus, .form-select:focus {
-    border-color: black;
-    box-shadow: none !important;
-}
-.btn-dark:hover, .btn-outline-dark:hover, .btn-light:hover {
-    opacity: 90%;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+a {
+    color: var(--ink);
 }
 
-.dropdown-menu .dropdown-item:hover {
-    background-color: cadetblue!important;
+::selection {
+    background: var(--accent);
+    color: var(--ink);
+}
+
+/* ---- Buttons ---------------------------------------------------------- */
+
+.btn {
+    border-radius: 0;
+    border: var(--border);
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.9rem;
+    padding: 0.6rem 1.4rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.12s ease;
+}
+
+.btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+}
+
+.btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 var(--ink);
+}
+
+.btn-accent {
+    background: var(--accent);
+    color: var(--accent-ink);
+}
+
+.btn-accent:hover {
+    background: var(--accent);
+}
+
+.btn-dark {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--ink);
+}
+
+.btn-light {
+    background: var(--white);
+    color: var(--ink);
+}
+
+.btn-lg {
+    font-size: 1.1rem;
+    padding: 0.9rem 2rem;
+}
+
+/* ---- Navbar ----------------------------------------------------------- */
+
+.site-header {
+    background: var(--paper);
+    border-bottom: var(--border);
+}
+
+.site-header .navbar {
+    padding: 0.6rem 0;
+}
+
+.brand {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+}
+
+.brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: var(--accent);
+    border: var(--border);
+    box-shadow: var(--shadow-sm);
+    font-size: 1.3rem;
+}
+
+.nav-links .nav-link {
+    font-family: var(--font-body);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+    color: var(--ink);
+    padding: 0.5rem 0.9rem;
+}
+
+.nav-links .nav-link:hover {
+    background: var(--ink);
+    color: var(--paper);
+}
+
+.lang-btn {
+    border: var(--border);
+    background: var(--white);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    box-shadow: 2px 2px 0 var(--ink);
     cursor: pointer;
 }
+
+/* ---- Hero ------------------------------------------------------------- */
+
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: url('/images/hero.jpg') center / cover no-repeat;
+}
+
+.hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(15, 15, 15, 0.62), rgba(15, 15, 15, 0.35) 40%, rgba(15, 15, 15, 0.72));
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    color: var(--paper);
+}
+
+.hero-eyebrow {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.85rem;
+    display: inline-block;
+    background: var(--accent);
+    color: var(--ink);
+    padding: 0.35rem 0.8rem;
+    border: var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.hero-title {
+    font-size: clamp(2.6rem, 8vw, 6.5rem);
+    color: var(--paper);
+    line-height: 0.95;
+    margin: 1.4rem 0 1rem;
+}
+
+.hero-title .accent {
+    color: var(--accent);
+    -webkit-text-stroke: 2px var(--paper);
+}
+
+.hero-text {
+    font-size: 1.15rem;
+    max-width: 34rem;
+    color: rgba(243, 240, 234, 0.9);
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+/* ---- Marquee ---------------------------------------------------------- */
+
+.marquee {
+    overflow: hidden;
+    background: var(--ink);
+    color: var(--paper);
+    border-top: var(--border);
+    border-bottom: var(--border);
+    padding: 0.7rem 0;
+    white-space: nowrap;
+}
+
+.marquee-track {
+    display: inline-flex;
+    gap: 2rem;
+    animation: marquee 22s linear infinite;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.marquee-track span {
+    display: inline-flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.marquee .dot {
+    color: var(--accent);
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* ---- Sections --------------------------------------------------------- */
+
+.section-head {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    margin-bottom: 0.4rem;
+}
+
+.section-sub {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+/* ---- Station cards ---------------------------------------------------- */
+
+.station-card {
+    background: var(--white);
+    border: var(--border);
+    box-shadow: var(--shadow);
+    height: 100%;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.station-card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 10px 10px 0 var(--ink);
+}
+
+.station-card__media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: var(--border);
+}
+
+.station-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.2);
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.station-card:hover .station-card__media img {
+    filter: grayscale(0);
+    transform: scale(1.04);
+}
+
+.station-card__tag {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    background: var(--accent);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.5rem;
+    border: var(--border);
+}
+
+.station-card__body {
+    padding: 1.1rem;
+}
+
+.station-card__name {
+    font-size: 1.2rem;
+    margin-bottom: 0.25rem;
+}
+
+.station-card__address {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+}
+
+/* ---- Map -------------------------------------------------------------- */
+
+.map-frame {
+    border: var(--border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+#map {
+    height: 460px;
+    filter: grayscale(1) contrast(0.95);
+}
+
+/* ---- CTA -------------------------------------------------------------- */
+
+.cta-band {
+    background: var(--accent);
+    border: var(--border);
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    padding: clamp(2.5rem, 6vw, 5rem);
+}
+
+.cta-band .cta-title {
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    color: var(--ink);
+}
+
+.cta-band .btn {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+}
+
+/* ---- Footer ----------------------------------------------------------- */
+
+.site-footer {
+    background: var(--ink);
+    color: var(--paper);
+    border-top: var(--border);
+}
+
+.site-footer a {
+    color: var(--paper);
+}
+
+/* ---- Forms (global, used by booking/admin pages) ---------------------- */
+
+.form-control,
+.form-select {
+    border: var(--border);
+    border-radius: 0;
+    background: var(--white);
+    font-family: var(--font-body);
+}
+
+.form-control:focus,
+.form-select:focus {
+    box-shadow: var(--shadow-sm);
+    border-color: var(--ink);
+}
+
+.form-label {
+    font-family: var(--font-body);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.8rem;
+}
+
+/* ---- Tables ----------------------------------------------------------- */
+
+.table {
+    --bs-table-bg: transparent;
+    border: var(--border);
+    background: var(--white);
+}
+
+.table thead th {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    border-bottom: var(--border);
+    background: var(--ink);
+    color: var(--paper);
+}
+
+/* ---- Alerts ----------------------------------------------------------- */
+
+.alert {
+    border: var(--border);
+    border-radius: 0;
+    font-weight: 700;
+}
+
+.alert-success { background: var(--accent); color: var(--ink); }
+.alert-danger { background: #ffb3b3; color: var(--ink); }
+
+/* ---- Calendar grid (booking) ----------------------------------------- */
+
+.calendar-grid {
+    border: var(--border);
+    background: var(--white);
+}
+
+.cal-header {
+    background: var(--ink);
+    color: var(--paper);
+    border: 1px solid var(--ink);
+}
+
+.cal-cell.available { background: var(--accent); }
+.cal-cell.available:hover { background: var(--ink); }
+.cal-cell.booked { background: #e0ddd6; }
+.cal-cell.selected { background: var(--ink); }
