@@ -38,6 +38,23 @@
   <data name="HeroTitleLine1" xml:space="preserve"><value>Rent. Snabbt.</value></data>
   <data name="HeroTitleLine2" xml:space="preserve"><value>Skinande.</value></data>
   <data name="MarqueeText" xml:space="preserve"><value>Tvätta • Gläns • Repetera</value></data>
+  <data name="HowItWorksTitle" xml:space="preserve"><value>Så fungerar det</value></data>
+  <data name="Step1Title" xml:space="preserve"><value>Välj station</value></data>
+  <data name="Step1Text" xml:space="preserve"><value>Välj bland våra stationer i Malmö.</value></data>
+  <data name="Step2Title" xml:space="preserve"><value>Välj paket</value></data>
+  <data name="Step2Text" xml:space="preserve"><value>Från Standard till Luxury — för varje budget.</value></data>
+  <data name="Step3Title" xml:space="preserve"><value>Boka din tid</value></data>
+  <data name="Step3Text" xml:space="preserve"><value>Reservera en tid i kalendern.</value></data>
+  <data name="StatsStations" xml:space="preserve"><value>Stationer</value></data>
+  <data name="StatsPackages" xml:space="preserve"><value>Paket</value></data>
+  <data name="StatsHours" xml:space="preserve"><value>Öppet dagligen</value></data>
+  <data name="StatsCity" xml:space="preserve"><value>Stad</value></data>
+  <data name="OurPackages" xml:space="preserve"><value>Tvättpaket</value></data>
+  <data name="OurPackagesSub" xml:space="preserve"><value>Tydliga priser, inga överraskningar</value></data>
+  <data name="OurServices" xml:space="preserve"><value>Våra tjänster</value></data>
+  <data name="OurServicesSub" xml:space="preserve"><value>Varje tvätt inkluderar expertvård</value></data>
+  <data name="VideoBandTitle" xml:space="preserve"><value>Se glansen</value></data>
+  <data name="VideoBandText" xml:space="preserve"><value>Professionell utrustning, expertens handlag.</value></data>
 
   <!-- Station details -->
   <data name="DetailsBack" xml:space="preserve"><value>Tillbaka till alla stationer</value></data>

@@ -462,3 +462,197 @@ a {
 .cal-cell.available:hover { background: var(--ink); }
 .cal-cell.booked { background: #e0ddd6; }
 .cal-cell.selected { background: var(--ink); }
+
+/* ---- Stats band ------------------------------------------------------- */
+
+.stats-band {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: var(--ink);
+    color: var(--paper);
+    border-top: var(--border);
+    border-bottom: var(--border);
+}
+
+.stat {
+    padding: 1.6rem 1rem;
+    text-align: center;
+    border-right: var(--border);
+}
+
+.stat:last-child { border-right: none; }
+
+.stat__value {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    color: var(--accent);
+    line-height: 1;
+}
+
+.stat__label {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    color: var(--paper);
+}
+
+/* ---- How it works ------------------------------------------------------ */
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.step {
+    background: var(--white);
+    border: var(--border);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+}
+
+.step__num {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    color: var(--accent);
+    -webkit-text-stroke: 1.5px var(--ink);
+    line-height: 1;
+}
+
+.step__title {
+    font-size: 1.1rem;
+    margin: 0.8rem 0 0.4rem;
+}
+
+.step__text {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* ---- Packages ---------------------------------------------------------- */
+
+.package-card {
+    background: var(--white);
+    border: var(--border);
+    box-shadow: var(--shadow);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.package-card--featured {
+    background: var(--accent);
+}
+
+.package-card__head {
+    padding: 1.2rem 1.2rem 0.8rem;
+    border-bottom: var(--border);
+}
+
+.package-card__name {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.package-card__price {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    margin: 0.3rem 0 0;
+}
+
+.package-card__duration {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.package-card--featured .package-card__duration { color: var(--ink); }
+
+.package-card__body {
+    padding: 1rem 1.2rem;
+    flex: 1;
+}
+
+.package-card__feature {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    padding: 0.25rem 0;
+}
+
+.package-card__feature::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.package-card--featured .package-card__feature::before { color: var(--ink); }
+
+/* ---- Services ---------------------------------------------------------- */
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.service {
+    background: var(--white);
+    border: var(--border);
+    box-shadow: var(--shadow-sm);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.service__icon {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.service__name {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* ---- Vertical video frame --------------------------------------------- */
+
+.vertical-frame {
+    border: var(--border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    aspect-ratio: 9 / 16;
+    max-width: 360px;
+    margin: 0 auto;
+}
+
+.vertical-frame video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ---- Responsive -------------------------------------------------------- */
+
+@media (max-width: 991px) {
+    .stats-band { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(2) { border-right: none; }
+    .steps { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 575px) {
+    .stats-band { grid-template-columns: 1fr; }
+    .stat { border-right: none; border-bottom: var(--border); }
+    .stat:last-child { border-bottom: none; }
+    .services-grid { grid-template-columns: 1fr; }
+}

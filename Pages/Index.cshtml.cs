@@ -11,34 +11,30 @@ namespace WashZone.Pages
         private readonly IStationService _stationService;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly IConfiguration _configuration;
 
         public IndexModel(
             IStationService stationService,
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            IConfiguration configuration)
+            SignInManager<IdentityUser> signInManager)
         {
             _stationService = stationService;
             _userManager = userManager;
             _signInManager = signInManager;
-            _configuration = configuration;
         }
 
         public IList<Station> Stations { get; set; } = new List<Station>();
         public IList<Package> Packages { get; set; } = new List<Package>();
-        public string GoogleMapsApiKey { get; set; } = string.Empty;
+        public IList<Package> PackagesWithFeatures { get; set; } = new List<Package>();
+        public IList<Feature> Features { get; set; } = new List<Feature>();
 
         [BindProperty(SupportsGet = true)]
         public int? SelectedPackageId { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            GoogleMapsApiKey = _configuration["GoogleMaps:ApiKey"]
-                ?? _configuration["GoogleMapsApiKey"]
-                ?? "";
-
             Packages = await _stationService.GetPackagesAsync();
+            PackagesWithFeatures = await _stationService.GetPackagesWithFeaturesAsync();
+            Features = await _stationService.GetFeaturesAsync();
             Stations = await _stationService.GetStationsAsync(SelectedPackageId);
 
             if (_signInManager.IsSignedIn(User))

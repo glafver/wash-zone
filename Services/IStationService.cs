@@ -8,6 +8,8 @@ public interface IStationService
     Task<List<Station>> GetStationsAsync(int? packageId = null);
     Task<Station?> GetStationDetailsAsync(int id);
     Task<List<Package>> GetPackagesAsync();
+    Task<List<Package>> GetPackagesWithFeaturesAsync();
+    Task<List<Feature>> GetFeaturesAsync();
     Task<List<Package>> GetPackagesForStationAsync(int stationId);
     Task<Package?> GetPackageAsync(int id);
     Task<bool> StationExistsAsync(int id);

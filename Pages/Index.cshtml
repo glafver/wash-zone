@@ -52,6 +52,51 @@
     </div>
 </div>
 
+<!-- ============ STATS ============ -->
+<section class="stats-band">
+    <div class="stat">
+        <div class="stat__value">@Model.Stations.Count</div>
+        <div class="stat__label">@Localizer["StatsStations"]</div>
+    </div>
+    <div class="stat">
+        <div class="stat__value">@Model.Packages.Count</div>
+        <div class="stat__label">@Localizer["StatsPackages"]</div>
+    </div>
+    <div class="stat">
+        <div class="stat__value">08–20</div>
+        <div class="stat__label">@Localizer["StatsHours"]</div>
+    </div>
+    <div class="stat">
+        <div class="stat__value">Malmö</div>
+        <div class="stat__label">@Localizer["StatsCity"]</div>
+    </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="container py-5">
+    <div class="text-center mb-5">
+        <div class="section-sub">@Localizer["HeroEyebrow"]</div>
+        <h2 class="section-head">@Localizer["HowItWorksTitle"]</h2>
+    </div>
+    <div class="steps">
+        <div class="step">
+            <div class="step__num">01</div>
+            <h3 class="step__title">@Localizer["Step1Title"]</h3>
+            <p class="step__text">@Localizer["Step1Text"]</p>
+        </div>
+        <div class="step">
+            <div class="step__num">02</div>
+            <h3 class="step__title">@Localizer["Step2Title"]</h3>
+            <p class="step__text">@Localizer["Step2Text"]</p>
+        </div>
+        <div class="step">
+            <div class="step__num">03</div>
+            <h3 class="step__title">@Localizer["Step3Title"]</h3>
+            <p class="step__text">@Localizer["Step3Text"]</p>
+        </div>
+    </div>
+</section>
+
 <!-- ============ STATIONS ============ -->
 <section class="container py-5">
     <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-3">
@@ -93,6 +138,82 @@
                         <a href="@Url.Page("/DetailsCarwash", new { id = station.Id })" class="btn btn-dark btn-sm">@Localizer["IndexMoreInfo"] →</a>
                     </div>
                 </article>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- ============ PACKAGES ============ -->
+<section class="container pb-5">
+    @{
+        var featuredPrice = Model.PackagesWithFeatures.Max(p => p.Price);
+    }
+    <div class="mb-4">
+        <div class="section-sub">@Localizer["HeroEyebrow"]</div>
+        <h2 class="section-head">@Localizer["OurPackages"]</h2>
+        <p class="text-muted">@Localizer["OurPackagesSub"]</p>
+    </div>
+    <div class="row g-4">
+        @foreach (var package in Model.PackagesWithFeatures)
+        {
+            <div class="col-md-6 col-lg-4">
+                <article class="package-card @(package.Price == featuredPrice ? "package-card--featured" : "")">
+                    <div class="package-card__head">
+                        <h3 class="package-card__name">@package.Name</h3>
+                        <div class="package-card__price">@package.Price kr</div>
+                        <div class="package-card__duration">@package.DurationMinutes min</div>
+                    </div>
+                    <div class="package-card__body">
+                        @foreach (var pf in package.PackageFeatures)
+                        {
+                            <div class="package-card__feature">@pf.Feature.Name</div>
+                        }
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- ============ VIDEO SHOWCASE ============ -->
+<section class="container pb-5">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+            <div class="section-sub">WashZone</div>
+            <h2 class="section-head">@Localizer["VideoBandTitle"]</h2>
+            <p class="lead">@Localizer["VideoBandText"]</p>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <a asp-page="/BookPage" class="btn btn-dark btn-lg mt-3">@Localizer["BookWash"]</a>
+            }
+            else
+            {
+                <a href="/Identity/Account/Login" class="btn btn-dark btn-lg mt-3">@Localizer["LoginToBook"]</a>
+            }
+        </div>
+        <div class="col-lg-6">
+            <div class="vertical-frame">
+                <video autoplay muted loop playsinline poster="/images/hero.jpg">
+                    <source src="/videos/vertical.mp4" type="video/mp4" />
+                </video>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="container pb-5">
+    <div class="mb-4">
+        <div class="section-sub">@Localizer["HeroEyebrow"]</div>
+        <h2 class="section-head">@Localizer["OurServices"]</h2>
+        <p class="text-muted">@Localizer["OurServicesSub"]</p>
+    </div>
+    <div class="services-grid">
+        @foreach (var feature in Model.Features)
+        {
+            <div class="service">
+                <img class="service__icon" src="~/images/@(feature.Name.ToLower().Replace(" ", "-")).png" alt="@feature.Name" />
+                <p class="service__name">@feature.Name</p>
             </div>
         }
     </div>

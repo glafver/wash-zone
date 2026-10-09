@@ -38,6 +38,23 @@
   <data name="HeroTitleLine1" xml:space="preserve"><value>Clean. Fast.</value></data>
   <data name="HeroTitleLine2" xml:space="preserve"><value>Flawless.</value></data>
   <data name="MarqueeText" xml:space="preserve"><value>Wash • Shine • Repeat</value></data>
+  <data name="HowItWorksTitle" xml:space="preserve"><value>How it works</value></data>
+  <data name="Step1Title" xml:space="preserve"><value>Choose a station</value></data>
+  <data name="Step1Text" xml:space="preserve"><value>Pick from our locations around Malmö.</value></data>
+  <data name="Step2Title" xml:space="preserve"><value>Pick a package</value></data>
+  <data name="Step2Text" xml:space="preserve"><value>Standard to Luxury — for every budget.</value></data>
+  <data name="Step3Title" xml:space="preserve"><value>Book your time</value></data>
+  <data name="Step3Text" xml:space="preserve"><value>Reserve a slot in the calendar.</value></data>
+  <data name="StatsStations" xml:space="preserve"><value>Stations</value></data>
+  <data name="StatsPackages" xml:space="preserve"><value>Packages</value></data>
+  <data name="StatsHours" xml:space="preserve"><value>Open daily</value></data>
+  <data name="StatsCity" xml:space="preserve"><value>City</value></data>
+  <data name="OurPackages" xml:space="preserve"><value>Wash packages</value></data>
+  <data name="OurPackagesSub" xml:space="preserve"><value>Transparent pricing, no surprises</value></data>
+  <data name="OurServices" xml:space="preserve"><value>What we do</value></data>
+  <data name="OurServicesSub" xml:space="preserve"><value>Every wash includes expert care</value></data>
+  <data name="VideoBandTitle" xml:space="preserve"><value>See the shine</value></data>
+  <data name="VideoBandText" xml:space="preserve"><value>Professional equipment, expert hands.</value></data>
 
   <!-- Station details -->
   <data name="DetailsBack" xml:space="preserve"><value>Go back to all stations</value></data>

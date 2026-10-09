@@ -37,6 +37,16 @@ public class StationService : IStationService
     public async Task<List<Package>> GetPackagesAsync()
         => await _context.Packages.OrderBy(p => p.Name).ToListAsync();
 
+    public async Task<List<Package>> GetPackagesWithFeaturesAsync()
+        => await _context.Packages
+            .Include(p => p.PackageFeatures)
+                .ThenInclude(pf => pf.Feature)
+            .OrderBy(p => p.Price)
+            .ToListAsync();
+
+    public async Task<List<Feature>> GetFeaturesAsync()
+        => await _context.Features.OrderBy(f => f.Name).ToListAsync();
+
     public async Task<List<Package>> GetPackagesForStationAsync(int stationId)
         => await _context.StationPackages
             .Where(sp => sp.StationId == stationId)
