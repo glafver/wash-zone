@@ -5,11 +5,92 @@
     ViewData["Title"] = "Stations";
 }
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
 <section class="container py-6">
     <div class="section-sub">WashZone</div>
     <h1 class="section-head" style="font-size:clamp(2.4rem,6vw,4.5rem)">@Localizer["StationsTitle"]</h1>
 
-    <div class="mt-4">
-        <partial name="_StationCards" model="Model.Stations" />
+    <div class="d-flex align-items-center gap-2 my-4">
+        <label class="form-label mb-0">@Localizer["IndexFilterLabel"]</label>
+        <div class="dropdown">
+            <button class="btn btn-outline dropdown-toggle" type="button" data-bs-toggle="dropdown" id="dropdownMenuButton">
+                @Localizer["IndexAllPackages"]
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item package-option" data-value="">@Localizer["IndexAllPackages"]</a></li>
+                @foreach (var package in Model.Packages)
+                {
+                    <li><a class="dropdown-item package-option" data-value="@package.Id">@package.Name</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <partial name="_StationCards" model="Model.Stations" />
+
+    <div class="mt-5">
+        <h2 class="section-head mb-4" style="font-size:clamp(1.5rem,3vw,2.2rem)">@Localizer["IndexLocationsHeading"]</h2>
+        <div class="map-frame">
+            <div id="map"></div>
+        </div>
     </div>
 </section>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Package filter (AJAX)
+        document.querySelectorAll('.package-option').forEach(item => {
+            item.addEventListener('click', function () {
+                const packageId = this.getAttribute('data-value');
+                document.getElementById('dropdownMenuButton').textContent = this.textContent;
+                fetch(`/Stations?handler=Stations&packageId=${packageId}`)
+                    .then(r => r.text())
+                    .then(html => {
+                        document.getElementById('stationsGrid').outerHTML = html;
+                    });
+            });
+        });
+
+        // Leaflet map
+        const stations = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Stations.Select(s => new { name = s.Name, address = s.Address, id = s.Id })));
+
+        const stationCoordinates = {
+            "Centrum": { lat: 55.6075, lng: 13.0015 },
+            "Västra Hamnen": { lat: 55.6176, lng: 12.9338 },
+            "Rosengård": { lat: 55.5888, lng: 13.0235 },
+            "Limhamn": { lat: 55.5708, lng: 12.9443 },
+            "Hyllie": { lat: 55.5432, lng: 12.9912 },
+            "Möllevången": { lat: 55.6130, lng: 12.9670 },
+            "Sorgenfri": { lat: 55.6305, lng: 13.0075 },
+            "Kirseberg": { lat: 55.5820, lng: 12.9895 }
+        };
+
+        const map = L.map('map').setView([55.6050, 12.9850], 11);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const icon = L.icon({
+            iconUrl: '/images/car-wash.png',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+        });
+
+        const bounds = L.latLngBounds([]);
+        stations.forEach(station => {
+            const coords = stationCoordinates[station.name];
+            if (!coords) return;
+            L.marker([coords.lat, coords.lng], { icon })
+                .addTo(map)
+                .bindPopup(`<strong>${station.name}</strong><br>${station.address}<br><a href="/DetailsCarwash/${station.id}">View details →</a>`);
+            bounds.extend([coords.lat, coords.lng]);
+        });
+
+        if (bounds.isValid()) {
+            map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+        }
+    </script>
+}
