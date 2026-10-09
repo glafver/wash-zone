@@ -564,11 +564,14 @@ a {
 
 .showcase-video {
     line-height: 0;
+    aspect-ratio: 21 / 9;
+    overflow: hidden;
 }
 
 .showcase-video video {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
 }
 
