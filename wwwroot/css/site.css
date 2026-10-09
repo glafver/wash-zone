@@ -537,6 +537,7 @@ a {
     text-transform: none;
     letter-spacing: 0;
     font-weight: 400;
+    text-shadow: 3px 3px 0 var(--ink);
 }
 
 .step__title {
