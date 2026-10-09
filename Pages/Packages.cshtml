@@ -22,7 +22,10 @@
                     <div class="package-card__body">
                         @foreach (var pf in package.PackageFeatures)
                         {
-                            <div class="package-card__feature">@pf.Feature.Name</div>
+                            <div class="package-card__feature">
+                                <img src="~/images/@(pf.Feature.Name.ToLower().Replace(" ", "-")).png" alt="@pf.Feature.Name" onerror="this.style.display='none'" />
+                                @pf.Feature.Name
+                            </div>
                         }
                     </div>
                 </article>
