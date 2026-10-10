@@ -45,5 +45,27 @@ namespace WashZone.Pages
 
             return Page();
         }
+
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            var stationId = await _stationService.GetStationIdForAdminAsync(userId);
+            if (stationId == null) return NotFound();
+
+            var result = await _bookingService.DeleteBookingAsync(id, string.Empty, isAdmin: false, adminStationId: stationId);
+
+            if (!result.Succeeded)
+            {
+                return result.ErrorType switch
+                {
+                    ServiceErrorType.NotFound => (IActionResult)NotFound(),
+                    ServiceErrorType.Forbidden => Forbid(),
+                    _ => RedirectToPage(),
+                };
+            }
+
+            TempData["SuccessMessage"] = "Booking successfully deleted!";
+            return RedirectToPage();
+        }
     }
 }

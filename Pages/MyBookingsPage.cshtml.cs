@@ -55,7 +55,7 @@ namespace WashZone.Pages
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
-            var result = await _bookingService.DeleteBookingAsync(id, userId, isAdmin: false);
+            var result = await _bookingService.DeleteBookingAsync(id, userId, isAdmin: false, adminStationId: null);
 
             if (!result.Succeeded)
             {

@@ -120,9 +120,16 @@ namespace WashZone.Areas.Identity.Pages.Account
 
                     var user = await _userManager.GetUserAsync(User);
 
-                    if (user != null && await _userManager.IsInRoleAsync(user, "Admin"))
+                    if (user != null)
                     {
-                        return RedirectToPage("/AdminDashboard");
+                        if (await _userManager.IsInRoleAsync(user, "Admin"))
+                        {
+                            return RedirectToPage("/AdminDashboard");
+                        }
+                        if (await _userManager.IsInRoleAsync(user, "StationAdmin"))
+                        {
+                            return RedirectToPage("/StationDashboard");
+                        }
                     }
                     return RedirectToPage("/MyBookingsPage");
                 }

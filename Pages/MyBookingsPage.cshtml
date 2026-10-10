@@ -3,7 +3,7 @@
 @model WashZone.Pages.MyBookingsPageModel
 
 @{
-    ViewData["Title"] = "My Bookings";
+    ViewData["Title"] = Localizer["NavMyBookings"].Value;
 
     var sortSelect = new SelectModel
     {
@@ -66,11 +66,6 @@
     <div class="section-sub">WashZone</div>
     <h1 class="section-head mb-4">@Localizer["MyBookingsTitle"]</h1>
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-    }
-
     <form method="get" class="row g-3 align-items-end mb-4">
         <div class="col-6 col-md-4 col-xl">
             <partial name="_Select" model="sortSelect" />
@@ -91,7 +86,8 @@
 
     @if (Model.Bookings.Any())
     {
-        <table class="table">
+        <div class="table-responsive">
+            <table class="table">
             <thead>
                 <tr>
                     <th>@Localizer["ColStation"]</th>
@@ -106,12 +102,12 @@
                 @foreach (var booking in Model.Bookings)
                 {
                     <tr>
-                        <td>@booking.Station.Name</td>
-                        <td>@booking.Package.Name</td>
-                        <td>@booking.Date.ToString("yyyy-MM-dd")</td>
-                        <td>@booking.Date.ToString("HH:mm")</td>
-                        <td>@booking.RegistrationNumber</td>
-                        <td>
+                        <td data-label="@Localizer["ColStation"]">@booking.Station.Name</td>
+                        <td data-label="@Localizer["ColPackage"]">@booking.Package.Name</td>
+                        <td data-label="@Localizer["ColDate"]">@booking.Date.ToString("yyyy-MM-dd")</td>
+                        <td data-label="@Localizer["ColTime"]">@booking.Date.ToString("HH:mm")</td>
+                        <td data-label="@Localizer["ColRegNumber"]">@booking.RegistrationNumber</td>
+                        <td class="actions-cell">
                             <div class="d-flex justify-content-end gap-2">
                                 <a asp-page="/EditBooking" asp-route-id="@booking.Id" class="btn btn-outline btn-sm">@Localizer["Edit"]</a>
                                 <form method="post" class="d-inline">
@@ -123,7 +119,8 @@
                     </tr>
                 }
             </tbody>
-        </table>
+            </table>
+        </div>
     }
     else
     {

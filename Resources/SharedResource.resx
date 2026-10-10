@@ -19,6 +19,33 @@
   <data name="NavLogout" xml:space="preserve"><value>Logout</value></data>
   <data name="NavRegister" xml:space="preserve"><value>Register</value></data>
   <data name="NavLogin" xml:space="preserve"><value>Login</value></data>
+  <data name="HomeTitle" xml:space="preserve"><value>Home</value></data>
+
+  <!-- Account / Identity -->
+  <data name="LogIn" xml:space="preserve"><value>Log in</value></data>
+  <data name="EmailField" xml:space="preserve"><value>Email</value></data>
+  <data name="PasswordField" xml:space="preserve"><value>Password</value></data>
+  <data name="ConfirmPasswordField" xml:space="preserve"><value>Confirm password</value></data>
+  <data name="PhoneNumberField" xml:space="preserve"><value>Phone number</value></data>
+  <data name="NoAccountPrompt" xml:space="preserve"><value>Don't have an account?</value></data>
+
+  <!-- Profile -->
+  <data name="Profile" xml:space="preserve"><value>Profile</value></data>
+  <data name="YourCars" xml:space="preserve"><value>Your cars</value></data>
+  <data name="AddCar" xml:space="preserve"><value>Add car</value></data>
+  <data name="ChangePassword" xml:space="preserve"><value>Change password</value></data>
+  <data name="CurrentPassword" xml:space="preserve"><value>Current password</value></data>
+  <data name="NewPassword" xml:space="preserve"><value>New password</value></data>
+  <data name="PhoneUpdated" xml:space="preserve"><value>Phone number updated.</value></data>
+  <data name="VehicleAdded" xml:space="preserve"><value>Car added.</value></data>
+  <data name="VehicleExists" xml:space="preserve"><value>Car already saved.</value></data>
+  <data name="VehicleRemoved" xml:space="preserve"><value>Car removed.</value></data>
+  <data name="PasswordChanged" xml:space="preserve"><value>Password changed.</value></data>
+  <data name="PasswordMismatch" xml:space="preserve"><value>New passwords do not match.</value></data>
+  <data name="NoCars" xml:space="preserve"><value>No cars saved yet.</value></data>
+  <data name="DeleteAccount" xml:space="preserve"><value>Delete account</value></data>
+  <data name="DeleteAccountError" xml:space="preserve"><value>Could not delete account.</value></data>
+  <data name="DeleteAccountConfirm" xml:space="preserve"><value>Are you sure you want to delete your account? This cannot be undone.</value></data>
 
   <!-- Index -->
   <data name="IndexWelcomeUser" xml:space="preserve"><value>Welcome, {0}!</value></data>
@@ -50,8 +77,8 @@
   <data name="OurServices" xml:space="preserve"><value>What we do</value></data>
   <data name="OurServicesSub" xml:space="preserve"><value>Every wash includes expert care</value></data>
   <data name="VideoBandTitle" xml:space="preserve"><value>See the shine</value></data>
-  <data name="VideoBandText" xml:space="preserve"><value>Professional equipment, expert hands.</value></data>
-  <data name="VideoBandExtra" xml:space="preserve"><value>From hand wash to ceramic coating — every car is treated like our own.</value></data>
+  <data name="VideoBandText" xml:space="preserve"><value>Driven by quality. Defined by detail.</value></data>
+  <data name="VideoBandExtra" xml:space="preserve"><value>No shortcuts. Results you can see.</value></data>
   <data name="VideoBandExtra2" xml:space="preserve"><value>Premium products, honest pricing.</value></data>
 
   <!-- Station details -->
@@ -72,6 +99,7 @@
   <data name="BookPackage" xml:space="preserve"><value>Package:</value></data>
   <data name="BookRegNumber" xml:space="preserve"><value>Registration Number:</value></data>
   <data name="BookSelectStationFirst" xml:space="preserve"><value>Select a station first</value></data>
+  <data name="BookSelectPackage" xml:space="preserve"><value>Select a package</value></data>
   <data name="BookNoStations" xml:space="preserve"><value>No stations available</value></data>
   <data name="BookNoPackages" xml:space="preserve"><value>No packages available</value></data>
   <data name="BookCustomPlate" xml:space="preserve"><value>Custom license plate</value></data>
@@ -148,8 +176,18 @@
   <!-- About -->
   <data name="AboutTitle" xml:space="preserve"><value>About WashZone</value></data>
   <data name="AboutLead" xml:space="preserve"><value>We make car care simple, fast and flawless.</value></data>
-  <data name="AboutText1" xml:space="preserve"><value>WashZone started with a simple idea — car washing should be effortless. Book online, show up, and drive away in a spotless car.</value></data>
-  <data name="AboutText2" xml:space="preserve"><value>Our stations around Malmö use professional equipment and premium products, handled by experts who treat every car like their own.</value></data>
+  <data name="AboutText1" xml:space="preserve"><value>We started small, but because we love our work and our cars, we grew — and today we're proud to offer the best services in all of Malmö.</value></data>
+  <data name="AboutText2" xml:space="preserve"><value>Our stations around Malmö use only premium chemicals and professional equipment, handled by 40+ experts who treat every car like their own.</value></data>
+  <data name="AboutStoryTitle" xml:space="preserve"><value>Our story</value></data>
+  <data name="AboutEmployees" xml:space="preserve"><value>Expert technicians</value></data>
+  <data name="AboutExperience" xml:space="preserve"><value>Years of experience</value></data>
+  <data name="AboutCarsServiced" xml:space="preserve"><value>Cars serviced</value></data>
+  <data name="AboutHeroLead" xml:space="preserve"><value>A luxury car wash with the best services for your car.</value></data>
+  <data name="AboutLuxuryTitle" xml:space="preserve"><value>The luxury standard</value></data>
+  <data name="AboutLuxuryText1" xml:space="preserve"><value>Premium products, professional equipment and expert hands — every detail matters.</value></data>
+  <data name="AboutLuxuryText2" xml:space="preserve"><value>From hand wash to ceramic coating, we treat every car like our own.</value></data>
+  <data name="AboutStatsTitle" xml:space="preserve"><value>WashZone in numbers</value></data>
+  <data name="AboutVideoText" xml:space="preserve"><value>Quality you can see. Results you can feel.</value></data>
 
   <!-- Packages -->
   <data name="OurPackages" xml:space="preserve"><value>Wash packages</value></data>

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Security.Claims;
+using WashZone.Data;
 using WashZone.Models;
 using WashZone.Services;
 
@@ -17,12 +19,14 @@ namespace WashZone.Pages
         private readonly IStationService _stationService;
         private readonly IBookingService _bookingService;
         private readonly ILogger<BookPageModel> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public BookPageModel(IStationService stationService, IBookingService bookingService, ILogger<BookPageModel> logger)
+        public BookPageModel(IStationService stationService, IBookingService bookingService, ILogger<BookPageModel> logger, ApplicationDbContext context)
         {
             _stationService = stationService;
             _bookingService = bookingService;
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty]
@@ -45,6 +49,7 @@ namespace WashZone.Pages
 
         public List<Station> Stations { get; set; } = new();
         public List<Package> Packages { get; set; } = new();
+        public List<UserVehicle> SavedCars { get; set; } = new();
 
         public TimeSpan OpeningTime { get; } = new(8, 0, 0);
         public TimeSpan ClosingTime { get; } = new(20, 0, 0);
@@ -53,6 +58,15 @@ namespace WashZone.Pages
         {
             Stations = await _stationService.GetStationsAsync();
             Packages = await _stationService.GetPackagesAsync();
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            if (!string.IsNullOrEmpty(userId))
+            {
+                SavedCars = await _context.UserVehicles
+                    .Where(v => v.UserId == userId)
+                    .OrderBy(v => v.RegistrationNumber)
+                    .ToListAsync();
+            }
 
             if (Stations == null || !Stations.Any())
             {
@@ -88,9 +102,9 @@ namespace WashZone.Pages
                 .Select(d => new
                 {
                     date = d.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                    weekday = d.ToString("ddd", CultureInfo.InvariantCulture),
+                    weekday = d.ToString("ddd", CultureInfo.CurrentCulture),
                     day = d.Day,
-                    month = d.ToString("MMM", CultureInfo.InvariantCulture),
+                    month = d.ToString("MMM", CultureInfo.CurrentCulture),
                 })
                 .ToList();
 

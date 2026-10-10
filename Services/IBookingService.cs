@@ -10,6 +10,6 @@ public interface IBookingService
     Task<List<Booking>> GetBookingsForStationAsync(int stationId, DateTime from, DateTime to);
     Task<bool> IsSlotAvailableAsync(int stationId, DateTime start, int durationMinutes, int? excludeBookingId = null);
     Task<ServiceResult> CreateBookingAsync(string userId, BookingInput input);
-    Task<ServiceResult> UpdateBookingAsync(int bookingId, string userId, bool isAdmin, BookingInput input);
-    Task<ServiceResult> DeleteBookingAsync(int bookingId, string userId, bool isAdmin);
+    Task<ServiceResult> UpdateBookingAsync(int bookingId, string userId, bool isAdmin, int? adminStationId, BookingInput input);
+    Task<ServiceResult> DeleteBookingAsync(int bookingId, string userId, bool isAdmin, int? adminStationId);
 }

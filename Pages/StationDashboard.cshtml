@@ -2,7 +2,7 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.StationDashboardModel
 @{
-    ViewData["Title"] = "My Station";
+    ViewData["Title"] = Localizer["MyStation"].Value;
 }
 
 <section class="container py-6">
@@ -20,7 +20,8 @@
 
         @if (Model.Bookings.Any())
         {
-            <table class="table">
+            <div class="table-responsive">
+                <table class="table">
                 <thead>
                     <tr>
                         <th>@Localizer["ColDate"]</th>
@@ -29,22 +30,33 @@
                         <th>@Localizer["ColPhone"]</th>
                         <th>@Localizer["ColPackage"]</th>
                         <th>@Localizer["ColRegNumber"]</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var booking in Model.Bookings)
                     {
                         <tr>
-                            <td>@booking.Date.ToString("yyyy-MM-dd")</td>
-                            <td>@booking.Date.ToString("HH:mm")</td>
-                            <td>@booking.User?.UserName</td>
-                            <td>@booking.User?.PhoneNumber</td>
-                            <td>@booking.Package?.Name</td>
-                            <td>@booking.RegistrationNumber</td>
+                            <td data-label="@Localizer["ColDate"]">@booking.Date.ToString("yyyy-MM-dd")</td>
+                            <td data-label="@Localizer["ColTime"]">@booking.Date.ToString("HH:mm")</td>
+                            <td data-label="@Localizer["ColUser"]">@booking.User?.UserName</td>
+                            <td data-label="@Localizer["ColPhone"]">@booking.User?.PhoneNumber</td>
+                            <td data-label="@Localizer["ColPackage"]">@booking.Package?.Name</td>
+                            <td data-label="@Localizer["ColRegNumber"]">@booking.RegistrationNumber</td>
+                            <td class="actions-cell">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a asp-page="/EditBooking" asp-route-id="@booking.Id" class="btn btn-outline btn-sm">@Localizer["Edit"]</a>
+                                    <form method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@booking.Id" />
+                                        <button type="submit" asp-page-handler="Delete" class="btn btn-danger btn-sm">@Localizer["Delete"]</button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     }
                 </tbody>
-            </table>
+                </table>
+            </div>
         }
         else
         {

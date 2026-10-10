@@ -19,6 +19,33 @@
   <data name="NavLogout" xml:space="preserve"><value>Logga ut</value></data>
   <data name="NavRegister" xml:space="preserve"><value>Registrera</value></data>
   <data name="NavLogin" xml:space="preserve"><value>Logga in</value></data>
+  <data name="HomeTitle" xml:space="preserve"><value>Hem</value></data>
+
+  <!-- Account / Identity -->
+  <data name="LogIn" xml:space="preserve"><value>Logga in</value></data>
+  <data name="EmailField" xml:space="preserve"><value>E-post</value></data>
+  <data name="PasswordField" xml:space="preserve"><value>Lösenord</value></data>
+  <data name="ConfirmPasswordField" xml:space="preserve"><value>Bekräfta lösenord</value></data>
+  <data name="PhoneNumberField" xml:space="preserve"><value>Telefonnummer</value></data>
+  <data name="NoAccountPrompt" xml:space="preserve"><value>Har du inget konto?</value></data>
+
+  <!-- Profile -->
+  <data name="Profile" xml:space="preserve"><value>Profil</value></data>
+  <data name="YourCars" xml:space="preserve"><value>Dina bilar</value></data>
+  <data name="AddCar" xml:space="preserve"><value>Lägg till bil</value></data>
+  <data name="ChangePassword" xml:space="preserve"><value>Byt lösenord</value></data>
+  <data name="CurrentPassword" xml:space="preserve"><value>Nuvarande lösenord</value></data>
+  <data name="NewPassword" xml:space="preserve"><value>Nytt lösenord</value></data>
+  <data name="PhoneUpdated" xml:space="preserve"><value>Telefonnummer uppdaterat.</value></data>
+  <data name="VehicleAdded" xml:space="preserve"><value>Bil tillagd.</value></data>
+  <data name="VehicleExists" xml:space="preserve"><value>Bilen är redan sparad.</value></data>
+  <data name="VehicleRemoved" xml:space="preserve"><value>Bil borttagen.</value></data>
+  <data name="PasswordChanged" xml:space="preserve"><value>Lösenord bytt.</value></data>
+  <data name="PasswordMismatch" xml:space="preserve"><value>Lösenorden matchar inte.</value></data>
+  <data name="NoCars" xml:space="preserve"><value>Inga bilar sparade än.</value></data>
+  <data name="DeleteAccount" xml:space="preserve"><value>Ta bort konto</value></data>
+  <data name="DeleteAccountError" xml:space="preserve"><value>Kunde inte ta bort kontot.</value></data>
+  <data name="DeleteAccountConfirm" xml:space="preserve"><value>Är du säker på att du vill ta bort ditt konto? Detta kan inte ångras.</value></data>
 
   <!-- Index -->
   <data name="IndexWelcomeUser" xml:space="preserve"><value>Välkommen, {0}!</value></data>
@@ -50,8 +77,8 @@
   <data name="OurServices" xml:space="preserve"><value>Våra tjänster</value></data>
   <data name="OurServicesSub" xml:space="preserve"><value>Varje tvätt inkluderar expertvård</value></data>
   <data name="VideoBandTitle" xml:space="preserve"><value>Se glansen</value></data>
-  <data name="VideoBandText" xml:space="preserve"><value>Professionell utrustning, expertens handlag.</value></data>
-  <data name="VideoBandExtra" xml:space="preserve"><value>Från handtvätt till keramisk beläggning — varje bil behandlas som vår egen.</value></data>
+  <data name="VideoBandText" xml:space="preserve"><value>Drivna av kvalitet. Definierade av detaljer.</value></data>
+  <data name="VideoBandExtra" xml:space="preserve"><value>Inga genvägar. Resultat du ser.</value></data>
   <data name="VideoBandExtra2" xml:space="preserve"><value>Premiumprodukter, ärliga priser.</value></data>
 
   <!-- Station details -->
@@ -72,6 +99,7 @@
   <data name="BookPackage" xml:space="preserve"><value>Paket:</value></data>
   <data name="BookRegNumber" xml:space="preserve"><value>Registreringsnummer:</value></data>
   <data name="BookSelectStationFirst" xml:space="preserve"><value>Välj en station först</value></data>
+  <data name="BookSelectPackage" xml:space="preserve"><value>Välj ett paket</value></data>
   <data name="BookNoStations" xml:space="preserve"><value>Inga stationer tillgängliga</value></data>
   <data name="BookNoPackages" xml:space="preserve"><value>Inga paket tillgängliga</value></data>
   <data name="BookCustomPlate" xml:space="preserve"><value>Anpassat registreringsnummer</value></data>
@@ -148,8 +176,18 @@
   <!-- About -->
   <data name="AboutTitle" xml:space="preserve"><value>Om WashZone</value></data>
   <data name="AboutLead" xml:space="preserve"><value>Vi gör bilvård enkelt, snabbt och fläckfritt.</value></data>
-  <data name="AboutText1" xml:space="preserve"><value>WashZone började med en enkel idé — biltvätt ska vara enkelt. Boka online, kom förbi och kör iväg i en fläckfri bil.</value></data>
-  <data name="AboutText2" xml:space="preserve"><value>Våra stationer runt Malmö använder professionell utrustning och premiumprodukter, skött av experter som behandlar varje bil som sin egen.</value></data>
+  <data name="AboutText1" xml:space="preserve"><value>Vi började smått, men eftersom vi älskar vårt arbete och våra bilar växte vi — och idag är vi stolta över att erbjuda de bästa tjänsterna i hela Malmö.</value></data>
+  <data name="AboutText2" xml:space="preserve"><value>Våra stationer runt Malmö använder enbart premiumkemikalier och professionell utrustning, skött av 40+ experter som behandlar varje bil som sin egen.</value></data>
+  <data name="AboutStoryTitle" xml:space="preserve"><value>Vår historia</value></data>
+  <data name="AboutEmployees" xml:space="preserve"><value>Experttekniker</value></data>
+  <data name="AboutExperience" xml:space="preserve"><value>Års erfarenhet</value></data>
+  <data name="AboutCarsServiced" xml:space="preserve"><value>Servade bilar</value></data>
+  <data name="AboutHeroLead" xml:space="preserve"><value>En lyxbiltvätt med de bästa tjänsterna för din bil.</value></data>
+  <data name="AboutLuxuryTitle" xml:space="preserve"><value>Lyxstandarden</value></data>
+  <data name="AboutLuxuryText1" xml:space="preserve"><value>Premiumprodukter, professionell utrustning och experthänder — varje detalj räknas.</value></data>
+  <data name="AboutLuxuryText2" xml:space="preserve"><value>Från handtvätt till keramisk coating — vi behandlar varje bil som vår egen.</value></data>
+  <data name="AboutStatsTitle" xml:space="preserve"><value>WashZone i siffror</value></data>
+  <data name="AboutVideoText" xml:space="preserve"><value>Kvalitet du ser. Resultat du känner.</value></data>
 
   <!-- Packages -->
   <data name="OurPackages" xml:space="preserve"><value>Tvättpaket</value></data>

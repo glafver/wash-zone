@@ -2,16 +2,78 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.AboutModel
 @{
-    ViewData["Title"] = "About";
+    ViewData["Title"] = Localizer["NavAbout"].Value;
 }
 
+<!-- ============ HEADER ============ -->
 <section class="container py-6">
     <div class="section-sub">WashZone</div>
     <h1 class="section-head" style="font-size:clamp(2.4rem,6vw,4.5rem)">@Localizer["AboutTitle"]</h1>
+    <p class="lead fw-bold mt-3 mb-0" style="max-width:46rem">@Localizer["AboutHeroLead"]</p>
+</section>
 
-    <div class="mt-2" style="max-width:44rem">
-        <p class="lead fw-bold">@Localizer["AboutLead"]</p>
-        <p>@Localizer["AboutText1"]</p>
-        <p>@Localizer["AboutText2"]</p>
+<!-- ============ STORY ============ -->
+<section class="container pb-6">
+    <div class="row g-5 align-items-center">
+        <div class="col-lg-6">
+            <div class="about-media">
+                <img src="~/images/about.jpg" alt="WashZone luxury car wash" />
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="section-sub">@Localizer["AboutStoryTitle"]</div>
+            <h2 class="section-head" style="font-size:clamp(1.8rem,4vw,2.6rem)">@Localizer["AboutLuxuryTitle"]</h2>
+            <p class="mt-3">@Localizer["AboutText1"]</p>
+            <p>@Localizer["AboutText2"]</p>
+            <p class="mb-0">@Localizer["AboutLuxuryText1"]</p>
+        </div>
+    </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<section class="container pb-6">
+    <div class="text-center mb-4">
+        <div class="section-sub">WashZone</div>
+        <h2 class="section-head">@Localizer["AboutStatsTitle"]</h2>
+    </div>
+    <div class="stats-grid">
+        <div class="stat">
+            <div class="stat__num">40+</div>
+            <div class="stat__label">@Localizer["AboutEmployees"]</div>
+        </div>
+        <div class="stat">
+            <div class="stat__num">8</div>
+            <div class="stat__label">@Localizer["StatsStations"]</div>
+        </div>
+        <div class="stat">
+            <div class="stat__num">12k+</div>
+            <div class="stat__label">@Localizer["AboutCarsServiced"]</div>
+        </div>
+        <div class="stat">
+            <div class="stat__num">08–20</div>
+            <div class="stat__label">@Localizer["StatsHours"]</div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ VIDEO ============ -->
+<section class="container pb-6">
+    <div class="about-media about-media--video">
+        <video autoplay muted loop playsinline poster="/images/about.jpg">
+            <source src="/videos/about.mp4" type="video/mp4" />
+        </video>
+        <span class="showcase-badge">REC</span>
+        <span class="showcase-timecode">00:04</span>
+        <span class="about-media__caption">
+            <span class="about-media__caption-main">
+                <span>@Localizer["HeroTitleLine1"]</span>
+                <span class="caption-accent">@Localizer["HeroTitleLine2"]</span>
+            </span>
+            <span class="about-media__caption-sub">@Localizer["AboutVideoText"]</span>
+        </span>
+        <span class="corner corner-tl"></span>
+        <span class="corner corner-tr"></span>
+        <span class="corner corner-bl"></span>
+        <span class="corner corner-br"></span>
     </div>
 </section>

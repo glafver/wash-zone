@@ -2,7 +2,7 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.AdminStationsModel
 @{
-    ViewData["Title"] = "Stations";
+    ViewData["Title"] = Localizer["NavStations"].Value;
 
     var addBtn = new ButtonModel { Text = Localizer["AddStation"].Value, Page = "/StationEdit", Variant = "dark" };
     var backBtn = new ButtonModel { Text = Localizer["Back"].Value, Page = "/AdminDashboard", Variant = "outline" };
@@ -17,16 +17,8 @@
         <partial name="_Btn" model="backBtn" />
     </div>
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-    }
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-    }
-
-    <table class="table">
+    <div class="table-responsive">
+        <table class="table">
         <thead>
             <tr>
                 <th>@Localizer["StationName"]</th>
@@ -39,10 +31,10 @@
             @foreach (var station in Model.Stations)
             {
                 <tr>
-                    <td>@station.Name</td>
-                    <td>@station.Address</td>
-                    <td>@(Model.AdminNames.TryGetValue(station.Id, out var admins) ? admins : "")</td>
-                    <td>
+                    <td data-label="@Localizer["StationName"]">@station.Name</td>
+                    <td data-label="@Localizer["StationAddress"]">@station.Address</td>
+                    <td data-label="@Localizer["StationAdmins"]">@(Model.AdminNames.TryGetValue(station.Id, out var admins) ? admins : "")</td>
+                    <td class="actions-cell">
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-page="/StationEdit" asp-route-id="@station.Id" class="btn btn-outline btn-sm">@Localizer["Edit"]</a>
                             <form method="post" class="d-inline">
@@ -54,5 +46,6 @@
                 </tr>
             }
         </tbody>
-    </table>
+        </table>
+    </div>
 </section>

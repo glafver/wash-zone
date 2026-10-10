@@ -2,7 +2,7 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.EditBookingModel
 @{
-    ViewData["Title"] = "Edit Booking";
+    ViewData["Title"] = Localizer["EditTitle"].Value;
     var currentStation = Model.Stations.FirstOrDefault(s => s.Id == Model.SelectedStationId);
     var stationButtonText = currentStation?.Name ?? Localizer["BookSelectStationFirst"].Value;
 }
@@ -134,7 +134,7 @@
     }
 
     function renderEmpty() {
-        document.getElementById('calendar').innerHTML = '<p class="text-muted">@Localizer["CalendarPrompt"]</p>';
+        document.getElementById('calendar').innerHTML = '<p class="text-muted">@Html.Raw(Localizer["CalendarPrompt"].Value)</p>';
     }
 
     function loadPackages(initial) {
@@ -143,10 +143,17 @@
         const packageValue = document.querySelector('#packageSelect .custom-select__value');
 
         document.getElementById('package').value = '';
-        packageValue.textContent = '@Localizer["BookSelectStationFirst"]';
-        packageMenu.innerHTML = '<li><button type="button" class="custom-select__option" data-value="">@Localizer["BookSelectStationFirst"]</button></li>';
 
-        if (!stationId) { renderEmpty(); return; }
+        if (!stationId) {
+            packageValue.textContent = '@Html.Raw(Localizer["BookSelectStationFirst"].Value)';
+            packageMenu.innerHTML = '<li><button type="button" class="custom-select__option" data-value="">@Html.Raw(Localizer["BookSelectStationFirst"].Value)</button></li>';
+            renderEmpty();
+            return;
+        }
+
+        packageValue.textContent = '@Html.Raw(Localizer["BookSelectPackage"].Value)';
+        packageMenu.innerHTML = '<li><button type="button" class="custom-select__option" data-value="">@Html.Raw(Localizer["BookSelectPackage"].Value)</button></li>';
+
         fetch(`/EditBooking?handler=Packages&stationId=${stationId}`)
             .then(r => r.json())
             .then(data => {

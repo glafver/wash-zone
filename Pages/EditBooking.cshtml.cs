@@ -61,6 +61,20 @@ namespace WashZone.Pages
                 return NotFound();
             }
 
+            // Station admins may only edit bookings at their own station.
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            if (User.IsInRole("StationAdmin") && !User.IsInRole("Admin"))
+            {
+                var adminStationId = await _stationService.GetStationIdForAdminAsync(userId);
+                if (adminStationId == null || booking.StationId != adminStationId.Value)
+                {
+                    return Forbid();
+                }
+
+                // Only show their own station in the dropdown.
+                Stations = Stations.Where(s => s.Id == adminStationId.Value).ToList();
+            }
+
             Booking = booking;
 
             // Pre-fill the form with the current booking data
@@ -99,9 +113,9 @@ namespace WashZone.Pages
                 .Select(d => new
                 {
                     date = d.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                    weekday = d.ToString("ddd", CultureInfo.InvariantCulture),
+                    weekday = d.ToString("ddd", CultureInfo.CurrentCulture),
                     day = d.Day,
-                    month = d.ToString("MMM", CultureInfo.InvariantCulture),
+                    month = d.ToString("MMM", CultureInfo.CurrentCulture),
                 })
                 .ToList();
 
@@ -172,7 +186,20 @@ namespace WashZone.Pages
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
             var isAdmin = User.IsInRole("Admin");
 
-            var result = await _bookingService.UpdateBookingAsync(Booking.Id, userId, isAdmin, new BookingInput
+            int? adminStationId = null;
+            if (User.IsInRole("StationAdmin"))
+            {
+                adminStationId = await _stationService.GetStationIdForAdminAsync(userId);
+            }
+
+            // Station admins can only assign bookings to their own station.
+            if (adminStationId.HasValue && SelectedStationId != adminStationId.Value)
+            {
+                ModelState.AddModelError(nameof(SelectedStationId), "You can only manage bookings at your own station.");
+                return Page();
+            }
+
+            var result = await _bookingService.UpdateBookingAsync(Booking.Id, userId, isAdmin, adminStationId, new BookingInput
             {
                 StationId = SelectedStationId,
                 PackageId = SelectedPackageId,
@@ -191,7 +218,7 @@ namespace WashZone.Pages
             }
 
             TempData["SuccessMessage"] = "Booking updated successfully!";
-            return RedirectToPage(isAdmin ? "/AdminDashboard" : "/MyBookingsPage");
+            return RedirectToPage(isAdmin ? "/AdminDashboard" : (adminStationId.HasValue ? "/StationDashboard" : "/MyBookingsPage"));
         }
 
         private bool TryParseSlot(out DateTime slot)

@@ -65,14 +65,14 @@
         const stationAddress = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Station?.Address ?? ""));
 
         const stationCoordinates = {
-            "Centrum": { lat: 55.6075, lng: 13.0015 },
-            "Västra Hamnen": { lat: 55.6176, lng: 12.9338 },
-            "Rosengård": { lat: 55.5888, lng: 13.0235 },
-            "Limhamn": { lat: 55.5708, lng: 12.9443 },
-            "Hyllie": { lat: 55.5432, lng: 12.9912 },
-            "Möllevången": { lat: 55.6130, lng: 12.9670 },
-            "Sorgenfri": { lat: 55.6305, lng: 13.0075 },
-            "Kirseberg": { lat: 55.5820, lng: 12.9895 }
+            "Centrum": { lat: 55.6072, lng: 13.0017 },
+            "Västra Hamnen": { lat: 55.6135, lng: 12.9770 },
+            "Rosengård": { lat: 55.5883, lng: 13.0320 },
+            "Limhamn": { lat: 55.5800, lng: 12.9340 },
+            "Hyllie": { lat: 55.5470, lng: 12.9820 },
+            "Möllevången": { lat: 55.5920, lng: 13.0070 },
+            "Sorgenfri": { lat: 55.6300, lng: 13.0150 },
+            "Kirseberg": { lat: 55.5850, lng: 13.0500 }
         };
 
         const coords = stationCoordinates[stationName] || { lat: 55.6050, lng: 12.9850 };
@@ -83,7 +83,7 @@
             iconAnchor: [20, 20],
         });
 
-        const map = L.map('map').setView([coords.lat, coords.lng], 14);
+        const map = L.map('map', { scrollWheelZoom: false, dragging: false, touchZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, zoomControl: false }).setView([coords.lat, coords.lng], 14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; OpenStreetMap contributors'

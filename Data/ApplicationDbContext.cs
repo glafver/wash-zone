@@ -19,6 +19,7 @@ namespace WashZone.Data
 
         public DbSet<StationPackage> StationPackages { get; set; }
         public DbSet<StationAdmin> StationAdmins { get; set; }
+        public DbSet<UserVehicle> UserVehicles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -66,6 +67,19 @@ namespace WashZone.Data
                 .HasOne(sa => sa.Station)
                 .WithMany()
                 .HasForeignKey(sa => sa.StationId);
+
+            // UserVehicle: a user's saved car (registration number), unique per user.
+            modelBuilder.Entity<UserVehicle>()
+                .HasKey(uv => uv.Id);
+
+            modelBuilder.Entity<UserVehicle>()
+                .HasIndex(uv => new { uv.UserId, uv.RegistrationNumber })
+                .IsUnique();
+
+            modelBuilder.Entity<UserVehicle>()
+                .HasOne(uv => uv.User)
+                .WithMany()
+                .HasForeignKey(uv => uv.UserId);
         }
     }
 }

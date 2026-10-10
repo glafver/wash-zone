@@ -2,7 +2,7 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.ContactsModel
 @{
-    ViewData["Title"] = "Contacts";
+    ViewData["Title"] = Localizer["NavContacts"].Value;
 }
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -28,10 +28,6 @@
 
     <div class="row g-5 mt-2">
         <div class="col-lg-6">
-            @if (TempData["SuccessMessage"] != null)
-            {
-                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-            }
             <form method="post">
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="mb-3">
@@ -69,7 +65,7 @@
             iconAnchor: [20, 20],
         });
 
-        const map = L.map('map').setView([55.6075, 13.0015], 14);
+        const map = L.map('map', { scrollWheelZoom: false, dragging: false, touchZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, zoomControl: false }).setView([55.6072, 13.0017], 14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; OpenStreetMap contributors'

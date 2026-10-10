@@ -2,7 +2,7 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.BookPageModel
 @{
-    ViewData["Title"] = "Book a Service";
+    ViewData["Title"] = Localizer["BookWash"].Value;
 }
 <section class="container py-6">
 <div class="section-sub">WashZone</div>
@@ -51,8 +51,16 @@
     <span asp-validation-for="SelectedSlot" class="text-danger"></span>
 
     <label class="form-label" for="regNumber">@Localizer["BookRegNumber"]</label>
-    <input class="form-control" type="text" id="regNumber" name="RegistrationNumber"
-           asp-for="RegistrationNumber" placeholder="@Localizer["BookRegPlaceholder"]" required />
+    <div class="search-select">
+        <input class="form-control" type="text" id="regNumber" name="RegistrationNumber"
+               asp-for="RegistrationNumber" placeholder="@Localizer["BookRegPlaceholder"]" autocomplete="off" required />
+        <ul class="search-select__menu">
+            @foreach (var car in Model.SavedCars)
+            {
+                <li><button type="button" class="search-select__option" data-value="@car.RegistrationNumber">@car.RegistrationNumber</button></li>
+            }
+        </ul>
+    </div>
     <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
 
     <input type="submit" class="btn btn-dark mt-4" value="@Localizer["BookSubmit"]">
@@ -140,13 +148,17 @@
         const packageValue = document.querySelector('#packageSelect .custom-select__value');
 
         document.getElementById('package').value = '';
-        packageValue.textContent = '@Localizer["BookSelectStationFirst"]';
-        packageMenu.innerHTML = '<li><button type="button" class="custom-select__option" data-value="">@Localizer["BookSelectStationFirst"]</button></li>';
 
         if (!stationId) {
+            packageValue.textContent = '@Html.Raw(Localizer["BookSelectStationFirst"].Value)';
+            packageMenu.innerHTML = '<li><button type="button" class="custom-select__option" data-value="">@Html.Raw(Localizer["BookSelectStationFirst"].Value)</button></li>';
             renderEmpty();
             return;
         }
+
+        packageValue.textContent = '@Html.Raw(Localizer["BookSelectPackage"].Value)';
+        packageMenu.innerHTML = '<li><button type="button" class="custom-select__option" data-value="">@Html.Raw(Localizer["BookSelectPackage"].Value)</button></li>';
+
         fetch(`/BookPage?handler=Packages&stationId=${stationId}`)
             .then(r => r.json())
             .then(data => {
@@ -163,7 +175,7 @@
                         packageMenu.appendChild(li);
                     });
                 } else {
-                    packageMenu.innerHTML = '<li><button type="button" class="custom-select__option" data-value="">@Localizer["BookNoPackages"]</button></li>';
+                    packageMenu.innerHTML = '<li><button type="button" class="custom-select__option" data-value="">@Html.Raw(Localizer["BookNoPackages"].Value)</button></li>';
                 }
                 renderEmpty();
             })
@@ -171,7 +183,7 @@
     }
 
     function renderEmpty() {
-        document.getElementById('calendar').innerHTML = '<p class="text-muted">@Localizer["CalendarPrompt"]</p>';
+        document.getElementById('calendar').innerHTML = '<p class="text-muted">@Html.Raw(Localizer["CalendarPrompt"].Value)</p>';
         document.getElementById('selectedSlot').value = '';
         selectedSlot = null;
     }

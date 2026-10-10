@@ -2,7 +2,7 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.PackageEditModel
 @{
-    ViewData["Title"] = "Edit Package";
+    ViewData["Title"] = Localizer["EditPackage"].Value;
 
     var nameField = new FieldModel { Name = "Package.Name", Label = Localizer["PackageName"].Value, Value = Model.Package.Name, Required = true };
     var priceField = new FieldModel { Name = "Package.Price", Label = Localizer["PackagePrice"].Value, Value = Model.Package.Price.ToString(), Type = "number", Required = true };
@@ -34,7 +34,9 @@
             }
         </div>
 
-        <button type="submit" class="btn btn-dark">@Localizer["Save"]</button>
-        <partial name="_Btn" model="cancelBtn" />
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-dark">@Localizer["Save"]</button>
+            <partial name="_Btn" model="cancelBtn" />
+        </div>
     </form>
 </section>

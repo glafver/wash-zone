@@ -2,7 +2,7 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.StationEditModel
 @{
-    ViewData["Title"] = "Edit Station";
+    ViewData["Title"] = Localizer["EditStation"].Value;
 
     var nameField = new FieldModel { Name = "Station.Name", Label = Localizer["StationName"].Value, Value = Model.Station.Name, Required = true };
     var addressField = new FieldModel { Name = "Station.Address", Label = Localizer["StationAddress"].Value, Value = Model.Station.Address, Required = true };
@@ -12,15 +12,6 @@
 <section class="container py-6">
     <div class="section-sub">WashZone</div>
     <h1 class="section-head mb-4">@Localizer["EditStation"]</h1>
-
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-    }
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-    }
 
     <form method="post" class="mb-4">
         <input type="hidden" asp-for="Station.Id" />
@@ -41,8 +32,10 @@
             }
         </div>
 
-        <button type="submit" class="btn btn-dark">@Localizer["Save"]</button>
-        <partial name="_Btn" model="cancelBtn" />
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-dark">@Localizer["Save"]</button>
+            <partial name="_Btn" model="cancelBtn" />
+        </div>
     </form>
 
     @if (Model.Station.Id > 0)
@@ -66,15 +59,12 @@
         }
 
         <form method="post" asp-page-handler="AssignAdmin" asp-route-id="@Model.Station.Id" class="d-flex gap-2 mt-3">
-            <div class="dropdown custom-select flex-grow-1">
-                <button type="button" class="custom-select__trigger" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="custom-select__value">@Localizer["SelectUser"]</span>
-                </button>
-                <ul class="dropdown-menu custom-select__menu">
-                    <li><button type="button" class="custom-select__option" data-value="">@Localizer["SelectUser"]</button></li>
+            <div class="search-select flex-grow-1">
+                <input type="text" class="form-control" placeholder="@Localizer["SelectUser"]" autocomplete="off" />
+                <ul class="search-select__menu">
                     @foreach (var u in Model.AvailableUsers)
                     {
-                        <li><button type="button" class="custom-select__option" data-value="@u.Id">@u.UserName</button></li>
+                        <li><button type="button" class="search-select__option" data-value="@u.Id">@u.UserName</button></li>
                     }
                 </ul>
                 <input type="hidden" name="userId" value="" />

@@ -49,7 +49,7 @@ namespace WashZone.Pages
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            var result = await _bookingService.DeleteBookingAsync(id, string.Empty, isAdmin: true);
+            var result = await _bookingService.DeleteBookingAsync(id, string.Empty, isAdmin: true, adminStationId: null);
 
             if (!result.Succeeded)
             {

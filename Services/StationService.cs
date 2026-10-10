@@ -8,10 +8,12 @@ namespace WashZone.Services;
 public class StationService : IStationService
 {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<IdentityUser> _userManager;
 
-    public StationService(ApplicationDbContext context)
+    public StationService(ApplicationDbContext context, UserManager<IdentityUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     public async Task<List<Station>> GetStationsAsync(int? packageId = null)
@@ -82,6 +84,20 @@ public class StationService : IStationService
         var hasBookings = await _context.Bookings.AnyAsync(b => b.StationId == id);
         if (hasBookings) return ServiceResult.Conflict("Cannot delete a station that has bookings.");
 
+        // Remove the StationAdmin role from this station's admins before deleting the station.
+        var adminIds = await _context.StationAdmins
+            .Where(sa => sa.StationId == id)
+            .Select(sa => sa.UserId)
+            .ToListAsync();
+        foreach (var adminId in adminIds)
+        {
+            var admin = await _userManager.FindByIdAsync(adminId);
+            if (admin != null && await _userManager.IsInRoleAsync(admin, "StationAdmin"))
+            {
+                await _userManager.RemoveFromRoleAsync(admin, "StationAdmin");
+            }
+        }
+
         _context.Stations.Remove(station);
         await _context.SaveChangesAsync();
         return ServiceResult.Success();
@@ -122,6 +138,13 @@ public class StationService : IStationService
             return ServiceResult.NotFound("User not found.");
         }
 
+        // Ensure the user has the StationAdmin role so they can access their dashboard.
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user != null && !await _userManager.IsInRoleAsync(user, "StationAdmin"))
+        {
+            await _userManager.AddToRoleAsync(user, "StationAdmin");
+        }
+
         // A user can only manage a single station, so replace any existing assignment.
         var existing = await _context.StationAdmins.FirstOrDefaultAsync(sa => sa.UserId == userId);
         if (existing != null)
@@ -144,6 +167,14 @@ public class StationService : IStationService
 
         _context.StationAdmins.Remove(existing);
         await _context.SaveChangesAsync();
+
+        // Remove the role so they no longer have station-admin access.
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user != null && await _userManager.IsInRoleAsync(user, "StationAdmin"))
+        {
+            await _userManager.RemoveFromRoleAsync(user, "StationAdmin");
+        }
+
         return ServiceResult.Success();
     }
 }

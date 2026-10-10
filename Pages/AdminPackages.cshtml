@@ -2,7 +2,7 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @model WashZone.Pages.AdminPackagesModel
 @{
-    ViewData["Title"] = "Packages";
+    ViewData["Title"] = Localizer["NavPackages"].Value;
 
     var addBtn = new ButtonModel { Text = Localizer["AddPackage"].Value, Page = "/PackageEdit", Variant = "dark" };
     var backBtn = new ButtonModel { Text = Localizer["Back"].Value, Page = "/AdminDashboard", Variant = "outline" };
@@ -17,16 +17,8 @@
         <partial name="_Btn" model="backBtn" />
     </div>
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-    }
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-    }
-
-    <table class="table">
+    <div class="table-responsive">
+        <table class="table">
         <thead>
             <tr>
                 <th>@Localizer["PackageName"]</th>
@@ -39,10 +31,10 @@
             @foreach (var package in Model.Packages)
             {
                 <tr>
-                    <td>@package.Name</td>
-                    <td>@package.Price kr</td>
-                    <td>@package.DurationMinutes min</td>
-                    <td>
+                    <td data-label="@Localizer["PackageName"]">@package.Name</td>
+                    <td data-label="@Localizer["PackagePrice"]">@package.Price kr</td>
+                    <td data-label="@Localizer["PackageDuration"]">@package.DurationMinutes min</td>
+                    <td class="actions-cell">
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-page="/PackageEdit" asp-route-id="@package.Id" class="btn btn-outline btn-sm">@Localizer["Edit"]</a>
                             <form method="post" class="d-inline">
@@ -54,5 +46,6 @@
                 </tr>
             }
         </tbody>
-    </table>
+        </table>
+    </div>
 </section>

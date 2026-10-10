@@ -72,15 +72,23 @@ public class BookingService : IBookingService
             DurationMinutes = input.DurationMinutes,
         });
 
+        // Remember the registration number so the user can reuse it next time.
+        if (!await _context.UserVehicles.AnyAsync(v => v.UserId == userId && v.RegistrationNumber == input.RegistrationNumber))
+        {
+            _context.UserVehicles.Add(new UserVehicle { UserId = userId, RegistrationNumber = input.RegistrationNumber });
+        }
+
         await _context.SaveChangesAsync();
         return ServiceResult.Success();
     }
 
-    public async Task<ServiceResult> UpdateBookingAsync(int bookingId, string userId, bool isAdmin, BookingInput input)
+    public async Task<ServiceResult> UpdateBookingAsync(int bookingId, string userId, bool isAdmin, int? adminStationId, BookingInput input)
     {
         var booking = await _context.Bookings.FindAsync(bookingId);
         if (booking == null) return ServiceResult.NotFound("Booking not found.");
-        if (booking.UserId != userId && !isAdmin) return ServiceResult.Forbidden();
+
+        var canManage = isAdmin || (adminStationId.HasValue && booking.StationId == adminStationId.Value);
+        if (booking.UserId != userId && !canManage) return ServiceResult.Forbidden();
 
         if (!await IsSlotAvailableAsync(input.StationId, input.Date, input.DurationMinutes, bookingId))
         {
@@ -97,11 +105,13 @@ public class BookingService : IBookingService
         return ServiceResult.Success();
     }
 
-    public async Task<ServiceResult> DeleteBookingAsync(int bookingId, string userId, bool isAdmin)
+    public async Task<ServiceResult> DeleteBookingAsync(int bookingId, string userId, bool isAdmin, int? adminStationId)
     {
         var booking = await _context.Bookings.FindAsync(bookingId);
         if (booking == null) return ServiceResult.NotFound("Booking not found.");
-        if (booking.UserId != userId && !isAdmin) return ServiceResult.Forbidden();
+
+        var canManage = isAdmin || (adminStationId.HasValue && booking.StationId == adminStationId.Value);
+        if (booking.UserId != userId && !canManage) return ServiceResult.Forbidden();
 
         _context.Bookings.Remove(booking);
         await _context.SaveChangesAsync();
