@@ -1,0 +1,28 @@
+@model SelectModel
+
+@{
+    var selected = Model.Options.FirstOrDefault(o => o.Selected) ?? Model.Options.FirstOrDefault();
+    var buttonText = selected?.Text ?? "";
+    var currentValue = selected?.Value ?? "";
+}
+
+<div class="field @Model.Class">
+    @if (!string.IsNullOrEmpty(Model.Label))
+    {
+        <label class="form-label">@Model.Label</label>
+    }
+    <div class="dropdown custom-select custom-select--submit">
+        <button type="button" class="custom-select__trigger" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="custom-select__value">@buttonText</span>
+        </button>
+        <ul class="dropdown-menu custom-select__menu">
+            @foreach (var option in Model.Options)
+            {
+                <li>
+                    <button type="button" class="custom-select__option @(option.Selected ? "is-selected" : "")" data-value="@option.Value">@option.Text</button>
+                </li>
+            }
+        </ul>
+        <input type="hidden" name="@Model.Name" value="@currentValue" />
+    </div>
+</div>

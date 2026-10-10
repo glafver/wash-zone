@@ -3,76 +3,83 @@
 @model WashZone.Pages.StationEditModel
 @{
     ViewData["Title"] = "Edit Station";
+
+    var nameField = new FieldModel { Name = "Station.Name", Label = Localizer["StationName"].Value, Value = Model.Station.Name, Required = true };
+    var addressField = new FieldModel { Name = "Station.Address", Label = Localizer["StationAddress"].Value, Value = Model.Station.Address, Required = true };
+    var cancelBtn = new ButtonModel { Text = Localizer["EditCancel"].Value, Page = "/AdminStations", Variant = "outline" };
 }
 
-<h1>@Localizer["EditStation"]</h1>
+<section class="container py-6">
+    <div class="section-sub">WashZone</div>
+    <h1 class="section-head mb-4">@Localizer["EditStation"]</h1>
 
-<form method="post" class="mb-4">
-    <input type="hidden" asp-for="Station.Id" />
-    <div asp-validation-summary="All" class="text-danger"></div>
-
-    <div class="mb-3">
-        <label class="form-label">@Localizer["StationName"]</label>
-        <input asp-for="Station.Name" class="form-control" required />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">@Localizer["StationAddress"]</label>
-        <input asp-for="Station.Address" class="form-control" required />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">@Localizer["StationPackages"]</label>
-        @foreach (var p in Model.AllPackages)
-        {
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="SelectedPackageIds" value="@p.Id" id="pkg_@p.Id"
-                       @(Model.SelectedPackageIds.Contains(p.Id) ? "checked" : "") />
-                <label class="form-check-label" for="pkg_@p.Id">@p.Name (@p.DurationMinutes min)</label>
-            </div>
-        }
-    </div>
-
-    <button type="submit" class="btn btn-dark">@Localizer["Save"]</button>
-    <a asp-page="/AdminStations" class="btn btn-outline-dark">@Localizer["EditCancel"]</a>
-</form>
-
-@if (Model.Station.Id > 0)
-{
-    <h3>@Localizer["StationAdmins"]</h3>
-    @if (Model.CurrentAdmins.Any())
+    @if (TempData["SuccessMessage"] != null)
     {
-        @foreach (var admin in Model.CurrentAdmins)
-        {
-            <div class="d-flex align-items-center gap-2 mb-2">
-                <span>@admin.UserName</span>
-                <form method="post" asp-page-handler="RemoveAdmin" asp-route-id="@Model.Station.Id" asp-route-userId="@admin.Id">
-                    <button type="submit" class="btn btn-danger btn-sm">@Localizer["RemoveAdmin"]</button>
-                </form>
-            </div>
-        }
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
     }
-    else
+    @if (TempData["ErrorMessage"] != null)
     {
-        <p class="text-muted">@Localizer["NoAdmins"]</p>
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
     }
 
-    <form method="post" asp-page-handler="AssignAdmin" asp-route-id="@Model.Station.Id" class="d-flex gap-2 mt-3">
-        <select name="userId" class="form-select">
-            <option value="">@Localizer["SelectUser"]</option>
-            @foreach (var u in Model.AvailableUsers)
+    <form method="post" class="mb-4">
+        <input type="hidden" asp-for="Station.Id" />
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <partial name="_Field" model="nameField" />
+        <partial name="_Field" model="addressField" />
+
+        <div class="field">
+            <label class="form-label">@Localizer["StationPackages"]</label>
+            @foreach (var p in Model.AllPackages)
             {
-                <option value="@u.Id">@u.UserName</option>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="SelectedPackageIds" value="@p.Id" id="pkg_@p.Id"
+                           @(Model.SelectedPackageIds.Contains(p.Id) ? "checked" : "") />
+                    <label class="form-check-label" for="pkg_@p.Id">@p.Name (@p.DurationMinutes min)</label>
+                </div>
             }
-        </select>
-        <button type="submit" class="btn btn-dark">@Localizer["AssignAdmin"]</button>
-    </form>
-}
+        </div>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
-}
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger mt-3">@TempData["ErrorMessage"]</div>
-}
+        <button type="submit" class="btn btn-dark">@Localizer["Save"]</button>
+        <partial name="_Btn" model="cancelBtn" />
+    </form>
+
+    @if (Model.Station.Id > 0)
+    {
+        <h3 class="mb-3">@Localizer["StationAdmins"]</h3>
+        @if (Model.CurrentAdmins.Any())
+        {
+            @foreach (var admin in Model.CurrentAdmins)
+            {
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span>@admin.UserName</span>
+                    <form method="post" asp-page-handler="RemoveAdmin" asp-route-id="@Model.Station.Id" asp-route-userId="@admin.Id">
+                        <button type="submit" class="btn btn-danger btn-sm">@Localizer["RemoveAdmin"]</button>
+                    </form>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted">@Localizer["NoAdmins"]</p>
+        }
+
+        <form method="post" asp-page-handler="AssignAdmin" asp-route-id="@Model.Station.Id" class="d-flex gap-2 mt-3">
+            <div class="dropdown custom-select flex-grow-1">
+                <button type="button" class="custom-select__trigger" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="custom-select__value">@Localizer["SelectUser"]</span>
+                </button>
+                <ul class="dropdown-menu custom-select__menu">
+                    <li><button type="button" class="custom-select__option" data-value="">@Localizer["SelectUser"]</button></li>
+                    @foreach (var u in Model.AvailableUsers)
+                    {
+                        <li><button type="button" class="custom-select__option" data-value="@u.Id">@u.UserName</button></li>
+                    }
+                </ul>
+                <input type="hidden" name="userId" value="" />
+            </div>
+            <button type="submit" class="btn btn-dark">@Localizer["AssignAdmin"]</button>
+        </form>
+    }
+</section>

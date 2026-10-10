@@ -4,62 +4,60 @@
 @{
     ViewData["Title"] = "Book a Service";
 }
-<h2 class="text-center">@Localizer["BookTitle"]</h2>
+<section class="container py-6">
+<div class="section-sub">WashZone</div>
+<h1 class="section-head mb-4">@Localizer["BookTitle"]</h1>
 
 <form method="post" class="booking-form" id="bookingForm">
     <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-    <label for="Station">@Localizer["BookStation"]</label>
-    <select id="Station" name="SelectedStationId" asp-for="SelectedStationId" required>
-        <option value="">@Localizer["BookSelectStationFirst"]</option>
-        @if (Model.Stations != null)
-        {
-            @foreach (var station in Model.Stations)
+    <label class="form-label">@Localizer["BookStation"]</label>
+    <div class="dropdown custom-select">
+        <button type="button" class="custom-select__trigger" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="custom-select__value">@Localizer["BookSelectStationFirst"]</span>
+        </button>
+        <ul class="dropdown-menu custom-select__menu">
+            <li><button type="button" class="custom-select__option" data-value="">@Localizer["BookSelectStationFirst"]</button></li>
+            @if (Model.Stations != null)
             {
-                <option value="@station.Id">@station.Name</option>
+                @foreach (var station in Model.Stations)
+                {
+                    <li><button type="button" class="custom-select__option" data-value="@station.Id">@station.Name</button></li>
+                }
             }
-        }
-    </select>
+        </ul>
+        <input type="hidden" asp-for="SelectedStationId" id="Station" />
+    </div>
     <span asp-validation-for="SelectedStationId" class="text-danger"></span>
 
-    <label for="package">@Localizer["BookPackage"]</label>
-    <select id="package" name="SelectedPackageId" asp-for="SelectedPackageId" required>
-        <option value="">@Localizer["BookSelectStationFirst"]</option>
-    </select>
+    <label class="form-label">@Localizer["BookPackage"]</label>
+    <div class="dropdown custom-select" id="packageSelect">
+        <button type="button" class="custom-select__trigger" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="custom-select__value">@Localizer["BookSelectStationFirst"]</span>
+        </button>
+        <ul class="dropdown-menu custom-select__menu" id="packageMenu">
+            <li><button type="button" class="custom-select__option" data-value="">@Localizer["BookSelectStationFirst"]</button></li>
+        </ul>
+        <input type="hidden" asp-for="SelectedPackageId" id="package" />
+    </div>
     <span asp-validation-for="SelectedPackageId" class="text-danger"></span>
 
     <input type="hidden" name="SelectedSlot" id="selectedSlot" asp-for="SelectedSlot" />
 
-    <label>@Localizer["BookChooseSlot"]</label>
-    <div id="calendar" class="calendar-container mb-3">
+    <label class="form-label">@Localizer["BookChooseSlot"]</label>
+    <div id="calendar" class="calendar-container">
         <p class="text-muted">@Localizer["CalendarPrompt"]</p>
     </div>
     <span asp-validation-for="SelectedSlot" class="text-danger"></span>
 
-    <label for="regNumber">@Localizer["BookRegNumber"]</label>
-    <input class="form-control mb-3" type="text" id="regNumber" name="RegistrationNumber"
+    <label class="form-label" for="regNumber">@Localizer["BookRegNumber"]</label>
+    <input class="form-control" type="text" id="regNumber" name="RegistrationNumber"
            asp-for="RegistrationNumber" placeholder="@Localizer["BookRegPlaceholder"]" required />
     <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
 
     <input type="submit" class="btn btn-dark mt-4" value="@Localizer["BookSubmit"]">
 </form>
-
-<style>
-    .booking-form { max-width: 900px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #f9f9f9; }
-    .booking-form label { display: block; margin-bottom: 8px; font-weight: bold; }
-    .booking-form select, .booking-form input[type="text"] { width: 100%; padding: 8px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; }
-    .booking-form input[type="submit"] { width: 100%; padding: 10px; }
-
-    .calendar-container { overflow-x: auto; }
-    .calendar-grid { display: grid; grid-template-columns: 70px repeat(7, 1fr); gap: 2px; }
-    .cal-header { font-weight: bold; text-align: center; background: #212529; color: #fff; padding: 6px 2px; font-size: 0.85rem; }
-    .cal-time { text-align: right; padding-right: 8px; font-size: 0.8rem; color: #555; align-self: center; }
-    .cal-cell { height: 30px; border-radius: 4px; cursor: default; background: #eee; }
-    .cal-cell.available { background: #d4edda; cursor: pointer; }
-    .cal-cell.available:hover { background: #a8d8b0; }
-    .cal-cell.booked { background: #f8d7da; }
-    .cal-cell.selected { background: #0d6efd; outline: 2px solid #084298; }
-</style>
+</section>
 
 <script>
     let selectedSlot = null;
@@ -138,25 +136,34 @@
 
     function loadPackages() {
         const stationId = document.getElementById('Station').value;
-        const packageSelect = document.getElementById('package');
-        packageSelect.innerHTML = '';
+        const packageMenu = document.getElementById('packageMenu');
+        const packageValue = document.querySelector('#packageSelect .custom-select__value');
+
+        document.getElementById('package').value = '';
+        packageValue.textContent = '@Localizer["BookSelectStationFirst"]';
+        packageMenu.innerHTML = '<li><button type="button" class="custom-select__option" data-value="">@Localizer["BookSelectStationFirst"]</button></li>';
+
         if (!stationId) {
-            packageSelect.innerHTML = '<option value="">@Localizer["BookSelectStationFirst"]</option>';
             renderEmpty();
             return;
         }
         fetch(`/BookPage?handler=Packages&stationId=${stationId}`)
             .then(r => r.json())
             .then(data => {
+                packageMenu.innerHTML = '';
                 if (data.length > 0) {
                     data.forEach(p => {
-                        const opt = document.createElement('option');
-                        opt.value = p.id;
-                        opt.textContent = `${p.name} (${p.durationMinutes} min, ${p.price} kr)`;
-                        packageSelect.appendChild(opt);
+                        const li = document.createElement('li');
+                        const b = document.createElement('button');
+                        b.type = 'button';
+                        b.className = 'custom-select__option';
+                        b.setAttribute('data-value', p.id);
+                        b.textContent = `${p.name} (${p.durationMinutes} min, ${p.price} kr)`;
+                        li.appendChild(b);
+                        packageMenu.appendChild(li);
                     });
                 } else {
-                    packageSelect.innerHTML = '<option value="">@Localizer["BookNoPackages"]</option>';
+                    packageMenu.innerHTML = '<li><button type="button" class="custom-select__option" data-value="">@Localizer["BookNoPackages"]</button></li>';
                 }
                 renderEmpty();
             })

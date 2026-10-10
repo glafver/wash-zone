@@ -5,44 +5,50 @@
     ViewData["Title"] = "My Station";
 }
 
-<h1>@Localizer["MyStation"]</h1>
+<section class="container py-6">
+    <div class="section-sub">WashZone</div>
+    <h1 class="section-head mb-4">@Localizer["MyStation"]</h1>
 
-@if (Model.Station != null)
-{
-    <div class="mb-4">
-        <h3>@Model.Station.Name</h3>
-        <p class="text-muted">@Model.Station.Address</p>
-    </div>
-
-    <h4>@Localizer["Bookings"]</h4>
-    <table class="table booking-table">
-        <thead>
-            <tr>
-                <th>@Localizer["ColDate"]</th>
-                <th>@Localizer["ColTime"]</th>
-                <th>@Localizer["ColUser"]</th>
-                <th>@Localizer["ColPhone"]</th>
-                <th>@Localizer["ColPackage"]</th>
-                <th>@Localizer["ColRegNumber"]</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var booking in Model.Bookings)
-            {
-                <tr>
-                    <td>@booking.Date.ToString("yyyy-MM-dd")</td>
-                    <td>@booking.Date.ToString("HH:mm")</td>
-                    <td>@booking.User?.UserName</td>
-                    <td>@booking.User?.PhoneNumber</td>
-                    <td>@booking.Package?.Name</td>
-                    <td>@booking.RegistrationNumber</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    @if (!Model.Bookings.Any())
+    @if (Model.Station != null)
     {
-        <p>@Localizer["NoBookings"]</p>
+        <div class="mb-4">
+            <h3>@Model.Station.Name</h3>
+            <p class="text-muted">@Model.Station.Address</p>
+        </div>
+
+        <h4 class="mb-3">@Localizer["Bookings"]</h4>
+
+        @if (Model.Bookings.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>@Localizer["ColDate"]</th>
+                        <th>@Localizer["ColTime"]</th>
+                        <th>@Localizer["ColUser"]</th>
+                        <th>@Localizer["ColPhone"]</th>
+                        <th>@Localizer["ColPackage"]</th>
+                        <th>@Localizer["ColRegNumber"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var booking in Model.Bookings)
+                    {
+                        <tr>
+                            <td>@booking.Date.ToString("yyyy-MM-dd")</td>
+                            <td>@booking.Date.ToString("HH:mm")</td>
+                            <td>@booking.User?.UserName</td>
+                            <td>@booking.User?.PhoneNumber</td>
+                            <td>@booking.Package?.Name</td>
+                            <td>@booking.RegistrationNumber</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">@Localizer["NoBookings"]</p>
+        }
     }
-}
+</section>

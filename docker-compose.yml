@@ -26,6 +26,8 @@ services:
       ASPNETCORE_URLS: "http://+:8080"
     ports:
       - "8080:8080"
+    volumes:
+      - washzone-keys:/app/keys
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -33,3 +35,4 @@ services:
 
 volumes:
   sqlserver-data:
+  washzone-keys:

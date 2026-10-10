@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddRazorPages();
+
+// Persist Data Protection keys to a mounted volume so login cookies survive
+// container restarts (otherwise each restart regenerates keys and logs users out).
+builder.Services.AddDataProtection()
+	.PersistKeysToFileSystem(new DirectoryInfo("/app/keys"))
+	.SetApplicationName("WashZone");
 
 // Localization (English + Swedish)
 // The SDK embeds "Resources/SharedResource.resx" as "WashZone.SharedResource"

@@ -1,29 +1,35 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
 @inject IStringLocalizer<SharedResource> Localizer
 
 @if (SignInManager.IsSignedIn(User))
 {
-    var name = User.Identity?.Name?.Split('@')[0] ?? "User";
-    <span class="nav-user">@name</span>
-
-    if (User.IsInRole("Admin"))
-    {
-        <a class="nav-link" asp-page="/AdminDashboard">@Localizer["NavAdminDashboard"]</a>
-    }
-    else if (User.IsInRole("StationAdmin"))
-    {
-        <a class="nav-link" asp-page="/StationDashboard">@Localizer["MyStation"]</a>
-    }
-    else
-    {
-        <a class="nav-link" asp-page="/MyBookingsPage">@Localizer["NavMyBookings"]</a>
-    }
-
-    <form class="d-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-        <button type="submit" class="nav-link border-0 bg-transparent">@Localizer["NavLogout"]</button>
-    </form>
+    var email = User.Identity?.Name ?? "";
+    <div class="dropdown">
+        <button class="nav-user dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            @email
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            @if (User.IsInRole("Admin"))
+            {
+                <li><a class="dropdown-item" asp-page="/AdminDashboard">@Localizer["NavAdminDashboard"]</a></li>
+            }
+            else if (User.IsInRole("StationAdmin"))
+            {
+                <li><a class="dropdown-item" asp-page="/StationDashboard">@Localizer["MyStation"]</a></li>
+            }
+            else
+            {
+                <li><a class="dropdown-item" asp-page="/MyBookingsPage">@Localizer["NavMyBookings"]</a></li>
+            }
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                    <button type="submit" class="dropdown-item">@Localizer["NavLogout"]</button>
+                </form>
+            </li>
+        </ul>
+    </div>
 }
 else
 {

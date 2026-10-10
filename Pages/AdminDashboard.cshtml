@@ -3,181 +3,146 @@
 @model WashZone.Pages.AdminDashboardModel
 @{
     ViewData["Title"] = "Admin Dashboard";
-}
 
-<h1>@Localizer["AdminTitle"]</h1>
-<h3 class="mb-4">@Localizer["AdminSubtitle"]</h3>
-
-<div class="mb-3">
-    <a asp-page="/AdminStations" class="btn btn-dark me-2">@Localizer["ManageStations"]</a>
-    <a asp-page="/AdminPackages" class="btn btn-dark">@Localizer["ManagePackages"]</a>
-</div>
-
-<div class="mb-3">
-    <div>
-        <form method="get" class="d-flex gap-3">
-            <div>
-                <label class="form-label my-auto mb-2">@Localizer["SortByDate"]</label>
-                <select name="sortOrder" class="form-select w-auto" onchange="this.form.submit()">
-                    <option value="asc" selected="@(Model.SortOrder == "asc" ? "selected" : null)">@Localizer["OldestFirst"]</option>
-                    <option value="desc" selected="@(Model.SortOrder == "desc" ? "selected" : null)">@Localizer["NewestFirst"]</option>
-                </select>
-            </div>
-            <div>
-                <label class="form-label my-auto mb-2">@Localizer["FilterByStation"]</label>
-                <select name="stationId" class="form-select w-auto" onchange="this.form.submit()">
-                    <option value="">@Localizer["AllStations"]</option>
-                    @foreach (var station in Model.Stations)
-                    {
-                        <option value="@station.Id" selected="@(Model.SelectedStationId == station.Id ? "selected" : null)">@station.Name</option>
-                    }
-                </select>
-            </div>
-            <div>
-                <label class="form-label">@Localizer["FilterByPackage"]</label>
-                <select name="packageId" class="form-select w-auto" onchange="this.form.submit()">
-                    <option value="">@Localizer["AllPackages"]</option>
-                    @foreach (var package in Model.Packages)
-                    {
-                        <option value="@package.Id" selected="@(Model.SelectedPackageId == package.Id ? "selected" : null)">@package.Name</option>
-                    }
-                </select>
-            </div>
-            <div>
-                <label class="form-label">@Localizer["FilterByRegNumber"]</label>
-                <input type="text" name="regNumber" value="@Model.RegNumberFilter" class="form-control w-auto" placeholder="@Localizer["EnterRegNumberPlaceholder"]" onchange="this.form.submit()" />
-            </div>
-            <div>
-                <label class="form-label">@Localizer["FilterByPhone"]</label>
-                <input type="text" name="phoneNumber" value="@Model.PhoneNumberFilter" class="form-control w-auto" placeholder="@Localizer["EnterPhonePlaceholder"]" onchange="this.form.submit()" />
-            </div>
-            <div>
-                <label class="form-label d-block">&nbsp;</label>
-                <a href="/AdminDashboard" class="btn btn-outline-dark">@Localizer["ResetFilters"]</a>
-            </div>
-
-        </form>
-    </div>
-</div>
-
-
-<table class="table booking-table">
-    <thead>
-        <tr>
-            <th>@Localizer["ColDate"]</th>
-            <th>@Localizer["ColTime"]</th>
-            <th>@Localizer["ColUser"]</th>
-            <th>@Localizer["ColPhone"]</th>
-            <th>@Localizer["ColStation"]</th>
-            <th>@Localizer["ColPackage"]</th>
-            <th>@Localizer["ColRegNumber"]</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var booking in Model.Bookings)
+    var sortSelect = new SelectModel
+    {
+        Name = "sortOrder",
+        Label = Localizer["SortByDate"].Value,
+        OnChange = "this.form.submit()",
+        Class = "mb-0",
+        Options = new List<SelectOptionModel>
         {
-            <tr>
-                <td>@booking.Date.ToString("MM/dd/yyyy")</td>
-                <td>@booking.Date.ToString("HH:mm")</td>
-                <td>@booking.User?.UserName</td>
-                <td>@booking.User?.PhoneNumber</td>
-                <td>@booking.Station?.Name</td>
-                <td>@booking.Package?.Name</td>
-                <td>@booking.RegistrationNumber</td>
-                <td>
-                    <div class="d-flex justify-content-center gap-3">
-                        <a asp-page="/EditBooking" asp-route-id="@booking.Id" class="btn btn-outline-dark btn-sm d-inline">@Localizer["Edit"]</a>
-                        <form method="post">
-                            <input type="hidden" name="id" value="@booking.Id" />
-                            <button type="submit" asp-page-handler="Delete" class="delete-button btn-sm">@Localizer["Delete"]</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
+            new() { Value = "asc", Text = Localizer["OldestFirst"].Value, Selected = Model.SortOrder == "asc" },
+            new() { Value = "desc", Text = Localizer["NewestFirst"].Value, Selected = Model.SortOrder == "desc" }
         }
-    </tbody>
-</table>
+    };
 
-@if (TempData["SuccessMessage"] != null) //popupwindow for success message
-{
-    <div id="successModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>@TempData["SuccessMessage"]</p>
-        </div>
+    var stationSelect = new SelectModel
+    {
+        Name = "stationId",
+        Label = Localizer["FilterByStation"].Value,
+        OnChange = "this.form.submit()",
+        Class = "mb-0",
+        Options = new List<SelectOptionModel> { new() { Value = "", Text = Localizer["AllStations"].Value } }
+    };
+    stationSelect.Options.AddRange(Model.Stations.Select(s => new SelectOptionModel
+    {
+        Value = s.Id.ToString(),
+        Text = s.Name,
+        Selected = Model.SelectedStationId == s.Id
+    }));
+
+    var packageSelect = new SelectModel
+    {
+        Name = "packageId",
+        Label = Localizer["FilterByPackage"].Value,
+        OnChange = "this.form.submit()",
+        Class = "mb-0",
+        Options = new List<SelectOptionModel> { new() { Value = "", Text = Localizer["AllPackages"].Value } }
+    };
+    packageSelect.Options.AddRange(Model.Packages.Select(p => new SelectOptionModel
+    {
+        Value = p.Id.ToString(),
+        Text = p.Name,
+        Selected = Model.SelectedPackageId == p.Id
+    }));
+
+    var regField = new FieldModel
+    {
+        Name = "regNumber",
+        Label = Localizer["FilterByRegNumber"].Value,
+        Value = Model.RegNumberFilter,
+        Placeholder = Localizer["EnterRegNumberPlaceholder"].Value,
+        OnChange = "this.form.submit()",
+        Class = "mb-0"
+    };
+
+    var phoneField = new FieldModel
+    {
+        Name = "phoneNumber",
+        Label = Localizer["FilterByPhone"].Value,
+        Value = Model.PhoneNumberFilter,
+        Placeholder = Localizer["EnterPhonePlaceholder"].Value,
+        OnChange = "this.form.submit()",
+        Class = "mb-0"
+    };
+
+    var stationsBtn = new ButtonModel { Text = Localizer["ManageStations"].Value, Page = "/AdminStations", Variant = "dark" };
+    var packagesBtn = new ButtonModel { Text = Localizer["ManagePackages"].Value, Page = "/AdminPackages", Variant = "dark" };
+    var resetBtn = new ButtonModel { Text = Localizer["ResetFilters"].Value, Href = "/AdminDashboard", Variant = "outline", Class = "btn-field" };
+}
+
+<section class="container py-6">
+    <div class="section-sub">WashZone</div>
+    <h1 class="section-head mb-2">@Localizer["AdminTitle"]</h1>
+    <p class="text-muted mb-4">@Localizer["AdminSubtitle"]</p>
+
+    <div class="d-flex gap-2 mb-4">
+        <partial name="_Btn" model="stationsBtn" />
+        <partial name="_Btn" model="packagesBtn" />
     </div>
 
-    <script>
-
-        window.onload = function () {
-            document.getElementById('successModal').style.display = 'block';
-        };
-
-        document.querySelector('.close').onclick = function () {
-            document.getElementById('successModal').style.display = 'none';
-        };
-    </script>
-
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 50%;
-            text-align: center;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-    </style>
-}
-<style>
-    .delete-button {
-        background-color: #C41E3A;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        cursor: pointer;
-        border-radius: 5px;
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
     }
 
-        .delete-button:hover {
-            background-color: darkred;
-        }
-</style>
-<style>
-    .booking-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
+    <form method="get" class="row g-3 align-items-end mb-4">
+        <div class="col-6 col-md-4 col-xl">
+            <partial name="_Select" model="sortSelect" />
+        </div>
+        <div class="col-6 col-md-4 col-xl">
+            <partial name="_Select" model="stationSelect" />
+        </div>
+        <div class="col-6 col-md-4 col-xl">
+            <partial name="_Select" model="packageSelect" />
+        </div>
+        <div class="col-6 col-md-4 col-xl">
+            <partial name="_Field" model="regField" />
+        </div>
+        <div class="col-6 col-md-4 col-xl">
+            <partial name="_Field" model="phoneField" />
+        </div>
+        <div class="col-auto">
+            <partial name="_Btn" model="resetBtn" />
+        </div>
+    </form>
 
-        .booking-table th, .booking-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .booking-table th {
-            background-color: #f4f4f4;
-        }
-</style>
-
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Localizer["ColDate"]</th>
+                <th>@Localizer["ColTime"]</th>
+                <th>@Localizer["ColUser"]</th>
+                <th>@Localizer["ColPhone"]</th>
+                <th>@Localizer["ColStation"]</th>
+                <th>@Localizer["ColPackage"]</th>
+                <th>@Localizer["ColRegNumber"]</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var booking in Model.Bookings)
+            {
+                <tr>
+                    <td>@booking.Date.ToString("yyyy-MM-dd")</td>
+                    <td>@booking.Date.ToString("HH:mm")</td>
+                    <td>@booking.User?.UserName</td>
+                    <td>@booking.User?.PhoneNumber</td>
+                    <td>@booking.Station?.Name</td>
+                    <td>@booking.Package?.Name</td>
+                    <td>@booking.RegistrationNumber</td>
+                    <td>
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-page="/EditBooking" asp-route-id="@booking.Id" class="btn btn-outline btn-sm">@Localizer["Edit"]</a>
+                            <form method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@booking.Id" />
+                                <button type="submit" asp-page-handler="Delete" class="btn btn-danger btn-sm">@Localizer["Delete"]</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

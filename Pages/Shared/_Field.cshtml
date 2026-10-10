@@ -1,0 +1,17 @@
+@model FieldModel
+
+<div class="field @Model.Class">
+    @if (!string.IsNullOrEmpty(Model.Label))
+    {
+        <label class="form-label" for="@Model.Name">@Model.Label</label>
+    }
+    <input type="@Model.Type"
+           name="@Model.Name"
+           id="@Model.Name"
+           value="@Model.Value"
+           placeholder="@Model.Placeholder"
+           autocomplete="@Model.Autocomplete"
+           onchange="@Model.OnChange"
+           class="form-control"
+           @(Model.Required ? "required" : null) />
+</div>

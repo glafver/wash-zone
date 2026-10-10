@@ -1,0 +1,27 @@
+@model ButtonModel
+
+@{
+    var sizeClass = Model.Size switch
+    {
+        "sm" => "btn-sm",
+        "lg" => "btn-lg",
+        _ => ""
+    };
+    var classes = $"btn btn-{Model.Variant} {sizeClass} {Model.Class}".Trim();
+}
+
+@if (!string.IsNullOrEmpty(Model.Page))
+{
+    if (Model.RouteId.HasValue)
+    {
+        <a asp-page="@Model.Page" asp-route-id="@Model.RouteId.Value" class="@classes">@Model.Text</a>
+    }
+    else
+    {
+        <a asp-page="@Model.Page" class="@classes">@Model.Text</a>
+    }
+}
+else
+{
+    <a href="@(string.IsNullOrEmpty(Model.Href) ? "#" : Model.Href)" class="@classes">@Model.Text</a>
+}
