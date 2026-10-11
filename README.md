@@ -66,7 +66,7 @@ cp .env.example .env
 Edit `.env` and set your Supabase connection string:
 
 ```
-ConnectionStrings__DefaultConnection=postgresql://postgres.YOUR-PROJECT-REF:YOUR-DB-PASSWORD@aws-0-YOUR-REGION.pooler.supabase.com:5432/postgres
+ConnectionStrings__DefaultConnection=Host=aws-0-YOUR-REGION.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.YOUR-PROJECT-REF;Password=YOUR-DB-PASSWORD;SSL Mode=Require
 ```
 
 > Use the **Session pooler** (port `5432`): it's IPv4 (the direct `db.<ref>.supabase.co:5432` connection is IPv6-only on the free tier) and supports EF Core migrations (the "Transaction pooler" on `6543` does not).
@@ -124,7 +124,7 @@ gcloud run deploy washzone \
   --platform managed \
   --region us-central1 \
   --allow-unauthenticated \
-  --set-env-vars "ConnectionStrings__DefaultConnection=postgresql://postgres.YOUR-REF:YOUR-PASSWORD@aws-0-YOUR-REGION.pooler.supabase.com:5432/postgres"
+  --set-env-vars "ConnectionStrings__DefaultConnection=Host=aws-0-YOUR-REGION.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.YOUR-REF;Password=YOUR-PASSWORD;SSL Mode=Require"
 ```
 
 - `--allow-unauthenticated` makes the site public (needed for a portfolio demo).
@@ -191,7 +191,7 @@ If you prefer to run the app with `dotnet run`, point it at your Supabase databa
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "postgresql://postgres.YOUR-PROJECT-REF:YOUR-DB-PASSWORD@aws-0-YOUR-REGION.pooler.supabase.com:5432/postgres"
+    "DefaultConnection": "Host=aws-0-YOUR-REGION.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.YOUR-PROJECT-REF;Password=YOUR-DB-PASSWORD;SSL Mode=Require"
   }
 }
 ```
