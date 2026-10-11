@@ -134,6 +134,10 @@ namespace WashZone.Data
             SeedUsers(userManager, roleManager, database).Wait();
         }
 
+        // A "naive" now (no timezone kind) for seeding booking dates. Booking times are
+        // stored as `timestamp without time zone`, which requires a DateTimeKind of Unspecified.
+        private static DateTime NaiveNow => DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
+
         private static async Task SeedUsers(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext database)
         {
             //Seed roles data to database
@@ -242,24 +246,24 @@ namespace WashZone.Data
                 var bookings = new List<Booking>
                     {
                         // Bookings for user1
-                        new Booking { UserId = userIds[0], RegistrationNumber = "ABC123", PackageId = 1, StationId = 1, DurationMinutes = 30, Date = DateTime.UtcNow.AddDays(2) },
-                        new Booking { UserId = userIds[0],RegistrationNumber = "ABC123", PackageId = 2, StationId = 3, DurationMinutes = 60, Date = DateTime.UtcNow.AddDays(5) },
-                        new Booking { UserId = userIds[0], RegistrationNumber = "ABC123",PackageId = 3, StationId = 5, DurationMinutes = 90, Date = DateTime.UtcNow.AddDays(7) },
+                        new Booking { UserId = userIds[0], RegistrationNumber = "ABC123", PackageId = 1, StationId = 1, DurationMinutes = 30, Date = NaiveNow.AddDays(2) },
+                        new Booking { UserId = userIds[0],RegistrationNumber = "ABC123", PackageId = 2, StationId = 3, DurationMinutes = 60, Date = NaiveNow.AddDays(5) },
+                        new Booking { UserId = userIds[0], RegistrationNumber = "ABC123",PackageId = 3, StationId = 5, DurationMinutes = 90, Date = NaiveNow.AddDays(7) },
 
                         // Bookings for user2
-                        new Booking { UserId = userIds[1],RegistrationNumber = "XYZ789", PackageId = 2, StationId = 2, DurationMinutes = 60, Date = DateTime.UtcNow.AddDays(3) },
-                        new Booking { UserId = userIds[1],RegistrationNumber = "XYZ789", PackageId = 4, StationId = 4, DurationMinutes = 120, Date = DateTime.UtcNow.AddDays(6) },
-                        new Booking { UserId = userIds[1],RegistrationNumber = "TESLA", PackageId = 5, StationId = 6, DurationMinutes = 180, Date = DateTime.UtcNow.AddDays(9) },
+                        new Booking { UserId = userIds[1],RegistrationNumber = "XYZ789", PackageId = 2, StationId = 2, DurationMinutes = 60, Date = NaiveNow.AddDays(3) },
+                        new Booking { UserId = userIds[1],RegistrationNumber = "XYZ789", PackageId = 4, StationId = 4, DurationMinutes = 120, Date = NaiveNow.AddDays(6) },
+                        new Booking { UserId = userIds[1],RegistrationNumber = "TESLA", PackageId = 5, StationId = 6, DurationMinutes = 180, Date = NaiveNow.AddDays(9) },
 
                         // Bookings for user3
-                        new Booking { UserId = userIds[2],RegistrationNumber = "LMN321", PackageId = 3, StationId = 3, DurationMinutes = 90, Date = DateTime.UtcNow.AddDays(4) },
-                        new Booking { UserId = userIds[2],RegistrationNumber = "LMN321", PackageId = 1, StationId = 1, DurationMinutes = 30, Date = DateTime.UtcNow.AddDays(8) },
-                        new Booking { UserId = userIds[2],RegistrationNumber = "LMN321", PackageId = 5, StationId = 7, DurationMinutes = 180, Date = DateTime.UtcNow.AddDays(10) },
+                        new Booking { UserId = userIds[2],RegistrationNumber = "LMN321", PackageId = 3, StationId = 3, DurationMinutes = 90, Date = NaiveNow.AddDays(4) },
+                        new Booking { UserId = userIds[2],RegistrationNumber = "LMN321", PackageId = 1, StationId = 1, DurationMinutes = 30, Date = NaiveNow.AddDays(8) },
+                        new Booking { UserId = userIds[2],RegistrationNumber = "LMN321", PackageId = 5, StationId = 7, DurationMinutes = 180, Date = NaiveNow.AddDays(10) },
 
                         // Bookings for user4
-                        new Booking { UserId = userIds[3],RegistrationNumber = "DEF456", PackageId = 4, StationId = 4, DurationMinutes = 120, Date = DateTime.UtcNow.AddDays(1) },
-                        new Booking { UserId = userIds[3],RegistrationNumber = "SUPERCAR", PackageId = 2, StationId = 2, DurationMinutes = 60, Date = DateTime.UtcNow.AddDays(5) },
-                        new Booking { UserId = userIds[3],RegistrationNumber = "SUPERCAR", PackageId = 3, StationId = 8, DurationMinutes = 90, Date = DateTime.UtcNow.AddDays(7) }
+                        new Booking { UserId = userIds[3],RegistrationNumber = "DEF456", PackageId = 4, StationId = 4, DurationMinutes = 120, Date = NaiveNow.AddDays(1) },
+                        new Booking { UserId = userIds[3],RegistrationNumber = "SUPERCAR", PackageId = 2, StationId = 2, DurationMinutes = 60, Date = NaiveNow.AddDays(5) },
+                        new Booking { UserId = userIds[3],RegistrationNumber = "SUPERCAR", PackageId = 3, StationId = 8, DurationMinutes = 90, Date = NaiveNow.AddDays(7) }
                     };
 
                 database.Bookings.AddRange(bookings);

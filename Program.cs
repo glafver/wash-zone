@@ -8,6 +8,11 @@ using WashZone.Models;
 using WashZone.Services;
 using System.Globalization;
 
+// Booking times are naive local wall-clock times (like SQL Server's `datetime2`),
+// so map `DateTime` to PostgreSQL `timestamp without time zone` (instead of the
+// Npgsql 6+ default `timestamp with time zone`, which would shift the time).
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Connection string (set via environment variable or appsettings.Development.json locally,
@@ -18,9 +23,9 @@ var connectionString =
 		"Connection string 'DefaultConnection' is not configured. " +
 		"Set ConnectionStrings__DefaultConnection in your environment or appsettings.Development.json.");
 
-// DB (retries transient SQL errors so the app can wait for SQL Server to become ready in Docker)
+// DB (retries transient connection errors so the app can wait for PostgreSQL to become ready)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-	options.UseSqlServer(connectionString, sql => sql.EnableRetryOnFailure()));
+	options.UseNpgsql(connectionString, npgsql => npgsql.EnableRetryOnFailure()));
 
 // Identity
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
