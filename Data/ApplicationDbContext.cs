@@ -1,15 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WashZone.Models;
 
 namespace WashZone.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext, IDataProtectionKeyContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
+
+        // Used by AddDataProtection().PersistKeysToDbContext() to store login-cookie
+        // signing keys in the database (so they survive restarts / Cloud Run cold starts).
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = default!;
 
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Station> Stations { get; set; }

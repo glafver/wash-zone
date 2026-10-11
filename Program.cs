@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,10 +38,10 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 
 builder.Services.AddRazorPages();
 
-// Persist Data Protection keys to a mounted volume so login cookies survive
-// container restarts (otherwise each restart regenerates keys and logs users out).
+// Persist Data Protection keys in the database (Supabase) so login cookies survive
+// restarts and work on ephemeral hosts like Cloud Run (where the filesystem is wiped).
 builder.Services.AddDataProtection()
-	.PersistKeysToFileSystem(new DirectoryInfo("/app/keys"))
+	.PersistKeysToDbContext<ApplicationDbContext>()
 	.SetApplicationName("WashZone");
 
 // Localization (English + Swedish)
@@ -89,6 +90,17 @@ else
 	app.UseExceptionHandler("/Error");
 	app.UseHsts();
 }
+
+// Trust the X-Forwarded-* headers set by Google Cloud Run's load balancer so the
+// app sees the correct scheme (https) and client IP. Cloud Run's proxy IPs are
+// dynamic, so clear the default loopback-only trust lists.
+var forwardedHeadersOptions = new ForwardedHeadersOptions
+{
+	ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+forwardedHeadersOptions.KnownNetworks.Clear();
+forwardedHeadersOptions.KnownProxies.Clear();
+app.UseForwardedHeaders(forwardedHeadersOptions);
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

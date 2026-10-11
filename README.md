@@ -95,20 +95,61 @@ docker compose down
 
 ---
 
-## 🚀 Deploying (Google Cloud VM + Supabase)
+## 🚀 Deploying (Google Cloud Run + Supabase)
 
-The database lives on Supabase (free, managed), so the VM only needs to run the lightweight ASP.NET Core app — a free `e2-micro` instance is plenty.
+The database lives on Supabase (free, managed), so the app is stateless and runs perfectly on **Cloud Run** — no server to maintain, HTTPS built in, and a generous free tier.
+
+### 1. Prerequisites
+
+- A Supabase project with the **Session pooler** connection string (see [Getting started](#-getting-started-docker--recommended)).
+- `gcloud` CLI installed and authenticated (`gcloud auth login`).
+
+### 2. Build and push the image
+
+```bash
+# (once) enable APIs + create an Artifact Registry repo
+gcloud services enable run.googleapis.com artifactregistry.googleapis.com
+gcloud artifacts repositories create washzone \
+  --repository-format=docker --location=us-central1
+
+# build (via Cloud Build) and push the image
+gcloud builds submit --tag us-central1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/washzone/washzone:latest
+```
+
+### 3. Deploy to Cloud Run
+
+```bash
+gcloud run deploy washzone \
+  --image us-central1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/washzone/washzone:latest \
+  --platform managed \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --set-env-vars "ConnectionStrings__DefaultConnection=postgresql://postgres.YOUR-REF:YOUR-PASSWORD@aws-0-YOUR-REGION.pooler.supabase.com:5432/postgres"
+```
+
+- `--allow-unauthenticated` makes the site public (needed for a portfolio demo).
+- Put Cloud Run and Supabase in the same geographic region to keep latency low.
+
+The command prints the public HTTPS URL (`https://washzone-<hash>.run.app`). Migrations and seed data run automatically on first start.
+
+### Updating
+
+Rebuild and redeploy after code changes:
+
+```bash
+gcloud builds submit --tag us-central1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/washzone/washzone:latest
+gcloud run deploy washzone \
+  --image us-central1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/washzone/washzone:latest \
+  --region us-central1
+```
+
+---
+
+## 💻 Alternative: single VM + Docker
+
+If you prefer a VM, the app alone is lightweight (no SQL Server), so a free `e2-micro` is enough.
 
 ### 1. Create the VM
-
-Google Cloud Console → Compute Engine → Create instance:
-
-- **Name:** `wash-zone`
-- **Machine type:** `e2-micro` (free tier)
-- **Boot disk:** Ubuntu 22.04 LTS
-- **Firewall:** allow TCP `8080`
-
-Or via `gcloud`:
 
 ```bash
 gcloud compute instances create wash-zone \
@@ -121,15 +162,13 @@ gcloud compute firewall-rules create allow-washzone \
   --allow tcp:8080 --target-tags=washzone
 ```
 
-### 2. Install Docker on the VM
+### 2. Install Docker
 
 ```bash
 gcloud compute ssh wash-zone --zone=us-central1-a
 sudo apt update && sudo apt install -y docker.io docker-compose-plugin
-sudo usermod -aG docker $USER
+sudo usermod -aG docker $USER   # log out and back in
 ```
-
-Log out and back in for the `docker` group to apply.
 
 ### 3. Deploy
 
@@ -137,48 +176,11 @@ Log out and back in for the `docker` group to apply.
 git clone https://github.com/glafver/wash-zone.git
 cd wash-zone
 cp .env.example .env
-# edit .env → set ConnectionStrings__DefaultConnection to your Supabase connection string
+# edit .env → ConnectionStrings__DefaultConnection (Supabase Session pooler)
 docker compose up -d --build
 ```
 
-### 4. Open the app
-
-```
-http://<VM_EXTERNAL_IP>:8080
-```
-
-Get the public IP:
-
-```bash
-gcloud compute instances describe wash-zone --zone=us-central1-a \
-  --format='get(networkInterfaces[0].accessConfigs[0].natIP)'
-```
-
-### Optional: HTTPS + custom domain
-
-Add a Caddy reverse proxy to `docker-compose.yml`:
-
-```yaml
-  caddy:
-    image: caddy:2
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-    depends_on:
-      - washzone
-```
-
-`Caddyfile`:
-
-```Caddyfile
-yourdomain.com {
-    reverse_proxy washzone:8080
-}
-```
-
-Then run `docker compose up -d` again.
+Open `http://<VM_EXTERNAL_IP>:8080`.
 
 ---
 
