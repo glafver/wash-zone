@@ -55,7 +55,7 @@ The app runs in a single container; the database is a free hosted **PostgreSQL**
 
 1. Sign up / log in at [supabase.com](https://supabase.com).
 2. Create a new project and choose a region close to you.
-3. In **Project Settings → Database**, copy the **direct connection string** (port `5432`).
+3. In **Project Settings → Database**, copy the **Session pooler** connection string (port `5432`, host `*.pooler.supabase.com`).
 
 ### 2. Configure environment variables
 
@@ -66,10 +66,10 @@ cp .env.example .env
 Edit `.env` and set your Supabase connection string:
 
 ```
-ConnectionStrings__DefaultConnection=postgresql://postgres.YOUR-PROJECT-REF:YOUR-DB-PASSWORD@db.YOUR-PROJECT-REF.supabase.co:5432/postgres
+ConnectionStrings__DefaultConnection=postgresql://postgres.YOUR-PROJECT-REF:YOUR-DB-PASSWORD@aws-0-YOUR-REGION.pooler.supabase.com:5432/postgres
 ```
 
-> Use the **direct connection** (port `5432`), not the "Transaction pooler" (`6543`), so EF Core migrations run correctly.
+> Use the **Session pooler** (port `5432`): it's IPv4 (the direct `db.<ref>.supabase.co:5432` connection is IPv6-only on the free tier) and supports EF Core migrations (the "Transaction pooler" on `6543` does not).
 
 The `.env` file is git-ignored and never committed.
 
@@ -189,7 +189,7 @@ If you prefer to run the app with `dotnet run`, point it at your Supabase databa
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "postgresql://postgres.YOUR-PROJECT-REF:YOUR-DB-PASSWORD@db.YOUR-PROJECT-REF.supabase.co:5432/postgres"
+    "DefaultConnection": "postgresql://postgres.YOUR-PROJECT-REF:YOUR-DB-PASSWORD@aws-0-YOUR-REGION.pooler.supabase.com:5432/postgres"
   }
 }
 ```
