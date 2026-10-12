@@ -36,6 +36,10 @@ html {
     font-size: 15px;
     height: 100%;
     overflow-x: hidden;
+    /* Reserve space for the vertical scrollbar on every page so the centered
+       content (navbar, container) doesn't jump sideways when the scrollbar
+       appears/disappears on short vs long pages. */
+    scrollbar-gutter: stable;
 }
 
 body {
