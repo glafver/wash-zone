@@ -12,7 +12,7 @@
 <h1 class="section-head mb-4">@Localizer["EditTitle"]</h1>
 
 <form method="post" class="booking-form" id="bookingForm">
-    <input type="hidden" asp-for="Booking.Id" />
+    <input type="hidden" asp-for="BookingId" />
     <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
     <label class="form-label">@Localizer["BookStation"]</label>
@@ -63,7 +63,7 @@
 </section>
 
 <script>
-    const bookingId = @Model.Booking.Id;
+    const bookingId = @Model.BookingId;
     let selectedSlot = '@Model.SelectedSlot';
 
     function parseSlot(s) {

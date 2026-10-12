@@ -23,8 +23,12 @@ namespace WashZone.Pages
             _stationService = stationService;
         }
 
-        [BindProperty]
+        // Display-only copy of the booking. NOT model-bound: binding the entity would
+        // fail validation on the required User/Package/Station navigation properties.
         public Booking Booking { get; set; } = new Booking();
+
+        [BindProperty]
+        public int BookingId { get; set; }
 
         public List<Station> Stations { get; set; } = new List<Station>();
         public List<Package> Packages { get; set; } = new List<Package>();
@@ -76,6 +80,7 @@ namespace WashZone.Pages
             }
 
             Booking = booking;
+            BookingId = booking.Id;
 
             // Pre-fill the form with the current booking data
             SelectedStationId = Booking.StationId;
@@ -199,7 +204,7 @@ namespace WashZone.Pages
                 return Page();
             }
 
-            var result = await _bookingService.UpdateBookingAsync(Booking.Id, userId, isAdmin, adminStationId, new BookingInput
+            var result = await _bookingService.UpdateBookingAsync(BookingId, userId, isAdmin, adminStationId, new BookingInput
             {
                 StationId = SelectedStationId,
                 PackageId = SelectedPackageId,
