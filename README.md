@@ -22,7 +22,7 @@ Users can browse car wash stations on a map, view available wash packages and th
 - Manage stations and packages (admin CRUD, assign station admins)
 - Bilingual UI (English / Swedish) with a language switcher
 - Seeded sample data (stations, packages, features, users, bookings)
-- CI build pipeline (GitHub Actions)
+- CI/CD pipeline: build check + auto-deploy to Cloud Run (GitHub Actions)
 
 ## 🧑‍💻 Demo accounts
 
@@ -99,6 +99,8 @@ docker compose down
 
 The database lives on Supabase (free, managed), so the app is stateless and runs perfectly on **Cloud Run** — no server to maintain, HTTPS built in, and a generous free tier.
 
+After the one-time setup below, deploys happen automatically on every push to `main` (see [CI/CD](#-cicd)).
+
 ### 1. Prerequisites
 
 - A Supabase project with the **Session pooler** connection string (see [Getting started](#-getting-started-docker--recommended)).
@@ -110,19 +112,19 @@ The database lives on Supabase (free, managed), so the app is stateless and runs
 # (once) enable APIs + create an Artifact Registry repo
 gcloud services enable run.googleapis.com artifactregistry.googleapis.com
 gcloud artifacts repositories create washzone \
-  --repository-format=docker --location=us-central1
+  --repository-format=docker --location=europe-west1
 
 # build (via Cloud Build) and push the image
-gcloud builds submit --tag us-central1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/washzone/washzone:latest
+gcloud builds submit --tag europe-west1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/washzone/washzone:latest
 ```
 
 ### 3. Deploy to Cloud Run
 
 ```bash
 gcloud run deploy washzone \
-  --image us-central1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/washzone/washzone:latest \
+  --image europe-west1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/washzone/washzone:latest \
   --platform managed \
-  --region us-central1 \
+  --region europe-west1 \
   --allow-unauthenticated \
   --set-env-vars "ConnectionStrings__DefaultConnection=Host=aws-0-YOUR-REGION.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.YOUR-REF;Password=YOUR-PASSWORD;SSL Mode=Require"
 ```
@@ -134,53 +136,14 @@ The command prints the public HTTPS URL (`https://washzone-<hash>.run.app`). Mig
 
 ### Updating
 
-Rebuild and redeploy after code changes:
+Push to `main` — GitHub Actions rebuilds and redeploys automatically. To deploy manually:
 
 ```bash
-gcloud builds submit --tag us-central1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/washzone/washzone:latest
+gcloud builds submit --tag europe-west1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/washzone/washzone:latest
 gcloud run deploy washzone \
-  --image us-central1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/washzone/washzone:latest \
-  --region us-central1
+  --image europe-west1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/washzone/washzone:latest \
+  --region europe-west1
 ```
-
----
-
-## 💻 Alternative: single VM + Docker
-
-If you prefer a VM, the app alone is lightweight (no SQL Server), so a free `e2-micro` is enough.
-
-### 1. Create the VM
-
-```bash
-gcloud compute instances create wash-zone \
-  --zone=us-central1-a \
-  --machine-type=e2-micro \
-  --image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud \
-  --tags=washzone
-
-gcloud compute firewall-rules create allow-washzone \
-  --allow tcp:8080 --target-tags=washzone
-```
-
-### 2. Install Docker
-
-```bash
-gcloud compute ssh wash-zone --zone=us-central1-a
-sudo apt update && sudo apt install -y docker.io docker-compose-plugin
-sudo usermod -aG docker $USER   # log out and back in
-```
-
-### 3. Deploy
-
-```bash
-git clone https://github.com/glafver/wash-zone.git
-cd wash-zone
-cp .env.example .env
-# edit .env → ConnectionStrings__DefaultConnection (Supabase Session pooler)
-docker compose up -d --build
-```
-
-Open `http://<VM_EXTERNAL_IP>:8080`.
 
 ---
 
@@ -227,7 +190,8 @@ dotnet tool run dotnet-ef migrations add <MigrationName>
 
 ```
 WashZone/
-├── .github/workflows/ci.yml      # CI build pipeline
+├── .github/workflows/ci.yml      # CI build check
+├── .github/workflows/deploy.yml  # auto-deploy to Cloud Run
 ├── docker-compose.yml            # the app container
 ├── Dockerfile                    # multi-stage .NET build
 ├── .env.example                  # environment variable template
@@ -266,9 +230,43 @@ WashZone/
 
 ---
 
-## 🔧 CI
+## 🔧 CI/CD
 
-GitHub Actions runs a build on every push and pull request to `main` (`.github/workflows/ci.yml`).
+GitHub Actions runs two workflows:
+
+| Workflow | File | When |
+| -------- | ---- | ---- |
+| Build check | `.github/workflows/ci.yml` | every push and pull request |
+| Deploy to Cloud Run | `.github/workflows/deploy.yml` | every push to `main` |
+
+The deploy workflow builds the Docker image, pushes it to Artifact Registry and deploys to Cloud Run automatically. It authenticates with a service account whose key is stored in the `GCP_SA_KEY` repository secret.
+
+### One-time setup
+
+Create a service account with the required roles and store its key as a GitHub secret:
+
+```bash
+gcloud iam service-accounts create washzone-deploy
+
+gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT \
+  --member="serviceAccount:washzone-deploy@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com" \
+  --role="roles/run.admin"
+
+gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT \
+  --member="serviceAccount:washzone-deploy@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com" \
+  --role="roles/artifactregistry.admin"
+
+gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT \
+  --member="serviceAccount:washzone-deploy@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com" \
+  --role="roles/cloudbuild.builds.editor"
+
+gcloud iam service-accounts keys create key.json \
+  --iam-account="washzone-deploy@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com"
+```
+
+Then add the contents of `key.json` as the `GCP_SA_KEY` secret (repo → Settings → Secrets and variables → Actions).
+
+> The project id, region and service name are set at the top of `.github/workflows/deploy.yml` — change them if yours differ.
 
 ---
 
