@@ -1,6 +1,6 @@
 # WashZone — Car Wash Booking Application
 
-A full-stack car wash booking system built with **ASP.NET Core 8 Razor Pages**, **Entity Framework Core**, **PostgreSQL (Supabase)**, **ASP.NET Core Identity** and **Docker**.
+A car wash booking system that enables users to schedule car wash appointments. The system provides authentication, booking management, and an administrative interface to oversee operations.
 
 Users can browse car wash stations on a map, view available wash packages and their features, and book a wash. An admin dashboard gives an overview of all bookings.
 
@@ -38,12 +38,13 @@ Seeded on first start:
 
 ## 🛠 Tech stack
 
-- .NET 8 / ASP.NET Core Razor Pages
-- Entity Framework Core 8 (code-first migrations, Npgsql)
-- PostgreSQL (hosted on Supabase)
+- C# / .NET 8 (ASP.NET Core Razor Pages)
+- Entity Framework Core 8 (code-first migrations)
 - ASP.NET Core Identity
+- PostgreSQL (hosted on Supabase)
+- Bootstrap (UI)
 - Leaflet + OpenStreetMap (maps)
-- Docker
+- Docker / Google Cloud Run
 
 ---
 
