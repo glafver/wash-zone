@@ -36,9 +36,10 @@ html {
     font-size: 15px;
     height: 100%;
     overflow-x: hidden;
-    /* Reserve space for the vertical scrollbar on every page so the centered
-       content (navbar, container) doesn't jump sideways when the scrollbar
-       appears/disappears on short vs long pages. */
+    /* Always keep a vertical scrollbar so the centered content (navbar, container)
+       doesn't jump sideways between short and long pages. `overflow-y: scroll`
+       works everywhere; `scrollbar-gutter: stable` is the cleaner modern variant. */
+    overflow-y: scroll;
     scrollbar-gutter: stable;
 }
 
