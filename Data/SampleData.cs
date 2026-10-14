@@ -240,6 +240,25 @@ namespace WashZone.Data
                 }
             }
 
+            //Seed a dedicated demo user (pre-filled) so anyone can log in and
+            //explore the app as a regular user.
+            //email: demo@washzone.se
+            //password: Demo123!
+
+            var demoUser = await userManager.FindByEmailAsync("demo@washzone.se");
+            if (demoUser == null)
+            {
+                demoUser = new IdentityUser
+                {
+                    UserName = "demo@washzone.se",
+                    Email = "demo@washzone.se",
+                    EmailConfirmed = true,
+                    PhoneNumber = "+46705551234"
+                };
+                await userManager.CreateAsync(demoUser, "Demo123!");
+                await userManager.AddToRoleAsync(demoUser, "User");
+            }
+
             //Seed bookings data to database for different users
             if (!database.Bookings.Any())
             {
@@ -267,6 +286,45 @@ namespace WashZone.Data
                     };
 
                 database.Bookings.AddRange(bookings);
+                database.SaveChanges();
+            }
+
+            //Seed saved cars (UserVehicle) so the demo accounts have pre-filled
+            //registration numbers for the booking autocomplete and profile page.
+            if (!database.UserVehicles.Any())
+            {
+                database.UserVehicles.AddRange(new List<UserVehicle>
+                {
+                    new UserVehicle { UserId = userIds[0], RegistrationNumber = "ABC123" },
+                    new UserVehicle { UserId = userIds[1], RegistrationNumber = "XYZ789" },
+                    new UserVehicle { UserId = userIds[1], RegistrationNumber = "TESLA" },
+                    new UserVehicle { UserId = userIds[2], RegistrationNumber = "LMN321" },
+                    new UserVehicle { UserId = userIds[3], RegistrationNumber = "DEF456" },
+                    new UserVehicle { UserId = userIds[3], RegistrationNumber = "SUPERCAR" },
+                });
+                database.SaveChanges();
+            }
+
+            // The demo user's data is seeded separately (per-user guard) so it also
+            // gets added on databases that already contain other seeded bookings/cars.
+            if (!database.Bookings.Any(b => b.UserId == demoUser.Id))
+            {
+                database.Bookings.AddRange(new List<Booking>
+                {
+                    new Booking { UserId = demoUser.Id, RegistrationNumber = "ABC123", PackageId = 1, StationId = 2, DurationMinutes = 30, Date = NaiveNow.AddDays(-3) },
+                    new Booking { UserId = demoUser.Id, RegistrationNumber = "ABC123", PackageId = 2, StationId = 4, DurationMinutes = 60, Date = NaiveNow.AddDays(2) },
+                    new Booking { UserId = demoUser.Id, RegistrationNumber = "XYZ789", PackageId = 3, StationId = 6, DurationMinutes = 90, Date = NaiveNow.AddDays(6) },
+                });
+                database.SaveChanges();
+            }
+
+            if (!database.UserVehicles.Any(v => v.UserId == demoUser.Id))
+            {
+                database.UserVehicles.AddRange(new List<UserVehicle>
+                {
+                    new UserVehicle { UserId = demoUser.Id, RegistrationNumber = "ABC123" },
+                    new UserVehicle { UserId = demoUser.Id, RegistrationNumber = "XYZ789" },
+                });
                 database.SaveChanges();
             }
         }

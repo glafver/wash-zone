@@ -32,8 +32,11 @@ Seeded on first start:
 | ------------- | -------------------------- | ----------- |
 | Admin         | `admin@washzone.se`        | `Admin123!` |
 | Station admin | `stationadmin@washzone.se` | `Admin123!` |
+| Demo user     | `demo@washzone.se`         | `Demo123!`  |
 | User          | `user1@test.se`            | `User123!`  |
 
+> The `demo@washzone.se` account comes **pre-filled** with a phone number, saved cars and bookings (one past + two upcoming) so anyone can log in and explore the app as a regular user.
+>
 > ⚠️ These are demo credentials. In a real deployment, move them to configuration and change them.
 
 ## 🛠 Tech stack
