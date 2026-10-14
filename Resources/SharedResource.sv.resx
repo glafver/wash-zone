@@ -28,6 +28,8 @@
   <data name="ConfirmPasswordField" xml:space="preserve"><value>Bekräfta lösenord</value></data>
   <data name="PhoneNumberField" xml:space="preserve"><value>Telefonnummer</value></data>
   <data name="NoAccountPrompt" xml:space="preserve"><value>Har du inget konto?</value></data>
+  <data name="DemoAccessTitle" xml:space="preserve"><value>Demo-åtkomst</value></data>
+  <data name="DemoAccessHint" xml:space="preserve"><value>Redan ifylld nedan — klicka bara på Logga in.</value></data>
 
   <!-- Profile -->
   <data name="Profile" xml:space="preserve"><value>Profil</value></data>

@@ -101,6 +101,9 @@ namespace WashZone.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
+
+            // Pre-fill the demo account so anyone can log in with one click.
+            Input = new InputModel { Email = "demo@washzone.se", Password = "Demo123!" };
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

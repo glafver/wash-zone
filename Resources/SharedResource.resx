@@ -28,6 +28,8 @@
   <data name="ConfirmPasswordField" xml:space="preserve"><value>Confirm password</value></data>
   <data name="PhoneNumberField" xml:space="preserve"><value>Phone number</value></data>
   <data name="NoAccountPrompt" xml:space="preserve"><value>Don't have an account?</value></data>
+  <data name="DemoAccessTitle" xml:space="preserve"><value>Demo access</value></data>
+  <data name="DemoAccessHint" xml:space="preserve"><value>Pre-filled below — just click Log in.</value></data>
 
   <!-- Profile -->
   <data name="Profile" xml:space="preserve"><value>Profile</value></data>
